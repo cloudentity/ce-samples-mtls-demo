@@ -1,3 +1,482 @@
+servers:
+  - initialize: false
+    do_not_create_default_claims: false
+    tenant_id: cloudentity-bbray
+    id: admin
+    profile: default
+    name: Admin
+    type: admin
+    color: '#EC5348'
+    secret: BUsUdCQqpXfsdXy4MojrhyHFqG3n3BgQjm75d43ernc
+    rotated_secrets: []
+    access_token_strategy: jwt
+    key_type: ecdsa
+    logo_uri: ''
+    custom_issuer_url: ''
+    dynamic_client_registration:
+      enabled: false
+      initial_access_token:
+        required: false
+      payload:
+        format: json
+        jws_payload:
+          source: server_configuration
+          jwks:
+            keys: null
+          jwks_uri: ''
+      default_scopes: null
+      disable_registration_token_rotation: false
+      cert_bound_registration_token: false
+    grant_types:
+      - client_credentials
+      - authorization_code
+    token_endpoint_auth_methods:
+      - none
+      - client_secret_basic
+      - client_secret_post
+      - client_secret_jwt
+      - private_key_jwt
+      - tls_client_auth
+      - self_signed_tls_client_auth
+    token_endpoint_authn_methods:
+      - none
+      - client_secret_basic
+      - client_secret_post
+      - client_secret_jwt
+      - private_key_jwt
+      - tls_client_auth
+      - self_signed_tls_client_auth
+    access_token_ttl: 1h0m0s
+    refresh_token_ttl: 720h0m0s
+    authorization_code_ttl: 10m0s
+    id_token_ttl: 1h0m0s
+    cookie_max_age: 1h0m0s
+    
+    root_cas: |
+      -----BEGIN CERTIFICATE-----
+      MIIDfjCCAmagAwIBAgIUHOLlcMhX8uJyFafYYNXYBMBJr2swDQYJKoZIhvcNAQEL
+      BQAwVzELMAkGA1UEBhMCVVMxEzARBgNVBAgTCldhc2hpbmd0b24xEDAOBgNVBAcT
+      B1NlYXR0bGUxFDASBgNVBAoTC0Nsb3VkZW50aXR5MQswCQYDVQQLEwJDQTAeFw0y
+      MTAxMjAwOTQ4MDBaFw0yNjAxMTkwOTQ4MDBaMFcxCzAJBgNVBAYTAlVTMRMwEQYD
+      VQQIEwpXYXNoaW5ndG9uMRAwDgYDVQQHEwdTZWF0dGxlMRQwEgYDVQQKEwtDbG91
+      ZGVudGl0eTELMAkGA1UECxMCQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
+      AoIBAQDKJroMoumr9jY129z7uf0WrvMxmzexP72ogINlQlM/p910YfnLYSWOUEIH
+      kQ5eyq3ATuesPzamNxjq4JkafopsMBeieCeVzir4VTmsxLxbBZG2GjdsGpyXmrXb
+      LXTb5dgNcolYh6LLPb11cBeb9TAy2D97Vx4t1Hr2SeLG1VvkNyNnoog6tZdmJUis
+      ufW9GOyXgiAv46rtgvvpzYn+LbE7oiXlQHICHNpeTh7140HG7eWMPubINuilGZBY
+      W80IGTpGUf2Vmuwo2LA17z5/3IB0dqlY5eT321TYVoqH1TYZrMllSLc+2x750e+l
+      E9sHil8QPptAS74UWUsq2PgIvyZbAgMBAAGjQjBAMA4GA1UdDwEB/wQEAwIBBjAP
+      BgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBTKWQeEZBRJ/UO1Py7EfTaOqVujbTAN
+      BgkqhkiG9w0BAQsFAAOCAQEAsg5ker9FPcq1u5E+y4Qq1yjUeuOT0kap+aIE1mp2
+      LSQoEA+tb40s/iNmTMdvCGReeoRoVYKz66+3zGoFYg5W1c5Ct9whjiLhKP1Pzc4I
+      JbPGklSrnnAwD72ypLF4yrTMTD65gTMsr2ao0MOe6vy/Z8R2uz48QJHhhi71VGhi
+      FstSiWvb4AgNhN39Ag5ufLtrGCbuZw5TSeW0J7PTBoYV1Z/0jrsdqxk8MjnbR8Qe
+      VyZGyIRnGkXUtC239/Lz0v0PXVwAPUF8ITb0JYcG/ojIc5VfTOkQOeOHHBaS+dXt
+      HBJjBbnwpN4tNFhczJkbga16hL+vV0I4z61mJG8OkDr25Q==
+      -----END CERTIFICATE-----
+    subject_identifier_types:
+      - public
+      - pairwise
+    subject_identifier_algorithm_salt: ekR6CNPmovwb_5yaXsG3GfPEoNlGfV9DG-U8ImXGJd8
+    enable_trust_anchor: false
+    trust_anchor_configuration:
+      jwks:
+        keys: null
+      jwks_uri: ''
+    enable_quick_access: false
+    enable_idp_discovery: false
+    enable_legacy_clients_with_no_software_statement: false
+    dynamic_scope_separator: .
+    issuer_id: ''
+    backchannel_token_delivery_modes_supported: null
+    backchannel_user_code_parameter_supported: false
+    consent_id_namespace: ''
+    require_pushed_authorization_requests: false
+    pushed_authorization_request_ttl: 1m0s
+    enable_id_token_encryption: false
+  - initialize: false
+    do_not_create_default_claims: false
+    tenant_id: cloudentity-bbray
+    id: system
+    profile: default
+    name: System
+    type: system
+    color: '#393954'
+    secret: ASOLP8tPP6vgDj_4gVHPqG-bOKXL0ksrr_1rEBIrr98
+    rotated_secrets: []
+    access_token_strategy: jwt
+    key_type: ecdsa
+    logo_uri: ''
+    custom_issuer_url: ''
+    dynamic_client_registration:
+      enabled: false
+      initial_access_token:
+        required: false
+      payload:
+        format: json
+        jws_payload:
+          source: server_configuration
+          jwks:
+            keys: null
+          jwks_uri: ''
+      default_scopes: null
+      disable_registration_token_rotation: false
+      cert_bound_registration_token: false
+    grant_types:
+      - client_credentials
+      - authorization_code
+    token_endpoint_auth_methods:
+      - none
+      - client_secret_basic
+      - client_secret_post
+      - client_secret_jwt
+      - private_key_jwt
+      - tls_client_auth
+      - self_signed_tls_client_auth
+    token_endpoint_authn_methods:
+      - none
+      - client_secret_basic
+      - client_secret_post
+      - client_secret_jwt
+      - private_key_jwt
+      - tls_client_auth
+      - self_signed_tls_client_auth
+    access_token_ttl: 1h0m0s
+    refresh_token_ttl: 720h0m0s
+    authorization_code_ttl: 10m0s
+    id_token_ttl: 1h0m0s
+    cookie_max_age: 1h0m0s
+    jwks:
+      keys:
+        - use: sig
+          kty: EC
+          kid: '216509247664890583869871084387093581524'
+          crv: P-256
+          alg: ES256
+          x: WfaQPLfBtbxabVBjFh4nsRMC8A0MBmTaOwYb19NOEHs
+          'y': lCc8IkHW2kHmqYk-jEVy1rlM3suU1onieAI2Htv23oo
+          d: GK3KdhnORktf3cPFDlGdEvZPl6YF0O_OCTYv2LCfZ04
+          x5c:
+            - >-
+              MIIBxDCCAWqgAwIBAgIRAKLiKhGgV16x8wB5mPTuDtQwCgYIKoZIzj0EAwIwLDEUMBIGA1UEChMLQ2xvdWRlbnRpdHkxFDASBgNVBAMTC0Nsb3VkZW50aXR5MB4XDTIxMDkwNzEzMjc0MloXDTIxMTAwODEzMjc0MlowLDEUMBIGA1UEChMLQ2xvdWRlbnRpdHkxFDASBgNVBAMTC0Nsb3VkZW50aXR5MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEWfaQPLfBtbxabVBjFh4nsRMC8A0MBmTaOwYb19NOEHuUJzwiQdbaQeapiT6MRXLWuUzey5TWieJ4AjYe2/beiqNtMGswDgYDVR0PAQH/BAQDAgKkMBMGA1UdJQQMMAoGCCsGAQUFBwMBMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFHb9fPihB0HSOB8bLwMkbKCdYtzJMBQGA1UdEQQNMAuCCWxvY2FsaG9zdDAKBggqhkjOPQQDAgNIADBFAiAXFRHhr73KM87M50iQjzrJizPfPDErSY7ZowQvchDtLQIhAOZXLyEiqCK2HsRZvdmUU1tTZ9XUeEYzs+/OtCXSPYF0
+          x5t: vbYjVnLCKQExIS1bemS1G1eKeko
+          'x5t#S256': TJdoJEtb1W-p3O8Xv-r_i9RJy4XrW29Esj-a0nE4Oew
+          created_at: '2021-09-07T13:27:42Z'
+          promoted_at: '2021-09-07T13:27:42Z'
+          rotated_at: null
+          revoked_at: null
+        - use: enc
+          kty: RSA
+          kid: c4rmhjmg5oeehn5fk6b0
+          alg: RSA-OAEP-256
+          'n': >-
+            697LuNqB3wz5O93gs2qluzfWuxdbIJZFe_bWchhIhz8ajZDzPfxySZ_4rsdR4oNw2ZoxxEW4txG8Bfch5fCd5grd-zPmebwLSOzvTfKtRHMO1C_PZs1Zg9cjrX9qDWo-KLjjqt-CQ-kiVd5SAcqDo65j9afteR2aMb_EtbTPOsGoWq3o6JrFtTNCbUHVxox0vnxpWfYU33KqcyFzhHkm215FQiDSsUVfZbcAyQ86LmX8TqwdGgaxJHXPVGefmIrA8GJ0gJ55Akr3CulFtHarS7WivOEQsOuDCmntcDRGuXCR1lcTVI4KWM7UQp97LqnFJSHqNUAoJigmfHSetp-nQw
+          e: AQAB
+          d: >-
+            3FGfuWthJBfaNjFqUiyr4dSmntuSIz46aTCH3ssP9ETdaJ6clqnXly31_EvyEML2BkwhcFQv1dCa8HeHEmFPHDHKZ3pzLgKYB-ZJIWYssmNG1qxR7pShqKSsjsMVLLKwnRkWj-V2qDh7-flQYJvpmlqqxCu3hgpAnXejJpddemLe5G9wMaaWQeJsoUz2i5MFjL00yIb-bjQE1v5k-QN7OqWuODghmB-HIhxYp5c_zH14kifN3x2NPRNK_eEHO-xJHlkwUCuKa9USiTuyArlPIWAb_4lj7jZLTu42j-lCJX82fGXQkEmup9YEWF5pOsreh8t115fvSuL8LPnAzka-AQ
+          p: >-
+            -QcfuccQ0TaPlmYLI4ZjdK9VmaDr7UQSVW9PjjdhD0mY32KdiDfUp44QR3sILuePLwxSXoxBacRFhUOr3h2i6mR77KopvmG91du7Xcl0IjRnnzBK9HB6RVy0x6xPjkyE2rhc94qPpkbS3iePsK4W9wt7ag-lxzi5nSIKMko06bs
+          q: >-
+            8nld7BT_jQP0tPqHBeuLjgtkoWWNib45-sX7ISe4_o18KSCF_kMarJg0mKLNvNeC3-3GI7GWQYKUFhInumZ7sH8th0NnXpgfZy4MmrWzo-CkVuvYNBtl5KpjoJ71o-OdUBfWMLTfwBDk5KYXJP5qSQD8SjRECP7AihbgzDS3PBk
+          dp: >-
+            RhJ8GeFq2QPaSX6zOa7SA35mvtDqMhxKcGHe5-yrUgrqikkMfM0A-Jjf-c0j01bzElEMSHB8448H5OTS0rBSLFRUDpcfIeQM78VhppVOKWXHlqKXJMsVjLj2YY0Z4bekVos0Fa-WljotkbdeFmAWNDO16XU3t6Q9jnqKlfYNh4s
+          dq: >-
+            8NTVEbhlfmVwdxTiaWHjkakFQT0BkM9M_SQJY4v1tXdH2_1-uOVjqAvhKb2CRU90oP-kri0jxVtxxF4x8XT643nd-ZxcHltPzYayZDOXAm0MLX1Al7iiwrTuEUnxRt-7jyKtzmDIYBcnkWbaVBcR8AK3kuhIrvqAuGcyzgCKAnk
+          qi: >-
+            90evULaZzvips54oIF3P7P8-LUsFcjCejhelFnbsnvGEmWjte5Y8jBn3Ang9iKYQbTTA7mq2wK2SP2t-AMFFcZy08yhSoqfS4u_wglA-2W2_eaDf5Ma-Y2RB4JSfaO76rwyh4TTX9fDEbI1QPaOkE_EiB_jIP8ePTD6Wt7DEkS0
+          created_at: '2021-09-07T13:27:42Z'
+          promoted_at: '2021-09-07T13:27:42Z'
+          rotated_at: null
+          revoked_at: null
+      next_signing_key:
+        use: sig
+        kty: EC
+        kid: '218157424082301620556154257497759585161'
+        crv: P-256
+        alg: ES256
+        x: mSDqTSHMpya1rVixlDgRwMQYrLS6WImy0tlJYjgVteg
+        'y': eAYhtR3U6SkxB82popvcUKDGVwVN2Dk4fYMAl1oPG3I
+        d: oQCw--1aVHYxz9G6pC_oiZaWcUlVFxUpT6Cir-QfAgM
+        x5c:
+          - >-
+            MIIBxDCCAWqgAwIBAgIRAKQfl3CtDOLHfDYNa9OWk4kwCgYIKoZIzj0EAwIwLDEUMBIGA1UEChMLQ2xvdWRlbnRpdHkxFDASBgNVBAMTC0Nsb3VkZW50aXR5MB4XDTIxMDkwNzEzMjc0MloXDTIxMTAwODEzMjc0MlowLDEUMBIGA1UEChMLQ2xvdWRlbnRpdHkxFDASBgNVBAMTC0Nsb3VkZW50aXR5MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEmSDqTSHMpya1rVixlDgRwMQYrLS6WImy0tlJYjgVteh4BiG1HdTpKTEHzamim9xQoMZXBU3YOTh9gwCXWg8bcqNtMGswDgYDVR0PAQH/BAQDAgKkMBMGA1UdJQQMMAoGCCsGAQUFBwMBMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFHj6YrtbSa9NatgnCU0RooyOsP7UMBQGA1UdEQQNMAuCCWxvY2FsaG9zdDAKBggqhkjOPQQDAgNIADBFAiEAjobk5fd2XQqR19+OJZyzY05BkTR3iLCuzTkm2euTTMMCIAUtN8QpJNPc0zB2pNCasdeX9v+ReU5s8feiMv5aiMFN
+        x5t: 9yr8tGW5gv4Vug5S2Brw6NsK2Ew
+        'x5t#S256': sbGqYNgMaqDHJNGpPIe2obG6RZwFrCl83Ly0SKWV6Cg
+        created_at: '2021-09-07T13:27:42Z'
+        promoted_at: null
+        rotated_at: null
+        revoked_at: null
+      next_encryption_key:
+        use: enc
+        kty: RSA
+        kid: c4rmhjmg5oeehn5fk6bg
+        alg: RSA-OAEP-256
+        'n': >-
+          sIqsSfsIp9kZ3K71gL9dBYTKFunxNwG5HvO_NeEGTYeMGl2GpqdgH-CmzrlH0BzTiEWnabUnMOdssWgmZk0sXS8_I7SXiepTjSuxfIjQiQ-TuQqcF7cLaxaD9u0ACd3070TkImbxPJZP64z236_FfemyKDa5vYBjSCP7DAYI0rxFac8tpTwcHxvbHQ2j3N1tt15vJkJ2ro86HEuJXjCBrctHsram7jj5hcI296DYQukl5f-3dLX9NokmEVSkk1xFCbUJ-MFyM5_f_VGSZR0v9L_x_0KRkav29TfzySCoeJfZKHi4K0Rg8eDT91RamoL67vYKzvQ8OrXMmgKXnPGbOw
+        e: AQAB
+        d: >-
+          j5CF4Teq50xOkr8Y2JVGIUnGSfH-_fuBvqD7euY-iOfU0FAEQxxTuDipjezwcFYw013JcdYmQ8e_BVor9_-EN1dHolKm9TnArkm88QgVhZBMUitFmqd5OqG5uSEsadm86KL-XteWD-4wmd4tmORI10cnYTp3u5pfonfYHQP_QtcLqlZ-l5wzMAwSoNDcbs6sbuylSWgeT0R8yP9nH5ss2CeK18rlaEkgMWJEGeumzhEDPr8mnmm1uNuT4z4QSIdM5RSBKNA7fiaXkuff2gicDGK4gSG6SAJDd6vEwx1HSO6WB9RJ78519rnMgy6qtDcRuva_jdysaFPhZfJIupgZQQ
+        p: >-
+          x4pvtdkIoRM4_27Y_f2nwRlS8RWnbl_BAtVHg7OAig6JO5jzlWUl9zs87PsiXZ1zIGeUQE0EKLk5KkUYgdpsbX69AoSI4Ms-yV9L0n4CAMeWvZqb9_HGzHH0MYJ-uUsFFoGjqUekeTro_WslM4KLKSwU1q2aVydrurMtyxcPCuE
+        q: >-
+          4n5RgmwiDztUIAZIwkCW7IAaxqjAxQ2HD-fuMxBrEvFLV4rDs5uc7tgiQ3Uf1Usr4PDSW8NYGdRUkTqwxn0Mp-VEXUuChAOMsMvNUKVIQm29W6q6LBQMten_8kvs_vTTbykv00hcWH58Rxjt5fqE6BoZNtYkdILggD9XWAozpZs
+        dp: >-
+          IRSpWnuFu7aFH4vP-6O-2PuKzZ8qZ9kGFaMoPQRYTgsE41WDJIRlW-x9OEiWNPDyci_Z2yMpilrSyFg2LOj6StjVGwK_8oyfdyEOX_I2AM0WB48HRn7V13UY59Bbk_qE-Gs7p8fR06tZjxHhU_3TdlrxhXm4ebR2Xrhv4hiLjOE
+        dq: >-
+          sh0IWHpU5omPhIesnCZTCbVMWUHIJq6WsimAJuQYcBMVXsifUhVj-mg5ubbXy9KLtR9tLgCWvek-f98ZuV4Jn9cqRfvlrY9lCnubAHqaMrM-IGJIefVicYSNZKvUukMqKtbG526WQHlnnjm6jArQjf5IKdmJXZ62keQ9-dw79VU
+        qi: >-
+          HP4OHQp9KZkM8LDIvy_svkDZd1Xwde8iHU6Q9jgf7D_BPHNruCwohBR3RziD4-FZveBj4qaSUEhZSOx9qWh6u0SjorIOkovPehzL8wQHfMSc7UYkHqcR10pkY5kf-Sh-_09WU5jhuQYra_VGlnWHOTE4tvrCX4vAn6kk0AJoCUc
+        created_at: '2021-09-07T13:27:42Z'
+        promoted_at: null
+        rotated_at: null
+        revoked_at: null
+      revoked_signing_keys: null
+      revoked_encryption_keys: null
+      rotated_keys_limit: 8
+      revoked_keys_limit: 16
+    enforce_pkce: true
+    enforce_pkce_for_public_clients: false
+    root_cas: |
+      -----BEGIN CERTIFICATE-----
+      MIIDfjCCAmagAwIBAgIUHOLlcMhX8uJyFafYYNXYBMBJr2swDQYJKoZIhvcNAQEL
+      BQAwVzELMAkGA1UEBhMCVVMxEzARBgNVBAgTCldhc2hpbmd0b24xEDAOBgNVBAcT
+      B1NlYXR0bGUxFDASBgNVBAoTC0Nsb3VkZW50aXR5MQswCQYDVQQLEwJDQTAeFw0y
+      MTAxMjAwOTQ4MDBaFw0yNjAxMTkwOTQ4MDBaMFcxCzAJBgNVBAYTAlVTMRMwEQYD
+      VQQIEwpXYXNoaW5ndG9uMRAwDgYDVQQHEwdTZWF0dGxlMRQwEgYDVQQKEwtDbG91
+      ZGVudGl0eTELMAkGA1UECxMCQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
+      AoIBAQDKJroMoumr9jY129z7uf0WrvMxmzexP72ogINlQlM/p910YfnLYSWOUEIH
+      kQ5eyq3ATuesPzamNxjq4JkafopsMBeieCeVzir4VTmsxLxbBZG2GjdsGpyXmrXb
+      LXTb5dgNcolYh6LLPb11cBeb9TAy2D97Vx4t1Hr2SeLG1VvkNyNnoog6tZdmJUis
+      ufW9GOyXgiAv46rtgvvpzYn+LbE7oiXlQHICHNpeTh7140HG7eWMPubINuilGZBY
+      W80IGTpGUf2Vmuwo2LA17z5/3IB0dqlY5eT321TYVoqH1TYZrMllSLc+2x750e+l
+      E9sHil8QPptAS74UWUsq2PgIvyZbAgMBAAGjQjBAMA4GA1UdDwEB/wQEAwIBBjAP
+      BgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBTKWQeEZBRJ/UO1Py7EfTaOqVujbTAN
+      BgkqhkiG9w0BAQsFAAOCAQEAsg5ker9FPcq1u5E+y4Qq1yjUeuOT0kap+aIE1mp2
+      LSQoEA+tb40s/iNmTMdvCGReeoRoVYKz66+3zGoFYg5W1c5Ct9whjiLhKP1Pzc4I
+      JbPGklSrnnAwD72ypLF4yrTMTD65gTMsr2ao0MOe6vy/Z8R2uz48QJHhhi71VGhi
+      FstSiWvb4AgNhN39Ag5ufLtrGCbuZw5TSeW0J7PTBoYV1Z/0jrsdqxk8MjnbR8Qe
+      VyZGyIRnGkXUtC239/Lz0v0PXVwAPUF8ITb0JYcG/ojIc5VfTOkQOeOHHBaS+dXt
+      HBJjBbnwpN4tNFhczJkbga16hL+vV0I4z61mJG8OkDr25Q==
+      -----END CERTIFICATE-----
+    subject_identifier_types:
+      - public
+      - pairwise
+    subject_identifier_algorithm_salt: tfyr7gXyg1uN01Jp3OpiL1GE6Czwo37R9T1QzsmZJBY
+    enable_trust_anchor: false
+    trust_anchor_configuration:
+      jwks:
+        keys: null
+      jwks_uri: ''
+    enable_quick_access: false
+    enable_idp_discovery: false
+    enable_legacy_clients_with_no_software_statement: false
+    dynamic_scope_separator: .
+    issuer_id: ''
+    backchannel_token_delivery_modes_supported: null
+    backchannel_user_code_parameter_supported: false
+    consent_id_namespace: ''
+    require_pushed_authorization_requests: false
+    pushed_authorization_request_ttl: 1m0s
+    enable_id_token_encryption: false
+policies:
+  - tenant_id: cloudentity-bbray
+    server_id: default
+    id: default-test-mtls
+    language: cloudentity
+    type: api
+    policy_name: test-mtls
+    validators:
+      - name: attributes
+        conf:
+          fields:
+            - comparator: equals
+              field: 'authnCtx.cnf.x5t#S256'
+              value: $request.headers.x-ssl-cert-hash
+        recovery: null
+      - name: attributes
+        conf:
+          fields:
+            - comparator: present
+              field: 'authnCtx.cnf.x5t#S256'
+              value: ''
+        recovery: null
+  - tenant_id: cloudentity-bbray
+    server_id: test-demo
+    id: mfa_test-demo_user
+    language: cloudentity
+    type: user
+    policy_name: MFA User
+    validators:
+      - name: authentication-factors
+        conf:
+          fields:
+            - comparator: contains
+              field: login.verified_recovery_methods
+              value:
+                - mfa
+        recovery:
+          - type: mfa
+gateway_api_groups:
+  - tenant_id: cloudentity-bbray
+    server_id: default
+    gateway_id: c7o1sqeifi7nonh7cokg
+    service_id: c7o1tnj8q1e8rjdcigh0
+    id: banking
+    name: ''
+    apis:
+      - api_type: rest
+        method: POST
+        path: /transfer
+        graphql_schema: ''
+      - api_type: rest
+        method: GET
+        path: /balance
+        graphql_schema: ''
+    metadata:
+      type: ''
+      azure:
+        apim_id: ''
+        apim_name: ''
+      aws:
+        api_id: ''
+        api_name: ''
+        stage: ''
+      apigee:
+        organization_name: ''
+        proxy_name: ''
+        environment_name: ''
+  - tenant_id: cloudentity-bbray
+    server_id: default
+    gateway_id: c7o1sqeifi7nonh7cokg
+    service_id: c7o1tnj8q1e8rjdcighg
+    id: petstore
+    name: ''
+    apis:
+      - api_type: rest
+        method: POST
+        path: /pet
+        graphql_schema: ''
+      - api_type: rest
+        method: PUT
+        path: /pet
+        graphql_schema: ''
+      - api_type: rest
+        method: GET
+        path: '/pet/{petId}'
+        graphql_schema: ''
+      - api_type: rest
+        method: POST
+        path: '/pet/{petId}'
+        graphql_schema: ''
+      - api_type: rest
+        method: DELETE
+        path: '/pet/{petId}'
+        graphql_schema: ''
+    metadata:
+      type: ''
+      azure:
+        apim_id: ''
+        apim_name: ''
+      aws:
+        api_id: ''
+        api_name: ''
+        stage: ''
+      apigee:
+        organization_name: ''
+        proxy_name: ''
+        environment_name: ''
+apis:
+  - tenant_id: cloudentity-bbray
+    server_id: default
+    service_id: c7o1tnj8q1e8rjdcigh0
+    id: cc5s6cmwp3idohjtcwh8r4urcpwsq4bom7dwkin9f7tgn5dbp3tsk
+    position: 0
+    method: GET
+    path: /balance
+    data_classifications: []
+    policy_id: default-test-mtls
+    can_have_policy: true
+    graphql_schema: ''
+    graphql_types: []
+    api_type: rest
+  - tenant_id: cloudentity-bbray
+    server_id: default
+    service_id: c7o1tnj8q1e8rjdcighg
+    id: cc5s6cmwp3idohjtcwh8r4urcpwsq4d8m7dwkin9f7agk7bxxpagk7njct6o
+    position: 0
+    method: GET
+    path: '/pet/{petId}'
+    data_classifications: []
+    policy_id: null
+    can_have_policy: true
+    graphql_schema: ''
+    graphql_types: []
+    api_type: rest
+  - tenant_id: cloudentity-bbray
+    server_id: default
+    service_id: c7o1tnj8q1e8rjdcigh0
+    id: cc5s6cmwp3idohjtcwh8r4urcpwsq4bom7er6w4wmhzzehubp33sc3m1
+    position: 1
+    method: POST
+    path: /transfer
+    data_classifications: []
+    policy_id: null
+    can_have_policy: true
+    graphql_schema: ''
+    graphql_types: []
+    api_type: rest
+  - tenant_id: cloudentity-bbray
+    server_id: default
+    service_id: c7o1tnj8q1e8rjdcighg
+    id: cc5s6cmwp3idohjtcwh8r4urcpwsq4d8m7efkin9f7agk7y
+    position: 1
+    method: PUT
+    path: /pet
+    data_classifications: []
+    policy_id: null
+    can_have_policy: true
+    graphql_schema: ''
+    graphql_types: []
+    api_type: rest
+  - tenant_id: cloudentity-bbray
+    server_id: default
+    service_id: c7o1tnj8q1e8rjdcighg
+    id: cc5s6cmwp3idohjtcwh8r4urcpwsq4d8m7er6w4wmhzzy3mw
+    position: 2
+    method: POST
+    path: /pet
+    data_classifications: []
+    policy_id: null
+    can_have_policy: true
+    graphql_schema: ''
+    graphql_types: []
+    api_type: rest
+  - tenant_id: cloudentity-bbray
+    server_id: default
+    service_id: c7o1tnj8q1e8rjdcighg
+    id: cc5s6cmwp3idohjtcwh8r4urcpwsq4d8m7nrkunfktni6m5oci4n665oci4r13d7
+    position: 3
+    method: DELETE
+    path: '/pet/{petId}'
+    data_classifications: []
+    policy_id: null
+    can_have_policy: true
+    graphql_schema: ''
+    graphql_types: []
+    api_type: rest
+  - tenant_id: cloudentity-bbray
+    server_id: default
+    service_id: c7o1tnj8q1e8rjdcighg
+    id: cc5s6cmwp3idohjtcwh8r4urcpwsq4d8m7er6w4wmhzzy3mwf77zy3mwjf184
+    position: 4
+    method: POST
+    path: '/pet/{petId}'
+    data_classifications: []
+    policy_id: null
+    can_have_policy: true
+    graphql_schema: ''
+    graphql_types: []
+    api_type: rest
 clients:
   - application_type: web
     application_types:

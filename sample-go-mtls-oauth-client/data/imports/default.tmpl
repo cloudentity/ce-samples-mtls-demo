@@ -1,0 +1,246 @@
+servers:
+- initialize: false
+  do_not_create_default_claims: false
+  tenant_id: {{ .tenant_id }}
+  id: mtls
+  profile: default
+  name: MTLS
+  type: admin
+  color: '#EC5348'
+  secret: BUsUdCQqpXfsdXy4MojrhyHFqG3n3BgQjm75d43ernc
+  rotated_secrets: []
+  access_token_strategy: jwt
+  key_type: ecdsa
+  logo_uri: ''
+  custom_issuer_url: ''
+  dynamic_client_registration:
+    enabled: false
+    initial_access_token:
+      required: false
+    payload:
+      format: json
+      jws_payload:
+        source: server_configuration
+        jwks:
+          keys: null
+        jwks_uri: ''
+    default_scopes: null
+    disable_registration_token_rotation: false
+    cert_bound_registration_token: false
+  grant_types:
+    - client_credentials
+    - authorization_code
+  token_endpoint_auth_methods:
+    - none
+    - client_secret_basic
+    - client_secret_post
+    - client_secret_jwt
+    - private_key_jwt
+    - tls_client_auth
+    - self_signed_tls_client_auth
+  token_endpoint_authn_methods:
+    - none
+    - client_secret_basic
+    - client_secret_post
+    - client_secret_jwt
+    - private_key_jwt
+    - tls_client_auth
+    - self_signed_tls_client_auth
+  access_token_ttl: 1h0m0s
+  refresh_token_ttl: 720h0m0s
+  authorization_code_ttl: 10m0s
+  id_token_ttl: 1h0m0s
+  cookie_max_age: 1h0m0s
+  
+  root_cas: |
+    -----BEGIN CERTIFICATE-----
+    MIIDfjCCAmagAwIBAgIUHOLlcMhX8uJyFafYYNXYBMBJr2swDQYJKoZIhvcNAQEL
+    BQAwVzELMAkGA1UEBhMCVVMxEzARBgNVBAgTCldhc2hpbmd0b24xEDAOBgNVBAcT
+    B1NlYXR0bGUxFDASBgNVBAoTC0Nsb3VkZW50aXR5MQswCQYDVQQLEwJDQTAeFw0y
+    MTAxMjAwOTQ4MDBaFw0yNjAxMTkwOTQ4MDBaMFcxCzAJBgNVBAYTAlVTMRMwEQYD
+    VQQIEwpXYXNoaW5ndG9uMRAwDgYDVQQHEwdTZWF0dGxlMRQwEgYDVQQKEwtDbG91
+    ZGVudGl0eTELMAkGA1UECxMCQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
+    AoIBAQDKJroMoumr9jY129z7uf0WrvMxmzexP72ogINlQlM/p910YfnLYSWOUEIH
+    kQ5eyq3ATuesPzamNxjq4JkafopsMBeieCeVzir4VTmsxLxbBZG2GjdsGpyXmrXb
+    LXTb5dgNcolYh6LLPb11cBeb9TAy2D97Vx4t1Hr2SeLG1VvkNyNnoog6tZdmJUis
+    ufW9GOyXgiAv46rtgvvpzYn+LbE7oiXlQHICHNpeTh7140HG7eWMPubINuilGZBY
+    W80IGTpGUf2Vmuwo2LA17z5/3IB0dqlY5eT321TYVoqH1TYZrMllSLc+2x750e+l
+    E9sHil8QPptAS74UWUsq2PgIvyZbAgMBAAGjQjBAMA4GA1UdDwEB/wQEAwIBBjAP
+    BgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBTKWQeEZBRJ/UO1Py7EfTaOqVujbTAN
+    BgkqhkiG9w0BAQsFAAOCAQEAsg5ker9FPcq1u5E+y4Qq1yjUeuOT0kap+aIE1mp2
+    LSQoEA+tb40s/iNmTMdvCGReeoRoVYKz66+3zGoFYg5W1c5Ct9whjiLhKP1Pzc4I
+    JbPGklSrnnAwD72ypLF4yrTMTD65gTMsr2ao0MOe6vy/Z8R2uz48QJHhhi71VGhi
+    FstSiWvb4AgNhN39Ag5ufLtrGCbuZw5TSeW0J7PTBoYV1Z/0jrsdqxk8MjnbR8Qe
+    VyZGyIRnGkXUtC239/Lz0v0PXVwAPUF8ITb0JYcG/ojIc5VfTOkQOeOHHBaS+dXt
+    HBJjBbnwpN4tNFhczJkbga16hL+vV0I4z61mJG8OkDr25Q==
+    -----END CERTIFICATE-----
+gateways:
+- tenant_id: {{ .tenant_id }}
+  authorization_server_id: default
+  id: c7o1sqeifi7nonh7cokg
+  client_id: c7o1sqmifi7nonh7col0
+  name: pyron-test
+  description: ''
+  type: pyron
+  create_and_bind_services_automatically: true
+  token_exchange:
+    enabled: false
+    trusted_idp_ids: null
+  token_exchange_client_id: null
+gateway_api_groups:
+- tenant_id: {{ .tenant_id }}
+  server_id: default
+  gateway_id: c7o1sqeifi7nonh7cokg
+  service_id: c7o1tnj8q1e8rjdcigh0
+  id: banking
+  name: ''
+  apis:
+    - api_type: rest
+      method: POST
+      path: /transfer
+      graphql_schema: ''
+    - api_type: rest
+      method: GET
+      path: /balance
+      graphql_schema: ''
+  metadata:
+    type: ''
+    azure:
+      apim_id: ''
+      apim_name: ''
+    aws:
+      api_id: ''
+      api_name: ''
+      stage: ''
+    apigee:
+      organization_name: ''
+      proxy_name: ''
+      environment_name: ''
+- tenant_id: {{ .tenant_id }}
+  server_id: default
+  gateway_id: c7o1sqeifi7nonh7cokg
+  service_id: c7o1tnj8q1e8rjdcighg
+  id: petstore
+  name: ''
+  apis:
+    - api_type: rest
+      method: POST
+      path: /pet
+      graphql_schema: ''
+    - api_type: rest
+      method: PUT
+      path: /pet
+      graphql_schema: ''
+    - api_type: rest
+      method: GET
+      path: '/pet/{petId}'
+      graphql_schema: ''
+    - api_type: rest
+      method: POST
+      path: '/pet/{petId}'
+      graphql_schema: ''
+    - api_type: rest
+      method: DELETE
+      path: '/pet/{petId}'
+      graphql_schema: ''
+  metadata:
+    type: ''
+    azure:
+      apim_id: ''
+      apim_name: ''
+    aws:
+      api_id: ''
+      api_name: ''
+      stage: ''
+    apigee:
+      organization_name: ''
+      proxy_name: ''
+      environment_name: ''
+clients:
+- tenant_id: {{ .tenant_id }}
+  authorization_server_id: mtls
+  client_id: c79lsrgh5kre3dfd8kf0
+  client_name: mTLS Sample Client
+  client_secret: S4DYjFEowDmEKfwbXOtR-mqaHWuIae2Mt4i-6KimZYQ
+  grant_types:
+  - client_credentials
+  token_endpoint_auth_method: client_secret_post
+
+  redirect_uris:
+    - 'http://localhost:18888/callback'
+  subject_type: public
+  token_endpoint_auth_method: tls_client_auth
+  token_endpoint_auth_signing_alg: none
+  userinfo_signed_response_alg: none
+  tls_client_certificate_bound_access_tokens: true
+  tls_client_auth_san_dns: acp
+- tenant_id: {{ .tenant_id }}
+  client_id: c7o1sqmifi7nonh7col0
+  authorization_server_id: system
+  developer_id: null
+  system: false
+  trusted: false
+  client_name: pyron-test
+  description: ''
+  client_uri: ''
+  logo_uri: ''
+  policy_uri: ''
+  tos_uri: ''
+  organisation_id: ''
+  application_type: web
+  application_types:
+    - service
+  redirect_uris: []
+  grant_types:
+    - client_credentials
+  response_types:
+    - code
+  scopes:
+    - gateway_exchange_tokens
+    - introspect_tokens
+    - push_gateway_requests
+    - read_gateway_configuration
+    - write_gateway_configuration
+  audience:
+    - c7o1sqmifi7nonh7col0
+  token_endpoint_auth_method: client_secret_basic
+  token_endpoint_auth_signing_alg: none
+  jwks:
+    keys: []
+  jwks_uri: ''
+  request_object_signing_alg: any
+  request_uris: []
+  client_id_issued_at: 1643126378
+  client_secret_expires_at: 0
+  sector_identifier_uri: ''
+  userinfo_signed_response_alg: none
+  id_token_signed_response_alg: ES256
+  id_token_encrypted_response_alg: ''
+  id_token_encrypted_response_enc: ''
+  tls_client_certificate_bound_access_tokens: false
+  tls_client_auth_subject_dn: ''
+  tls_client_auth_san_dns: ''
+  tls_client_auth_san_uri: ''
+  tls_client_auth_san_ip: ''
+  tls_client_auth_san_email: ''
+  privacy:
+    scopes: null
+  subject_type: public
+  backchannel_token_delivery_mode: ''
+  backchannel_client_notification_endpoint: ''
+  backchannel_authentication_request_signing_alg: ''
+  backchannel_user_code_parameter: false
+  require_pushed_authorization_requests: false
+  client_secret: SJ4NQfgOJlm6wS3qx6qtKTi5S3xTjPpc1fenLl55vMY
+  hashed_secret: >-
+    c77d7ef1af4a8d76d165e41fbdf7f5e99a0761a8f67b5427c0d5d5d05c158a745fc575fd8ee05b0f4ce5837878afcbac08fc5ab3dd61b0d9ffccf9ca8206d2562502e61386e0d57b397962be0782a4d7d7a6bea73d836fc026d90094eef9528ef858fe9e5046469348f1d5951d4137841ffe525668f5c0cb02acffed13b41a5c
+  metadata: {}
+  developer_metadata: {}
+  software_statement: ''
+  software_id: ''
+  software_version: ''
+  registration_token:
+    signature: ''
+    expires_in: 0
+    client_uri: ''
+  dynamically_registered: false

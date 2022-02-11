@@ -11,9 +11,9 @@
         "authorization_server_id": "system",
         "client_id": "c551ng1akg2gd3ou83cg",
         "client_id_issued_at": 1632219686,
-        "client_name": "API App",
+        "client_name": "API App imported",
         "client_secret": "zUd7WiqafM9rp30KdL27Z4FQVQ4Ikf4nphfTG9HYQLk",
-        "description": "mTLS Sample App",
+        "description": "mTLS Sample App imported",
         "grant_types": [
           "client_credentials"
         ],
@@ -35,7 +35,7 @@
           "http://localhost:18888/callback"
         ],
         "subject_type": "public",
-        "tenant_id": "system",
+        "tenant_id": "admin",
         "token_endpoint_auth_method": "tls_client_auth",
         "token_endpoint_auth_signing_alg": "none",
         "userinfo_signed_response_alg": "none",
