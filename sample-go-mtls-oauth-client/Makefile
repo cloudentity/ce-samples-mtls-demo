@@ -1,8 +1,17 @@
 build:
-	docker-compose up --build
+	docker-compose build
 
 run: 
-	docker-compose up
+	docker-compose up -d --no-build
+	./scripts/wait.sh
 
-down:
+run-all:
+	docker-compose up --build -d 
+	./scripts/wait.sh
+
+stop:
 	docker-compose down
+
+.PHONY: clean
+clean:
+	docker-compose down -v --remove-orphans

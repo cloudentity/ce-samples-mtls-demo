@@ -1,0 +1,76 @@
+{
+  "apiGroups": {
+    "petstore": {
+      "_group": {
+        "basePath": "/pets"
+      },
+      "_rules": [
+        {
+          "default": {
+            "targetHost": "echo-service",
+            "targetPort": "4000"
+          },
+          "request": {
+            "preFlow": {
+              "plugins": [
+                { "name": "acp-authz" }
+              ]
+            }
+          },
+          "endpoints": [
+            {
+              "method": "POST",
+              "pathPattern": "/pet"
+            },
+            {
+              "method": "PUT",
+              "pathPattern": "/pet"
+            },
+            {
+              "method": "GET",
+              "pathPattern": "/pet/{petId}"
+            },
+            {
+              "method": "POST",
+              "pathPattern": "/pet/{petId}"
+            },
+            {
+              "method": "DELETE",
+              "pathPattern": "/pet/{petId}"
+            }
+          ]
+        }
+      ]
+    },
+    "banking": {
+      "_group": {
+        "basePath": "/banking"
+      },
+      "_rules": [
+        {
+          "default": {
+            "targetHost": "echo-service",
+            "targetPort": "4000"
+          },
+          "request": {
+            "preFlow": {
+              "plugins": [
+                { "name": "acp-authz" }
+              ]
+            }
+          },
+          "endpoints": [
+            {
+              "method": "POST",
+              "pathPattern": "/transfer"
+            },
+            {
+              "method": "GET",
+              "pathPattern": "/balance"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
