@@ -61,12 +61,42 @@ clients:
   tls_client_auth_san_dns: acp
   audience:
       - c79lsrgh5kre3dfd8xxx
+- tenant_id: {{ .tenant_id }}
+  authorization_server_id: system
+  id: c85cgj5t9c9vscu6k9ab
+  client_id: c85cgj5t9c9vscu6k9tg
+  client_secret: ytFAm6jjtNx88JRN8l4ayrzcXh7ouuu0av_MBC5iCk4
+  client_name: mtls pyron
+  name: pyron-mtls-client
+  system: false
+  trusted: false
+  description: ''
+  create_and_bind_services_automatically: true
+  token_exchange:
+    enabled: false
+    trusted_idp_ids: null
+  token_exchange_client_id: null
+  grant_types:
+    - client_credentials
+  response_types:
+    - code
+  scopes:
+    - gateway_exchange_tokens
+    - introspect_tokens
+    - push_gateway_requests
+    - read_gateway_configuration
+    - write_gateway_configuration
+  audience:
+    - c85cgj5t9c9vscu6k9tg
+  token_endpoint_auth_method: client_secret_post
+  backchannel_user_code_parameter: false
+  require_pushed_authorization_requests: false
 gateways:
 - tenant_id: {{ .tenant_id }}
   authorization_server_id: mtls2
   id: c7o1sqmifi7nonh7xxxx
-  client_id: c79lsrgh5kre3dfd8xxx
-  name: pyron-mtls
+  client_id: c85cgj5t9c9vscu6k9tg
+  name: pyron-mtls 
   description: ''
   type: pyron
   create_and_bind_services_automatically: true
@@ -74,52 +104,25 @@ gateways:
     enabled: false
     trusted_idp_ids: null
   token_exchange_client_id: null
-gateway_api_groups:
-- tenant_id: {{ .tenant_id }}
-  server_id: mtls2
-  gateway_id: c7o1sqmifi7nonh7xxxx
-  service_id: mtls2-profile
-  id: defaultgtwy
-  name: 'api group mtls'
-  apis:
-    - api_type: rest
-      method: POST
-      path: /transfer
-      graphql_schema: ''
-    - api_type: rest
-      method: GET
-      path: /balance
-      graphql_schema: ''
-services:
-- id: mtls2-profile
-  tenant_id: {{ .tenant_id }}
-  authorization_server_id: mtls2
-  name: Profile
-  description: ''
-  with_specification: false
-  apis:
-    - tenant_id: {{ .tenant_id }}
-      server_id: mtls2
-      service_id: mtls2-profile
-      id: cc5s6cmwp3idohjtcwh8r4urcpwsq4bom7dwkin9f7tgn5dbp3tsk
-      position: 0
-      method: GET
-      path: /balance
-      data_classifications: []
-      can_have_policy: true
-      graphql_schema: ''
-      graphql_types: []
-      api_type: rest
-    - tenant_id: {{ .tenant_id }}
-      server_id: mtls2
-      service_id: mtls2-profile
-      id: cc5s6cmwp3idohjtcwh8r4urcpwsq4bom7er6w4wmhzzehubp33sc3m1
-      position: 1
-      method: POST
-      path: /transfer
-      data_classifications: []
-      policy_id: null
-      can_have_policy: true
-      graphql_schema: ''
-      graphql_types: []
-      api_type: rest
+policies:
+  - tenant_id: {{ .tenant_id }}
+    server_id: mtls2
+    id: sample-policy-mtls
+    language: cloudentity
+    type: api
+    policy_name: sample-mtls-policy
+    validators:
+      - name: attributes
+        conf:
+          fields:
+            - comparator: equals
+              field: 'authnCtx.cnf.x5t#S256'
+              value: $request.headers.x-ssl-cert-hash
+        recovery: null
+      - name: attributes
+        conf:
+          fields:
+            - comparator: present
+              field: 'authnCtx.cnf.x5t#S256'
+              value: ''
+        recovery: null

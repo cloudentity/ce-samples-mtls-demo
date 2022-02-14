@@ -1,6 +1,6 @@
-ACP_SERVER_ID=mtls2
-TOKEN_EXCHANGE_ENABLED=true
 ACP_ISSUER_URL=https://cloudentity-bbray.us.authz.cloudentity.io/cloudentity-bbray/system
-ACP_CLIENT_ID=c79lsrgh5kre3dfd8xxx
-ACP_CLIENT_SECRET=S4DYjFEowDmEKfwbXOtR-mqaHWuIae2Mt4i-6KimZYQ
+ACP_CLIENT_ID=c85cgj5t9c9vscu6k9tg
+ACP_CLIENT_SECRET=ytFAm6jjtNx88JRN8l4ayrzcXh7ouuu0av_MBC5iCk4
 ACP_TENANT_ID=cloudentity-bbray
+ACP_SERVER_ID=system
+TOKEN_EXCHANGE_ENABLED=true
