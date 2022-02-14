@@ -1,57 +1,9 @@
 servers:
-- initialize: false
-  do_not_create_default_claims: false
-  tenant_id: {{ .tenant_id }}
-  id: mtls
+- tenant_id: {{ .tenant_id }}
+  id: mtls2
+  name: MTLS 2
   profile: default
-  name: MTLS
-  type: admin
-  color: '#EC5348'
-  secret: BUsUdCQqpXfsdXy4MojrhyHFqG3n3BgQjm75d43ernc
-  rotated_secrets: []
-  access_token_strategy: jwt
-  key_type: ecdsa
-  logo_uri: ''
-  custom_issuer_url: ''
-  dynamic_client_registration:
-    enabled: false
-    initial_access_token:
-      required: false
-    payload:
-      format: json
-      jws_payload:
-        source: server_configuration
-        jwks:
-          keys: null
-        jwks_uri: ''
-    default_scopes: null
-    disable_registration_token_rotation: false
-    cert_bound_registration_token: false
-  grant_types:
-    - client_credentials
-    - authorization_code
-  token_endpoint_auth_methods:
-    - none
-    - client_secret_basic
-    - client_secret_post
-    - client_secret_jwt
-    - private_key_jwt
-    - tls_client_auth
-    - self_signed_tls_client_auth
-  token_endpoint_authn_methods:
-    - none
-    - client_secret_basic
-    - client_secret_post
-    - client_secret_jwt
-    - private_key_jwt
-    - tls_client_auth
-    - self_signed_tls_client_auth
-  access_token_ttl: 1h0m0s
-  refresh_token_ttl: 720h0m0s
-  authorization_code_ttl: 10m0s
-  id_token_ttl: 1h0m0s
-  cookie_max_age: 1h0m0s
-  
+  initialize: true
   root_cas: |
     -----BEGIN CERTIFICATE-----
     MIIDfjCCAmagAwIBAgIUHOLlcMhX8uJyFafYYNXYBMBJr2swDQYJKoZIhvcNAQEL
@@ -74,82 +26,31 @@ servers:
     VyZGyIRnGkXUtC239/Lz0v0PXVwAPUF8ITb0JYcG/ojIc5VfTOkQOeOHHBaS+dXt
     HBJjBbnwpN4tNFhczJkbga16hL+vV0I4z61mJG8OkDr25Q==
     -----END CERTIFICATE-----
-  subject_identifier_types:
-    - public
-    - pairwise
-  subject_identifier_algorithm_salt: ekR6CNPmovwb_5yaXsG3GfPEoNlGfV9DG-U8ImXGJd8
-  enable_trust_anchor: false
-  trust_anchor_configuration:
-    jwks:
-      keys: null
-    jwks_uri: ''
-  enable_quick_access: false
-  enable_idp_discovery: false
-  enable_legacy_clients_with_no_software_statement: false
-  dynamic_scope_separator: .
-  issuer_id: ''
-  backchannel_token_delivery_modes_supported: null
-  backchannel_user_code_parameter_supported: false
-  consent_id_namespace: ''
-  require_pushed_authorization_requests: false
-  pushed_authorization_request_ttl: 1m0s
-  enable_id_token_encryption: false
-gateways:
+idps:
 - tenant_id: {{ .tenant_id }}
-  authorization_server_id: mtls
-  id: c7o1sqmifi7nonh7cccc
-  client_id: c7o1sqmifi7nonh7cfff
-  name: pyron-test
-  description: ''
-  type: pyron
-  create_and_bind_services_automatically: true
-  token_exchange:
-    enabled: false
-    trusted_idp_ids: null
-  token_exchange_client_id: null
-gateway_api_groups:
-- tenant_id: {{ .tenant_id }}
-  server_id: mtls
-  gateway_id: c7o1sqmifi7nonh7cccc
-  service_id: c7o1tnj8q1e8rjdjkgha
-  id: defaultgtwy
-  name: ''
-  apis:
-    - api_type: rest
-      method: POST
-      path: /transfer
-      graphql_schema: ''
-    - api_type: rest
-      method: GET
-      path: /balance
-      graphql_schema: ''
-  metadata:
-    type: ''
-    azure:
-      apim_id: ''
-      apim_name: ''
-    aws:
-      api_id: ''
-      api_name: ''
-      stage: ''
-    apigee:
-      organization_name: ''
-      proxy_name: ''
-      environment_name: ''
+  authorization_server_id: mtls2
+  id: bugkgai3g9kregtu04u0
+  name: MTLS IDP
+  method: static
+  credentials:
+    static:
+      users:
+      - username: user
+        password: user
+        authentication_context:
+          name: user
+          mobile_verified: "+48123456789"
 clients:
 - tenant_id: {{ .tenant_id }}
-  authorization_server_id: mtls
-  client_id: c79lsrgh5kre3dfd8kf0
-  client_name: mTLS Sample Client
+  authorization_server_id: mtls2
+  client_id: c79lsrgh5kre3dfd8xxx
+  client_name: MTLS Sample Client
   client_secret: S4DYjFEowDmEKfwbXOtR-mqaHWuIae2Mt4i-6KimZYQ
   grant_types:
   - client_credentials
-  token_endpoint_auth_method: client_secret_post
+  - authorization_code
   scopes:
-    - email
-    - introspect_tokens
     - openid
-    - revoke_tokens
   redirect_uris:
     - 'http://localhost:18888/callback'
   subject_type: public
@@ -159,99 +60,47 @@ clients:
   tls_client_certificate_bound_access_tokens: true
   tls_client_auth_san_dns: acp
   audience:
-      - c79lsrgh5kre3dfd8kf0
+      - c79lsrgh5kre3dfd8xxx
+gateways:
 - tenant_id: {{ .tenant_id }}
-  client_id: c7o1sqmifi7nonh7cfff
-  authorization_server_id: system
-  developer_id: null
-  system: false
-  trusted: false
-  client_name: pyron-test
+  authorization_server_id: mtls2
+  id: c7o1sqmifi7nonh7xxxx
+  client_id: c79lsrgh5kre3dfd8xxx
+  name: pyron-mtls
   description: ''
-  client_uri: ''
-  logo_uri: ''
-  policy_uri: ''
-  tos_uri: ''
-  organisation_id: ''
-  application_type: web
-  application_types:
-    - service
-  redirect_uris: []
-  grant_types:
-    - client_credentials
-  response_types:
-    - code
-  scopes:
-    - gateway_exchange_tokens
-    - introspect_tokens
-    - push_gateway_requests
-    - read_gateway_configuration
-    - write_gateway_configuration
-  audience:
-    - c7o1sqmifi7nonh7cfff
-  token_endpoint_auth_method: client_secret_basic
-  token_endpoint_auth_signing_alg: none
-  jwks:
-    keys: []
-  jwks_uri: ''
-  request_object_signing_alg: any
-  request_uris: []
-  client_secret_expires_at: 0
-  sector_identifier_uri: ''
-  userinfo_signed_response_alg: none
-  id_token_signed_response_alg: ES256
-  id_token_encrypted_response_alg: ''
-  id_token_encrypted_response_enc: ''
-  tls_client_certificate_bound_access_tokens: false
-  tls_client_auth_subject_dn: ''
-  tls_client_auth_san_dns: ''
-  tls_client_auth_san_uri: ''
-  tls_client_auth_san_ip: ''
-  tls_client_auth_san_email: ''
-  privacy:
-    scopes: null
-  subject_type: public
-  backchannel_token_delivery_mode: ''
-  backchannel_client_notification_endpoint: ''
-  backchannel_authentication_request_signing_alg: ''
-  backchannel_user_code_parameter: false
-  require_pushed_authorization_requests: false
-  client_secret: SJ4NQfgOJlm6wS3qx6qtKTi5S3xTjPpc1fenLl55vMY
-  hashed_secret: >-
-    c77d7ef1af4a8d76d165e41fbdf7f5e99a0761a8f67b5427c0d5d5d05c158a745fc575fd8ee05b0f4ce5837878afcbac08fc5ab3dd61b0d9ffccf9ca8206d2562502e61386e0d57b397962be0782a4d7d7a6bea73d836fc026d90094eef9528ef858fe9e5046469348f1d5951d4137841ffe525668f5c0cb02acffed13b41a5c
-  metadata: {}
-  developer_metadata: {}
-  software_statement: ''
-  software_id: ''
-  software_version: ''
-  registration_token:
-    signature: ''
-    expires_in: 0
-    client_uri: ''
-  dynamically_registered: false
-  scope_grants:
-  - subject: user
-    tenant_id: {{ .tenant_id }}
-    server_id: mtls
-    client_id: c79lsrgh5kre3dfd8kf0
-    scope_name: openid
-    granted_scope_name: openid
-    given_at: '2022-01-21T19:43:53.779232Z'
-    language: en
+  type: pyron
+  create_and_bind_services_automatically: true
+  token_exchange:
+    enabled: false
+    trusted_idp_ids: null
+  token_exchange_client_id: null
+gateway_api_groups:
+- tenant_id: {{ .tenant_id }}
+  server_id: mtls2
+  gateway_id: c7o1sqmifi7nonh7xxxx
+  service_id: mtls2-profile
+  id: defaultgtwy
+  name: 'api group mtls'
+  apis:
+    - api_type: rest
+      method: POST
+      path: /transfer
+      graphql_schema: ''
+    - api_type: rest
+      method: GET
+      path: /balance
+      graphql_schema: ''
 services:
-- id: c7o1tnj8q1e8rjdjkgha
+- id: mtls2-profile
   tenant_id: {{ .tenant_id }}
-  authorization_server_id: mtls
-  gateway_id: null
+  authorization_server_id: mtls2
   name: Profile
   description: ''
-  system: true
   with_specification: false
-  scopes: []
   apis:
     - tenant_id: {{ .tenant_id }}
-      server_id: mtls
-      service_id: c7o1tnj8q1e8rjdjkgha
+      server_id: mtls2
+      service_id: mtls2-profile
       id: cc5s6cmwp3idohjtcwh8r4urcpwsq4bom7dwkin9f7tgn5dbp3tsk
       position: 0
       method: GET
@@ -262,8 +111,8 @@ services:
       graphql_types: []
       api_type: rest
     - tenant_id: {{ .tenant_id }}
-      server_id: mtls
-      service_id: c7o1tnj8q1e8rjdjkgha
+      server_id: mtls2
+      service_id: mtls2-profile
       id: cc5s6cmwp3idohjtcwh8r4urcpwsq4bom7er6w4wmhzzehubp33sc3m1
       position: 1
       method: POST
@@ -274,195 +123,3 @@ services:
       graphql_schema: ''
       graphql_types: []
       api_type: rest
-idps:
-  - id: c82nnubpuc6jfobdqpe0
-    tenant_id: cloudentity-bbray
-    authorization_server_id: mtls
-    client_id: c7o1sqmifi7nonh7cfff
-    name: sandbox idp
-    disabled: false
-    method: static
-    attributes:
-      - name: name
-        description: Name
-        type: string
-        labels: null
-      - name: given_name
-        description: Given name
-        type: string
-        labels: null
-      - name: family_name
-        description: Family name
-        type: string
-        labels: null
-      - name: email
-        description: Email
-        type: string
-        labels: null
-      - name: email_verified
-        description: Email verified
-        type: bool
-        labels: null
-      - name: phone_number
-        description: Phone number
-        type: string
-        labels: null
-      - name: phone_number_verified
-        description: Phone number verified
-        type: bool
-        labels: null
-    mappings:
-      - source: name
-        target: name
-        type: string
-        allow_weak_decoding: false
-      - source: given_name
-        target: given_name
-        type: string
-        allow_weak_decoding: false
-      - source: family_name
-        target: family_name
-        type: string
-        allow_weak_decoding: false
-      - source: email
-        target: email
-        type: string
-        allow_weak_decoding: false
-      - source: email_verified
-        target: email_verified
-        type: bool
-        allow_weak_decoding: false
-      - source: phone_number
-        target: phone_number
-        type: string
-        allow_weak_decoding: false
-      - source: phone_number_verified
-        target: phone_number_verified
-        type: bool
-        allow_weak_decoding: false
-    static_amr: []
-    transformer:
-      enabled: false
-      script: ''
-    config:
-      enable_stateful_ctx: false
-      stateful_ctx_duration: 0s
-    discovery_settings:
-      domains: []
-      instant_redirect: false
-    token_exchange_settings:
-      enabled: false
-    identity_pool_id: null
-    settings:
-      static:
-        hint: false
-      azure:
-        tenant: ''
-        client_id: ''
-        scopes: null
-        get_user: false
-        fetch_groups: false
-        only_security_groups: false
-        group_name_format: ''
-        graph_user_attributes: null
-      okta:
-        domain: ''
-        scopes: null
-        get_user_info: false
-        use_org_authorization_server: false
-        authorization_server_id: ''
-      azureb2c:
-        client_id: ''
-        scopes: null
-        tenant: ''
-        policy: ''
-        get_user: false
-        fetch_groups: false
-        only_security_groups: false
-        group_name_format: ''
-        graph_user_attributes: null
-      cognito:
-        pool_id: ''
-        region: ''
-        client_id: ''
-        scopes: null
-        get_user_info: false
-      github:
-        client_id: ''
-        scopes: null
-        fetch_groups: false
-      oidc:
-        client_id: ''
-        scopes: null
-        issuer_url: ''
-        get_user_info: false
-      intelli_trust:
-        client_id: ''
-        scopes: null
-        domain: ''
-        get_user_info: false
-        fetch_groups: false
-      saml:
-        sso_url: ''
-        entity_issuer: ''
-        identifier_source: ''
-        identifier_attribute: ''
-        subject_name_id_format: ''
-        skip_in_response_to_verification: false
-      custom:
-        login_url: ''
-        type: ''
-      external:
-        url: ''
-      google:
-        client_id: ''
-        scopes: null
-        issuer_url: ''
-        get_user_info: false
-      auth0:
-        client_id: ''
-        scopes: null
-        domain: ''
-        get_user_info: false
-    credentials:
-      static:
-        users:
-          - username: user
-            password: user
-            email: ''
-            email_verified: false
-            phone_number: ''
-            phone_number_verified: false
-            authentication_context:
-              name: user
-            additional_attributes: null
-      azure:
-        client_secret: ''
-      okta:
-        supervisor_client:
-          client_id: ''
-          private_key: ''
-      azureb2c:
-        client_secret: ''
-      cognito:
-        client_secret: ''
-      github:
-        client_secret: ''
-      oidc:
-        client_secret: ''
-      intelli_trust:
-        client_secret: ''
-      saml:
-        idp_certificate: ''
-      custom: {}
-      external:
-        username: ''
-        password: ''
-        api_key_name: ''
-        api_key_value: ''
-        api_key_in: ''
-      google:
-        client_secret: ''
-      auth0:
-        client_secret: ''
- 
