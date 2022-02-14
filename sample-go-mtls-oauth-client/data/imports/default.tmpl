@@ -74,11 +74,31 @@ servers:
     VyZGyIRnGkXUtC239/Lz0v0PXVwAPUF8ITb0JYcG/ojIc5VfTOkQOeOHHBaS+dXt
     HBJjBbnwpN4tNFhczJkbga16hL+vV0I4z61mJG8OkDr25Q==
     -----END CERTIFICATE-----
+  subject_identifier_types:
+    - public
+    - pairwise
+  subject_identifier_algorithm_salt: ekR6CNPmovwb_5yaXsG3GfPEoNlGfV9DG-U8ImXGJd8
+  enable_trust_anchor: false
+  trust_anchor_configuration:
+    jwks:
+      keys: null
+    jwks_uri: ''
+  enable_quick_access: false
+  enable_idp_discovery: false
+  enable_legacy_clients_with_no_software_statement: false
+  dynamic_scope_separator: .
+  issuer_id: ''
+  backchannel_token_delivery_modes_supported: null
+  backchannel_user_code_parameter_supported: false
+  consent_id_namespace: ''
+  require_pushed_authorization_requests: false
+  pushed_authorization_request_ttl: 1m0s
+  enable_id_token_encryption: false
 gateways:
 - tenant_id: {{ .tenant_id }}
-  authorization_server_id: default
-  id: c7o1sqeifi7nonh7cokg
-  client_id: c7o1sqmifi7nonh7col0
+  authorization_server_id: mtls
+  id: c7o1sqmifi7nonh7cbbb
+  client_id: c7o1sqmifi7nonh7cfff
   name: pyron-test
   description: ''
   type: pyron
@@ -89,8 +109,8 @@ gateways:
   token_exchange_client_id: null
 gateway_api_groups:
 - tenant_id: {{ .tenant_id }}
-  server_id: default
-  gateway_id: c7o1sqeifi7nonh7cokg
+  server_id: mtls
+  gateway_id: c7o1sqmifi7nonh7cbbb
   service_id: c7o1tnj8q1e8rjdcigh0
   id: banking
   name: ''
@@ -116,46 +136,6 @@ gateway_api_groups:
       organization_name: ''
       proxy_name: ''
       environment_name: ''
-- tenant_id: {{ .tenant_id }}
-  server_id: default
-  gateway_id: c7o1sqeifi7nonh7cokg
-  service_id: c7o1tnj8q1e8rjdcighg
-  id: petstore
-  name: ''
-  apis:
-    - api_type: rest
-      method: POST
-      path: /pet
-      graphql_schema: ''
-    - api_type: rest
-      method: PUT
-      path: /pet
-      graphql_schema: ''
-    - api_type: rest
-      method: GET
-      path: '/pet/{petId}'
-      graphql_schema: ''
-    - api_type: rest
-      method: POST
-      path: '/pet/{petId}'
-      graphql_schema: ''
-    - api_type: rest
-      method: DELETE
-      path: '/pet/{petId}'
-      graphql_schema: ''
-  metadata:
-    type: ''
-    azure:
-      apim_id: ''
-      apim_name: ''
-    aws:
-      api_id: ''
-      api_name: ''
-      stage: ''
-    apigee:
-      organization_name: ''
-      proxy_name: ''
-      environment_name: ''
 clients:
 - tenant_id: {{ .tenant_id }}
   authorization_server_id: mtls
@@ -165,7 +145,8 @@ clients:
   grant_types:
   - client_credentials
   token_endpoint_auth_method: client_secret_post
-
+  scopes:
+    - openid
   redirect_uris:
     - 'http://localhost:18888/callback'
   subject_type: public
@@ -174,9 +155,11 @@ clients:
   userinfo_signed_response_alg: none
   tls_client_certificate_bound_access_tokens: true
   tls_client_auth_san_dns: acp
+  audience:
+      - c79lsrgh5kre3dfd8kf0
 - tenant_id: {{ .tenant_id }}
-  client_id: c7o1sqmifi7nonh7col0
-  authorization_server_id: system
+  client_id: c7o1sqmifi7nonh7cfff
+  authorization_server_id: mtls
   developer_id: null
   system: false
   trusted: false
@@ -202,7 +185,7 @@ clients:
     - read_gateway_configuration
     - write_gateway_configuration
   audience:
-    - c7o1sqmifi7nonh7col0
+    - c7o1sqmifi7nonh7cfff
   token_endpoint_auth_method: client_secret_basic
   token_endpoint_auth_signing_alg: none
   jwks:
@@ -244,3 +227,66 @@ clients:
     expires_in: 0
     client_uri: ''
   dynamically_registered: false
+  scope_grants:
+  - subject: user
+    tenant_id: {{ .tenant_id }}
+    server_id: mtls
+    client_id: c79lsrgh5kre3dfd8kf0
+    scope_name: openid
+    granted_scope_name: openid
+    given_at: '2022-01-21T19:43:53.779232Z'
+    language: en
+services:
+- id: c4rmhjmg5oeehn5fk7j7
+  tenant_id: {{ .tenant_id }}
+  authorization_server_id: mtls
+  gateway_id: null
+  name: Profile
+  description: ''
+  system: true
+  with_specification: false
+  scopes:
+    - id: c4rmhjmllleehn5fk7l0
+      tenant_id: {{ .tenant_id }}
+      authorization_server_id: mtls
+      name: profile
+      display_name: Profile
+      description: >-
+        This scope value requests access to the end-user's default profile
+        claims, which are: name, family_name, given_name, middle_name,
+        nickname, preferred_username, profile, picture, website, gender,
+        birthdate, zoneinfo, locale, and updated_at.
+      tenant_id: {{ .tenant_id }}
+      authorization_server_id: admin
+      name: openid
+      display_name: OpenID
+      description: >-
+        This scope value requests access to the sub claim which uniquely
+        identifies the user.
+  apis:
+    - tenant_id: {{ .tenant_id }}
+      server_id: mtls
+      service_id: c4rmhjmg5oeehn5fk7j7
+      id: cc5s6cmwp3idohjtcwh8r4urcpwsq4bom7dwkin9f7tgn5dbp3tsk
+      position: 0
+      method: GET
+      path: /balance
+      data_classifications: []
+      policy_id: default-test-mtls
+      can_have_policy: true
+      graphql_schema: ''
+      graphql_types: []
+      api_type: rest
+    - tenant_id: {{ .tenant_id }}
+      server_id: mtls
+      service_id: c4rmhjmg5oeehn5fk7j7
+      id: cc5s6cmwp3idohjtcwh8r4urcpwsq4bom7er6w4wmhzzehubp33sc3m1
+      position: 1
+      method: POST
+      path: /transfer
+      data_classifications: []
+      policy_id: null
+      can_have_policy: true
+      graphql_schema: ''
+      graphql_types: []
+      api_type: rest
