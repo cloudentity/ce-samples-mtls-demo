@@ -1,6 +1,6 @@
+ACP_ISSUER_URL=https://cloudentity-bbray.us.authz.cloudentity.io/cloudentity-bbray/system
+ACP_CLIENT_ID=c7o1sqmifi7nonh7cfff
 ACP_CLIENT_SECRET=SJ4NQfgOJlm6wS3qx6qtKTi5S3xTjPpc1fenLl55vMY
 ACP_TENANT_ID=cloudentity-bbray
 ACP_SERVER_ID=system
 TOKEN_EXCHANGE_ENABLED=true
-ACP_ISSUER_URL=https://cloudentity-bbray.us.authz.cloudentity.io/cloudentity-bbray/system
-ACP_CLIENT_ID=c7o1sqmifi7nonh7cfff

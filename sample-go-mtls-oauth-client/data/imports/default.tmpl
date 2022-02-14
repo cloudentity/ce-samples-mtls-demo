@@ -97,7 +97,7 @@ servers:
 gateways:
 - tenant_id: {{ .tenant_id }}
   authorization_server_id: mtls
-  id: c7o1sqmifi7nonh7cbbb
+  id: c7o1sqmifi7nonh7cccc
   client_id: c7o1sqmifi7nonh7cfff
   name: pyron-test
   description: ''
@@ -110,9 +110,9 @@ gateways:
 gateway_api_groups:
 - tenant_id: {{ .tenant_id }}
   server_id: mtls
-  gateway_id: c7o1sqmifi7nonh7cbbb
-  service_id: c7o1tnj8q1e8rjdcigh0
-  id: banking
+  gateway_id: c7o1sqmifi7nonh7cccc
+  service_id: c7o1tnj8q1e8rjdjkgha
+  id: defaultgtwy
   name: ''
   apis:
     - api_type: rest
@@ -146,7 +146,10 @@ clients:
   - client_credentials
   token_endpoint_auth_method: client_secret_post
   scopes:
+    - email
+    - introspect_tokens
     - openid
+    - revoke_tokens
   redirect_uris:
     - 'http://localhost:18888/callback'
   subject_type: public
@@ -236,7 +239,7 @@ clients:
     given_at: '2022-01-21T19:43:53.779232Z'
     language: en
 services:
-- id: c4rmhjmg5oeehn5fk7j7
+- id: c7o1tnj8q1e8rjdjkgha
   tenant_id: {{ .tenant_id }}
   authorization_server_id: mtls
   gateway_id: null
@@ -244,41 +247,23 @@ services:
   description: ''
   system: true
   with_specification: false
-  scopes:
-    - id: c4rmhjmllleehn5fk7l0
-      tenant_id: {{ .tenant_id }}
-      authorization_server_id: mtls
-      name: profile
-      display_name: Profile
-      description: >-
-        This scope value requests access to the end-user's default profile
-        claims, which are: name, family_name, given_name, middle_name,
-        nickname, preferred_username, profile, picture, website, gender,
-        birthdate, zoneinfo, locale, and updated_at.
-      tenant_id: {{ .tenant_id }}
-      authorization_server_id: admin
-      name: openid
-      display_name: OpenID
-      description: >-
-        This scope value requests access to the sub claim which uniquely
-        identifies the user.
+  scopes: []
   apis:
     - tenant_id: {{ .tenant_id }}
       server_id: mtls
-      service_id: c4rmhjmg5oeehn5fk7j7
+      service_id: c7o1tnj8q1e8rjdjkgha
       id: cc5s6cmwp3idohjtcwh8r4urcpwsq4bom7dwkin9f7tgn5dbp3tsk
       position: 0
       method: GET
       path: /balance
       data_classifications: []
-      policy_id: default-test-mtls
       can_have_policy: true
       graphql_schema: ''
       graphql_types: []
       api_type: rest
     - tenant_id: {{ .tenant_id }}
       server_id: mtls
-      service_id: c4rmhjmg5oeehn5fk7j7
+      service_id: c7o1tnj8q1e8rjdjkgha
       id: cc5s6cmwp3idohjtcwh8r4urcpwsq4bom7er6w4wmhzzehubp33sc3m1
       position: 1
       method: POST
@@ -289,3 +274,195 @@ services:
       graphql_schema: ''
       graphql_types: []
       api_type: rest
+idps:
+  - id: c82nnubpuc6jfobdqpe0
+    tenant_id: cloudentity-bbray
+    authorization_server_id: mtls
+    client_id: c7o1sqmifi7nonh7cfff
+    name: sandbox idp
+    disabled: false
+    method: static
+    attributes:
+      - name: name
+        description: Name
+        type: string
+        labels: null
+      - name: given_name
+        description: Given name
+        type: string
+        labels: null
+      - name: family_name
+        description: Family name
+        type: string
+        labels: null
+      - name: email
+        description: Email
+        type: string
+        labels: null
+      - name: email_verified
+        description: Email verified
+        type: bool
+        labels: null
+      - name: phone_number
+        description: Phone number
+        type: string
+        labels: null
+      - name: phone_number_verified
+        description: Phone number verified
+        type: bool
+        labels: null
+    mappings:
+      - source: name
+        target: name
+        type: string
+        allow_weak_decoding: false
+      - source: given_name
+        target: given_name
+        type: string
+        allow_weak_decoding: false
+      - source: family_name
+        target: family_name
+        type: string
+        allow_weak_decoding: false
+      - source: email
+        target: email
+        type: string
+        allow_weak_decoding: false
+      - source: email_verified
+        target: email_verified
+        type: bool
+        allow_weak_decoding: false
+      - source: phone_number
+        target: phone_number
+        type: string
+        allow_weak_decoding: false
+      - source: phone_number_verified
+        target: phone_number_verified
+        type: bool
+        allow_weak_decoding: false
+    static_amr: []
+    transformer:
+      enabled: false
+      script: ''
+    config:
+      enable_stateful_ctx: false
+      stateful_ctx_duration: 0s
+    discovery_settings:
+      domains: []
+      instant_redirect: false
+    token_exchange_settings:
+      enabled: false
+    identity_pool_id: null
+    settings:
+      static:
+        hint: false
+      azure:
+        tenant: ''
+        client_id: ''
+        scopes: null
+        get_user: false
+        fetch_groups: false
+        only_security_groups: false
+        group_name_format: ''
+        graph_user_attributes: null
+      okta:
+        domain: ''
+        scopes: null
+        get_user_info: false
+        use_org_authorization_server: false
+        authorization_server_id: ''
+      azureb2c:
+        client_id: ''
+        scopes: null
+        tenant: ''
+        policy: ''
+        get_user: false
+        fetch_groups: false
+        only_security_groups: false
+        group_name_format: ''
+        graph_user_attributes: null
+      cognito:
+        pool_id: ''
+        region: ''
+        client_id: ''
+        scopes: null
+        get_user_info: false
+      github:
+        client_id: ''
+        scopes: null
+        fetch_groups: false
+      oidc:
+        client_id: ''
+        scopes: null
+        issuer_url: ''
+        get_user_info: false
+      intelli_trust:
+        client_id: ''
+        scopes: null
+        domain: ''
+        get_user_info: false
+        fetch_groups: false
+      saml:
+        sso_url: ''
+        entity_issuer: ''
+        identifier_source: ''
+        identifier_attribute: ''
+        subject_name_id_format: ''
+        skip_in_response_to_verification: false
+      custom:
+        login_url: ''
+        type: ''
+      external:
+        url: ''
+      google:
+        client_id: ''
+        scopes: null
+        issuer_url: ''
+        get_user_info: false
+      auth0:
+        client_id: ''
+        scopes: null
+        domain: ''
+        get_user_info: false
+    credentials:
+      static:
+        users:
+          - username: user
+            password: user
+            email: ''
+            email_verified: false
+            phone_number: ''
+            phone_number_verified: false
+            authentication_context:
+              name: user
+            additional_attributes: null
+      azure:
+        client_secret: ''
+      okta:
+        supervisor_client:
+          client_id: ''
+          private_key: ''
+      azureb2c:
+        client_secret: ''
+      cognito:
+        client_secret: ''
+      github:
+        client_secret: ''
+      oidc:
+        client_secret: ''
+      intelli_trust:
+        client_secret: ''
+      saml:
+        idp_certificate: ''
+      custom: {}
+      external:
+        username: ''
+        password: ''
+        api_key_name: ''
+        api_key_value: ''
+        api_key_in: ''
+      google:
+        client_secret: ''
+      auth0:
+        client_secret: ''
+ 
