@@ -41,7 +41,7 @@ Your workspace is now prepared to import the sample Workspace and Client.
 2. Go to the .env file in the root directory.
 3. Fill in the values shown below with your configuration tenant URL, configuration tenant, client ID, and client secret.
 ![env vars](https://github.com/cloudentity/ce-samples-mtls-demo/blob/incr-build/sample-go-mtls-oauth-client/img/env.png?raw=true.png)
-4. Run the command below in the terminal from the root of the Golang sample repo.
+4. Run the command below in the terminal from the root of the Go sample repo.
 ```
 make run-all
 ```
