@@ -13,21 +13,21 @@ using the Cloudentity Pyron API Gateway.
 2. [Run the sample OAuth client app](#build-and-run-the-go-OAuth-client-sample)
 
 ### Configure Cloudentity SAAS workspace to allow import of Workspace and Client app.
-1. Sign in [Cloudentity](https://authz.cloudentity.io/)
+1. Sign in [Cloudentity](https://authz.cloudentity.io/) <br />
 ![sign in](https://github.com/cloudentity/ce-samples-mtls-demo/blob/incr-build/sample-go-mtls-oauth-client/img/signin.png?raw=true.png)
-2. Choose the System workspace workspace.
+2. Choose the System workspace workspace. <br />
 ![choose workspace](https://github.com/cloudentity/ce-samples-mtls-demo/blob/incr-build/sample-go-mtls-oauth-client/img/cswp.png?raw=true.png)
-3. Go to "Applications" in the left side bar, then choose "Clients".
+3. Go to "Applications" in the left side bar, then choose "Clients". <br />
 ![workspace clients](https://github.com/cloudentity/ce-samples-mtls-demo/blob/incr-build/sample-go-mtls-oauth-client/img/cac.png?raw=true.png)
-4. Choose "Create Application".
+4. Choose "Create Application". <br />
 ![create new service](https://github.com/cloudentity/ce-samples-mtls-demo/blob/incr-build/sample-go-mtls-oauth-client/img/createservice.png?raw=true.png)
 5. Create the service following the steps shown.
   * Choose "OAuth" tab.
   * Copy the Client ID and Client Secret (these will be used in step below). 
-  * Scroll down and set "Token Endpoint Authentication Method" to "Client Secret Post"
-![setup service](https://github.com/cloudentity/ce-samples-mtls-demo/blob/incr-build/sample-go-mtls-oauth-client/img/setupservice.png?raw=true.png)
+  * Scroll down and set "Token Endpoint Authentication Method" to "Client Secret Post" <br />
+![setup service](https://github.com/cloudentity/ce-samples-mtls-demo/blob/incr-build/sample-go-mtls-oauth-client/img/setupservice.png?raw=true.png) <br />
 ![set token authentication method](https://github.com/cloudentity/ce-samples-mtls-demo/blob/incr-build/sample-go-mtls-oauth-client/img/post.png?raw=true.png)
-5. Choose the "Scopes" tab and turn on `manage_configuration` in the "Management" section.
+5. Choose the "Scopes" tab and turn on `manage_configuration` in the "Management" section. <br />
 ![scopes](https://github.com/cloudentity/ce-samples-mtls-demo/blob/incr-build/sample-go-mtls-oauth-client/img/scopes.png?raw=true.png)
 
 
@@ -35,11 +35,11 @@ Your workspace is now prepared to import the sample Workspace and Client.
 
 ### Build and run the Go OAuth client sample
 
-1. Find your tenant name and tenant URL as shown.
+1. Find your tenant name and tenant URL as shown. <br />
 ![tenant url](https://github.com/cloudentity/ce-samples-mtls-demo/blob/incr-build/sample-go-mtls-oauth-client/img/tenant.png?raw=true.png)
 ![tenant name](https://github.com/cloudentity/ce-samples-mtls-demo/blob/incr-build/sample-go-mtls-oauth-client/img/tenant-name.png?raw=true.png)
-2. Go to the .env file in the root directory.
-3. Fill in the values shown below with your configuration tenant URL, configuration tenant, client ID, and client secret.
+2. Go to the .env file in the root directory. <br />
+3. Fill in the values shown below with your configuration tenant URL, configuration tenant, client ID, and client secret. <br />
 ![env vars](https://github.com/cloudentity/ce-samples-mtls-demo/blob/incr-build/sample-go-mtls-oauth-client/img/env.png?raw=true.png)
 4. Run the command below in the terminal from the root of the Go sample repo.
 ```
@@ -51,19 +51,19 @@ After successfully starting the application you will see the following console l
 Login endpoint available at: http://localhost:18888/login
 ```
 
-4. Go to your account and verify that the MTLS OAuth Sample workspace has been imported. 
+4. Go to your account and verify that the MTLS OAuth Sample workspace has been imported.  <br />
 ![sample imported](https://github.com/cloudentity/ce-samples-mtls-demo/blob/incr-build/sample-go-mtls-oauth-client/img/imported.png?raw=true.png)
-5. Go to "Governance->Policies" on the left side menu and notice that a sample policy has been created. 
+5. Go to "Governance->Policies" on the left side menu and notice that a sample policy has been created.  <br />
 ![sample policy](https://github.com/cloudentity/ce-samples-mtls-demo/blob/incr-build/sample-go-mtls-oauth-client/img/policy.png?raw=true.png)
-6. Go to "Enforcement->APIS" on the left side menu and notice that the `/balance` endpoint is set to "Unrestricted". 
+6. Go to "Enforcement->APIS" on the left side menu and notice that the `/balance` endpoint is set to "Unrestricted". <br />
 ![unrestricted api](https://github.com/cloudentity/ce-samples-mtls-demo/blob/incr-build/sample-go-mtls-oauth-client/img/unrestricted.png?raw=true.png)
-6. To enforce the policy that has been created, click on "Unrestricted" for the `/balance` endpoint and set to "sample-mtls-policy". You should see that the API endpoint is now protected as shown. 
+6. To enforce the policy that has been created, click on "Unrestricted" for the `/balance` endpoint and set to "sample-mtls-policy". You should see that the API endpoint is now protected as shown. <br />
 ![protected api](https://github.com/cloudentity/ce-samples-mtls-demo/blob/incr-build/sample-go-mtls-oauth-client/img/protected.png?raw=true.png)
-7. Now go to the URL displayed in the terminal and follow the prompts to log in. The user name for the sample Identity provider is `user` and the password is `user`.
+7. Now go to the URL displayed in the terminal and follow the prompts to log in. The user name for the sample Identity provider is `user` and the password is `user`. <br />
 ![login](https://github.com/cloudentity/ce-samples-mtls-demo/blob/incr-build/sample-go-mtls-oauth-client/img/login.png?raw=true.png)
-8. After logging in, note the certificate hash `x5t#S256`.
+8. After logging in, note the certificate hash `x5t#S256`. <br />
 ![sample imported](https://github.com/cloudentity/ce-samples-mtls-demo/blob/incr-build/sample-go-mtls-oauth-client/img/hash.png?raw=true.png)
-9. Finally, click the "Call Resource Server API" link to use the token to interact with the resource server. 
+9. Finally, click the "Call Resource Server API" link to use the token to interact with the resource server.  <br />
 ![sample imported](https://github.com/cloudentity/ce-samples-mtls-demo/blob/incr-build/sample-go-mtls-oauth-client/img/valid.png?raw=true.png)
 
 
