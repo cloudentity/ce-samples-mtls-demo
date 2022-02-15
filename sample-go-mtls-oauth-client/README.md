@@ -52,7 +52,7 @@ Login endpoint available at: http://localhost:18888/login
 ```
 
 4. Go to your account and verify that the MTLS OAuth Sample workspace has been imported. 
-![sample imported](https://github.com/cloudentity/ce-samples-mtls-demo/blob/incr-build/sample-go-mtls-oauth-client/img/samplews.png?raw=true.png)
+![sample imported](https://github.com/cloudentity/ce-samples-mtls-demo/blob/incr-build/sample-go-mtls-oauth-client/img/imported.png?raw=true.png)
 5. Go to "Governance->Policies" on the left side menu and notice that a sample policy has been created. 
 ![sample policy](https://github.com/cloudentity/ce-samples-mtls-demo/blob/incr-build/sample-go-mtls-oauth-client/img/policy.png?raw=true.png)
 6. Go to "Enforcement->APIS" on the left side menu and notice that the `/balance` endpoint is set to "Unrestricted". 
