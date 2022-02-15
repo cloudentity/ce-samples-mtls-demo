@@ -14,7 +14,7 @@ using the Cloudentity Pyron API Gateway.
 
 ### Configure Cloudentity SAAS workspace to allow import of Workspace and Client app.
 1. Sign in [Cloudentity](https://authz.cloudentity.io/)
-<img src="https://github.com/cloudentity/ce-samples-mtls-demo/blob/incr-build/sample-go-mtls-oauth-client/img/signin.png?raw=true.png" width="100" height="100">
+<img src="https://github.com/cloudentity/ce-samples-mtls-demo/blob/incr-build/sample-go-mtls-oauth-client/img/signin.png?raw=true.png" height="200">
 ![sign in](https://github.com/cloudentity/ce-samples-mtls-demo/blob/incr-build/sample-go-mtls-oauth-client/img/signin.png?raw=true.png|height=100px)
 2. Choose the System workspace workspace.
 ![choose workspace](https://github.com/cloudentity/ce-samples-mtls-demo/blob/incr-build/sample-go-mtls-oauth-client/img/cswp.png?raw=true.png)
