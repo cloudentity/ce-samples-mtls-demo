@@ -11,24 +11,24 @@ using the Cloudentity Pyron API Gateway.
 ## To run the sample OAuth client requires two primary tasks and a third, optional, task:
 1. [Prepare your Cloudentity SAAS workspace](#configure-cloudentity-saas-workspace)
 2. [Run the sample OAuth client app](#build-and-run-the-go-OAuth-client-sample)
-3. [Prepare the Pyron Authorizer](#using-pyron-api-gateway)
 
 ### Configure Cloudentity SAAS workspace to allow import of Workspace and Client app.
 1. Sign in [Cloudentity](https://authz.cloudentity.io/)
-![sign in](https://docs.authorization.cloudentity.com/uploads/tut_auth_login.png)
-2. Choose the system workspace workspace. This example uses the "mtls-workspace" workspace.
+![sign in](https://github.com/cloudentity/ce-samples-mtls-demo/blob/incr-build/sample-go-mtls-oauth-client/img/signin.png?raw=true.png)
+2. Choose the System workspace workspace.
 ![choose workspace](https://github.com/cloudentity/ce-samples-mtls-demo/blob/incr-build/sample-go-mtls-oauth-client/img/cswp.png?raw=true.png)
 3. Go to "Applications" in the left side bar, then choose "Clients".
 ![workspace clients](https://github.com/cloudentity/ce-samples-mtls-demo/blob/incr-build/sample-go-mtls-oauth-client/img/cac.png?raw=true.png)
 4. Choose "Create Application".
 ![create new service](https://github.com/cloudentity/ce-samples-mtls-demo/blob/incr-build/sample-go-mtls-oauth-client/img/createservice.png?raw=true.png)
-5. Create the service following the steps shown "Create Application".
-  1. Choose "OAuth" tab.
-  2. Copy the Client ID and Client Secret (these will be used in step below). 
-  3. Scroll down and set "Token Endpoint Authentication Method" to "Client Secret Post"
+5. Create the service following the steps shown.
+  * Choose "OAuth" tab.
+  * Copy the Client ID and Client Secret (these will be used in step below). 
+  * Scroll down and set "Token Endpoint Authentication Method" to "Client Secret Post"
 ![setup service](https://github.com/cloudentity/ce-samples-mtls-demo/blob/incr-build/sample-go-mtls-oauth-client/img/setupservice.png?raw=true.png)
 ![set token authentication method](https://github.com/cloudentity/ce-samples-mtls-demo/blob/incr-build/sample-go-mtls-oauth-client/img/post.png?raw=true.png)
 5. Choose the "Scopes" tab and turn on `manage_configuration` in the "Management" section.
+![scopes](https://github.com/cloudentity/ce-samples-mtls-demo/blob/incr-build/sample-go-mtls-oauth-client/img/scopes.png?raw=true.png)
 
 
 Your workspace is now prepared to import the sample Workspace and Client. 
