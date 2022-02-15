@@ -1,6 +1,6 @@
 servers:
 - tenant_id: {{ .tenant_id }}
-  id: mtlssample
+  id: {{ .workspace }} 
   name: MTLS OAUTH sample
   profile: default
   initialize: true
@@ -28,7 +28,7 @@ servers:
     -----END CERTIFICATE-----
 idps:
 - tenant_id: {{ .tenant_id }}
-  authorization_server_id: mtlssample
+  authorization_server_id: {{ .workspace }}
   id: bugkgai3g9kregtu04u0
   name: MTLS IDP
   method: static
@@ -42,7 +42,7 @@ idps:
           mobile_verified: "+48123456789"
 clients:
 - tenant_id: {{ .tenant_id }}
-  authorization_server_id: mtlssample
+  authorization_server_id: {{ .workspace }}
   client_id: c79lsrgh5kre3dfd8xxx
   client_name: MTLS Sample Client
   client_secret: S4DYjFEowDmEKfwbXOtR-mqaHWuIae2Mt4i-6KimZYQ
@@ -93,7 +93,7 @@ clients:
   require_pushed_authorization_requests: false
 gateways:
 - tenant_id: {{ .tenant_id }}
-  authorization_server_id: mtlssample
+  authorization_server_id: {{ .workspace }}
   id: c7o1sqmifi7nonh7xxxx
   client_id: c85cgj5t9c9vscu6k9tg
   name: pyron-mtls 
@@ -106,7 +106,7 @@ gateways:
   token_exchange_client_id: null
 policies:
   - tenant_id: {{ .tenant_id }}
-    server_id: mtlssample
+    server_id: {{ .workspace }}
     id: sample-policy-mtls
     language: cloudentity
     type: api
