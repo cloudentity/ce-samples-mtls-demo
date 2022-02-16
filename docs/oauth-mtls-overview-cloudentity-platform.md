@@ -5,14 +5,14 @@ As you might already be aware Cloudentity platform is compliant to latest emergi
 specfications support. We will take you down the path of understanding use cases that can be addressed using mTLS specification, code samples in various language on how to integrate and utilize the latest
 specification in your new architecture patterns
 
-## Keywords
+## Specification keyword support
+
+Attached image shows all the keywords for the specification that is support by Cloudentity authorization platform
 
 ![Cloudentity mtls](rfc-8705-keywords.jpeg)
 
-## mtls Concept
+## Recommended uses
 
-![Cloudentity istio authorizer authorization](mtls-concept.jpeg)
-
-##
+The specification 
 
 
