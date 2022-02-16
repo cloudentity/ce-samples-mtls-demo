@@ -181,6 +181,8 @@ func (s *Server) Start() error {
 		TLSNextProto: make(map[string]func(*http.Server, *tls.Conn, http.Handler), 0),
 	}
 
+	handler.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets"))))
+
 	fmt.Printf("Login endpoint available at: http://localhost:%v/login\nCallback endpoint available at: %v\n\n", s.Config.PORT, s.Client.Config.RedirectURL)
 	if err := httpServer.ListenAndServe(); err != http.ErrServerClosed {
 		log.Fatalln(err)

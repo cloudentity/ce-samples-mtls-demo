@@ -1,19 +1,140 @@
-{{ define "bootstrap" }}
+{{ define "home" }}
 <html>
-<head>
-    <title>Tokens</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body>
-    <div class="flex justify-around">
-        <div class="w-1/2 my-8 mx-2"><b>Access Token</b><p class="break-all">{{ .Token }}</p></div>
-        <pre class="w-1/2 my-8 mx-2">{{ .FormattedClaims }}</pre>
+ <head>
+  <link rel="stylesheet"
+ href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+ crossorigin="anonymous">
+ <style>
+.button {
+  display: inline-block;
+  padding: 15px 25px;
+  font-size: 10px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+}
+
+.button:hover {background-color: #3e8e41}
+
+.button:active {
+  background-color: #257fd9;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+.highlight {
+    color: red;
+    font-weight: bold;
+}
+</style>
+ <script>
+    function toggleConcepts() {
+        var x = document.getElementById("mtls-concept-flows");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
+</script>
+  </head>
+  <body>
+    <div class="container" style="padding:20px">
+        <div class="card card-body bg-light">
+        
+        <h3>
+            <a href="/home">
+                <img src="/assets/logo.png" alt="Cloudentity logo"  width="42" height="42" />
+            </a>
+            Cloudentity OAuth MTLS Bound Tokens & Enforcement 
+        </h3>
+        <div>
+            <p>
+                <button onclick="toggleConcepts()" class="button">Let's talk about some concepts</button>
+            </p>
+            <div id="mtls-concept-flows" style="display:none">
+                <div>
+                    <p> Some keywords that would be of interest to the audience as we step into this demo, 
+                    for mTLS OAuth RFC and Cloudentity implementation support </p>
+                    <img src="images/rfc-8705-keywords.jpeg" alt="Cloudentity logo" style="height: 100%; width: 100%; object-fit: contain" />
+                </div>
+                <div>
+                    <h4> Using OAuth mTLS flows in Application architectures </h4>
+                    <p> Let's dive into how will these flows augment secure application development practices and architectures </p>
+                    <img src="images/mtls-concept.jpeg" alt="Cloudentity logo"  style="height: 100%; width: 100%; object-fit: contain" />
+                </div>
+                <div>
+                    <h4> Demo setup - let's prove it out! </h4>
+                    <p> Let's make sure this is just not some pretty boxes and we have some demo apps to back the concepts. </p>
+                    <img src="images/mtls-demo-setup.jpeg" alt="Cloudentity logo" style="height: 100%; width: 100%; object-fit: contain" />
+                </div>
+            </div>
+        </div>
+        <div>
+            {{ if .auth }}
+            <a href="{{ .auth }}">Get Access Token</a>
+            {{ else if .Token }}
+            <p><b>Access Token</b></p>
+            <p  id="regular_access_token"> {{ .Token }} </p>
+            <p><b>Claims</b></p>
+            <pre id="claims">{{ .FormattedClaims }}</pre>
+            <p>{{ .Cnf }}</p>
+            <p>Notice the member "x5t#S256" highlighted in red. This value of this member is a base64url-encoded [RFC4648] SHA-256 hash
+                (a.k.a., thumbprint, fingerprint, or digest) of the DER encoding
+                of the X.509 certificate <a href="https://datatracker.ietf.org/doc/html/rfc8705#section-3.1">JWT Certificate Thumbprint Confirmation Method</a></p>
+                {{ if .UsePyron }}
+                <p><b>Use MTLS bound Token to Access a Resource</b></p>
+                <p>Try changing the certificate hash and notice what happens when fetching the resource.</p>
+                <form action="/resource" method="post">
+                    <div class="form-group">
+                        <label for="certhash">Certificate Hash</label>
+                        <input type="text" class="form-control" id="certhash" name="certhash"><br><br>
+                        <input type="submit" class="btn btn-primary" value="Fetch Resource">
+                    </div>
+                </form>                 
+                {{ end }}
+            {{ else if .Resource }}
+                <p><b>Status</b></p>
+                <pre>{{ .Status }}</pre>
+                {{ if eq .Status 200 }}
+                    <p><b>Body</b></p>
+                    <pre>{{ .Content }}</pre>
+                {{ else }}
+                <p>The request is Unauthorized</p>
+                {{ end }}
+                <a class="flex justify-center underline text-blue-600 hover:text-blue-800" href="/login">Start Over</a>
+
+            {{ end }}
+        </div>
     </div>
-    {{ if .UsePyron }}
-    <a class="flex justify-center underline text-blue-600 hover:text-blue-800" href="/resource">Call Resource Server API</a>
-    {{ end }}
-</body>
+  </div>
+  <script>
+    let claims = document.getElementById("claims");
+    if (claims) {
+        setFormInputHash(claims.innerHTML);
+        highlightMember(claims);
+    }
+
+    function setFormInputHash(claims) {
+        let member = "x5t#S256\": \"";
+        let startIdx = claims.indexOf(member)+member.length;
+        let endIdx = claims.substr(startIdx).indexOf("\"", 0);
+        let certHash = claims.substr(startIdx, endIdx);
+        document.getElementById("certhash").value = certHash;
+    }
+
+    function highlightMember(claims) {
+        claims.innerHTML = claims.innerHTML.replace("x5t#S256", function(match) {
+            return '<span class="highlight">' + match + '</span>'
+        });
+    }
+  </script>
+ </body>
 </html>
 {{ end }}
