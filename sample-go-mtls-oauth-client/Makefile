@@ -6,6 +6,7 @@ run:
 	./scripts/wait.sh
 
 run-all:
+	./scripts/prep.sh
 	docker-compose up --build -d 
 	./scripts/wait.sh
 

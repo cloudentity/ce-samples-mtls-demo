@@ -50,7 +50,7 @@ services:
       - --tenant-url
       - ${CONFIGURATION_TENANT_URL}
       - --tenant
-      - ${CONFIGURATION_TENANT}
+      - ${CONFIGURATION_TENANT_ID}
       - --client-id
       - ${CONFIGURATION_CLIENT_ID}
       - --client-secret

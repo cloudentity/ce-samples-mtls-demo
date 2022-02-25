@@ -11,14 +11,14 @@ import (
 
 func (s *Server) Login(w http.ResponseWriter, r *http.Request) {
 	var (
-		authorizeURL       map[string]interface{}
+		data       map[string]interface{}
 		encodedCookieValue string
 		storage            AppStorage
 		err                error
 	)
 
-	authorizeURL = make(map[string]interface{})
-	if authorizeURL["auth"], storage.CSRF, err = s.Client.AuthorizeURL(); err != nil {
+	data = make(map[string]interface{})
+	if data["auth"], storage.CSRF, err = s.Client.AuthorizeURL(); err != nil {
 		s.renderError(w, ErrorDetails{http.StatusInternalServerError, fmt.Sprintf("failed to get authorization url: %+v", err)})
 		return
 	}
@@ -34,7 +34,7 @@ func (s *Server) Login(w http.ResponseWriter, r *http.Request) {
 		Path:  "/",
 	})
 
-	s.Tmpl.ExecuteTemplate(w, "home", authorizeURL)
+	s.Tmpl.ExecuteTemplate(w, "home", data)
 }
 
 func (s *Server) Callback(w http.ResponseWriter, r *http.Request) {

@@ -33,12 +33,11 @@ type Config struct {
 	InsecureSkipVerify bool   `env:"INSECURE_SKIP_VERIFY"`
 	PORT               int    `env:"PORT,required"`
 	RedirectHost       string `env:"REDIRECT_HOST,required"`
-	WorkspaceName      string `env:"WORKSPACE_NAME,required"`
+	WorkspaceName      string `env:"ACP_WORKSPACE,required"`
 	TenantURL          string `env:"CONFIGURATION_TENANT_URL,required"`
 	Endpoints          WellKnownEndpoints
 	UsePyron           bool   `env:"USE_PYRON,required"`
 	ResourceURL        string `env:"RESOURCE_URL"`
-	XSSLCertHash       string `env:"X_SSL_CERT_HASH"`
 	InjectCertMode     bool   `env:"INJECT_CERT_MODE,required"`
 }
 
