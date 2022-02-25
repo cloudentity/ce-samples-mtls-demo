@@ -34,6 +34,7 @@ type Config struct {
 	PORT               int    `env:"PORT,required"`
 	RedirectHost       string `env:"REDIRECT_HOST,required"`
 	WorkspaceName      string `env:"ACP_WORKSPACE,required"`
+	WellKnownURL       string `env:"CONFIGURATION_WELL_KNOWN,required"`
 	TenantURL          string `env:"CONFIGURATION_TENANT_URL,required"`
 	Endpoints          WellKnownEndpoints
 	UsePyron           bool   `env:"USE_PYRON,required"`
@@ -104,7 +105,7 @@ func NewServer() (Server, error) {
 		return server, errors.Wrapf(err, "failed to load config")
 	}
 
-	if server.Config.Endpoints, err = fetchEndpointURLs(fmt.Sprintf("%s/%s/.well-known/openid-configuration", server.Config.TenantURL, server.Config.WorkspaceName)); err != nil {
+	if server.Config.Endpoints, err = fetchEndpointURLs(server.Config.WellKnownURL); err != nil {
 		return server, errors.Wrap(err, "failed to fetch well-known endpoints")
 	}
 
