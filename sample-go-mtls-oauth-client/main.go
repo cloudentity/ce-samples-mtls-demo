@@ -229,16 +229,11 @@ func fetchEndpointURLs(config Config) (WellKnownEndpoints, error) {
 		issuer    *url.URL
 	)
 
-	base, tenant, issuer, err = parsePath(config)
-	if err != nil {
-		log.Fatalf("error parsePath %v", err)
+	if base, tenant, issuer, err = parsePath(config); err != nil {
+		return endpoints, errors.Wrap(err, "unable to parse path")
 	}
 
-	u := getTargetURL(config, base, tenant, issuer, "") // TODO: add whether it is system tenant or not
-
-	log.Printf("issuer url %s", u.String())
-
-	if resp, err = http.Get(issuer.String()); err != nil {
+	if resp, err = http.Get(getTargetURL(config, base, tenant, issuer, "").String()); err != nil {
 		return endpoints, errors.Wrap(err, "error retrieving .well-known")
 	}
 	defer resp.Body.Close()
@@ -267,17 +262,16 @@ func fetchEndpointURLs(config Config) (WellKnownEndpoints, error) {
 }
 
 func getTargetURL(config Config, basePath string, tenantID string, issuerURL *url.URL, systemTenant string) *url.URL {
-	log.Printf("base %s and tenant %s and issuer %s", basePath, tenantID, issuerURL.String())
 	switch config.RoutingMode {
 	case "server":
-		basePath = fmt.Sprintf("%s/.well-known/openid-configuration", basePath)
+		basePath = fmt.Sprintf("%s/%s/.well-known/openid-configuration", basePath, config.WorkspaceName)
 	case "tenant":
-		basePath = fmt.Sprintf("%s/.well-known/openid-configuration", basePath)
+		basePath = fmt.Sprintf("%s/%s/.well-known/openid-configuration", basePath, config.WorkspaceName)
 	default:
 		if tenantID == systemTenant {
-			basePath = fmt.Sprintf("%s/.well-known/openid-configuration", basePath)
+			basePath = fmt.Sprintf("%s/%s/.well-known/openid-configuration", basePath, config.WorkspaceName)
 		} else {
-			basePath = fmt.Sprintf("%s/%s/.well-known/openid-configuration", basePath, tenantID)
+			basePath = fmt.Sprintf("%s/%s/%s/.well-known/openid-configuration", basePath, tenantID, config.WorkspaceName)
 		}
 	}
 
@@ -320,7 +314,7 @@ func getPathParts(issuer string) (issuerURL *url.URL, paths []string, err error)
 }
 
 func getBasePath(config Config, paths []string) (string, error) {
-	basePath := "/"
+	basePath := ""
 
 	switch config.RoutingMode {
 	case "server":
