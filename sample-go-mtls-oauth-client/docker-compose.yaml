@@ -34,6 +34,33 @@ services:
      - 8442:8442
     restart: on-failure
 
+  configuration:
+    container_name: configuration
+    env_file:
+      - .env
+    image: cloudentity/openbanking-quickstart-configuration:latest
+    restart: on-failure
+    volumes:
+      - ./certs/acp_cert.pem:/certs/acp_cert.pem
+      - ./certs/ca.pem:/certs/ca.pem
+      - ./data/variables.yaml:/variables.yaml
+      - ./data/imports:/app/imports
+    command:
+      - /app/main
+      - --tenant-url
+      - ${CONFIGURATION_TENANT_URL}
+      - --tenant
+      - ${CONFIGURATION_TENANT_ID}
+      - --client-id
+      - ${CONFIGURATION_CLIENT_ID}
+      - --client-secret
+      - ${CONFIGURATION_CLIENT_SECRET}
+      - --templates-dirs
+      - /app/imports
+      - --variables-file
+      - /variables.yaml
+      - --verbose
+
   echo-service:
     container_name: echo-service
     image: jmalloc/echo-server

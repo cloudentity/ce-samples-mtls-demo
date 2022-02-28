@@ -1,0 +1,128 @@
+servers:
+- tenant_id: {{ .tenant_id }}
+  id: {{ .workspace }} 
+  name: MTLS OAUTH sample
+  profile: default
+  initialize: true
+  root_cas: |
+    -----BEGIN CERTIFICATE-----
+    MIIDfjCCAmagAwIBAgIUHOLlcMhX8uJyFafYYNXYBMBJr2swDQYJKoZIhvcNAQEL
+    BQAwVzELMAkGA1UEBhMCVVMxEzARBgNVBAgTCldhc2hpbmd0b24xEDAOBgNVBAcT
+    B1NlYXR0bGUxFDASBgNVBAoTC0Nsb3VkZW50aXR5MQswCQYDVQQLEwJDQTAeFw0y
+    MTAxMjAwOTQ4MDBaFw0yNjAxMTkwOTQ4MDBaMFcxCzAJBgNVBAYTAlVTMRMwEQYD
+    VQQIEwpXYXNoaW5ndG9uMRAwDgYDVQQHEwdTZWF0dGxlMRQwEgYDVQQKEwtDbG91
+    ZGVudGl0eTELMAkGA1UECxMCQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
+    AoIBAQDKJroMoumr9jY129z7uf0WrvMxmzexP72ogINlQlM/p910YfnLYSWOUEIH
+    kQ5eyq3ATuesPzamNxjq4JkafopsMBeieCeVzir4VTmsxLxbBZG2GjdsGpyXmrXb
+    LXTb5dgNcolYh6LLPb11cBeb9TAy2D97Vx4t1Hr2SeLG1VvkNyNnoog6tZdmJUis
+    ufW9GOyXgiAv46rtgvvpzYn+LbE7oiXlQHICHNpeTh7140HG7eWMPubINuilGZBY
+    W80IGTpGUf2Vmuwo2LA17z5/3IB0dqlY5eT321TYVoqH1TYZrMllSLc+2x750e+l
+    E9sHil8QPptAS74UWUsq2PgIvyZbAgMBAAGjQjBAMA4GA1UdDwEB/wQEAwIBBjAP
+    BgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBTKWQeEZBRJ/UO1Py7EfTaOqVujbTAN
+    BgkqhkiG9w0BAQsFAAOCAQEAsg5ker9FPcq1u5E+y4Qq1yjUeuOT0kap+aIE1mp2
+    LSQoEA+tb40s/iNmTMdvCGReeoRoVYKz66+3zGoFYg5W1c5Ct9whjiLhKP1Pzc4I
+    JbPGklSrnnAwD72ypLF4yrTMTD65gTMsr2ao0MOe6vy/Z8R2uz48QJHhhi71VGhi
+    FstSiWvb4AgNhN39Ag5ufLtrGCbuZw5TSeW0J7PTBoYV1Z/0jrsdqxk8MjnbR8Qe
+    VyZGyIRnGkXUtC239/Lz0v0PXVwAPUF8ITb0JYcG/ojIc5VfTOkQOeOHHBaS+dXt
+    HBJjBbnwpN4tNFhczJkbga16hL+vV0I4z61mJG8OkDr25Q==
+    -----END CERTIFICATE-----
+idps:
+- tenant_id: {{ .tenant_id }}
+  authorization_server_id: {{ .workspace }}
+  id: bugkgai3g9kregtu04u0
+  name: MTLS IDP
+  method: static
+  credentials:
+    static:
+      users:
+      - username: user
+        password: user
+        authentication_context:
+          name: user
+          mobile_verified: "+48123456789"
+clients:
+- tenant_id: {{ .tenant_id }}
+  authorization_server_id: {{ .workspace }}
+  client_id: c79lsrgh5kre3dfd8xxx
+  client_name: MTLS Sample Client
+  client_secret: S4DYjFEowDmEKfwbXOtR-mqaHWuIae2Mt4i-6KimZYQ
+  grant_types:
+  - client_credentials
+  - authorization_code
+  scopes:
+    - openid
+  redirect_uris:
+    - 'http://localhost:18888/callback'
+  subject_type: public
+  token_endpoint_auth_method: tls_client_auth
+  token_endpoint_auth_signing_alg: none
+  userinfo_signed_response_alg: none
+  tls_client_certificate_bound_access_tokens: true
+  tls_client_auth_san_dns: acp
+  audience:
+      - c79lsrgh5kre3dfd8xxx
+- tenant_id: {{ .tenant_id }}
+  authorization_server_id: system
+  id: c85cgj5t9c9vscu6k9ab
+  client_id: c85cgj5t9c9vscu6k9tg
+  client_secret: ytFAm6jjtNx88JRN8l4ayrzcXh7ouuu0av_MBC5iCk4
+  client_name: mtls pyron
+  name: pyron-mtls-client
+  system: false
+  trusted: false
+  description: ''
+  create_and_bind_services_automatically: true
+  token_exchange:
+    enabled: false
+    trusted_idp_ids: null
+  token_exchange_client_id: null
+  grant_types:
+    - client_credentials
+  response_types:
+    - code
+  scopes:
+    - gateway_exchange_tokens
+    - introspect_tokens
+    - push_gateway_requests
+    - read_gateway_configuration
+    - write_gateway_configuration
+  audience:
+    - c85cgj5t9c9vscu6k9tg
+  token_endpoint_auth_method: client_secret_post
+  backchannel_user_code_parameter: false
+  require_pushed_authorization_requests: false
+gateways:
+- tenant_id: {{ .tenant_id }}
+  authorization_server_id: {{ .workspace }}
+  id: c7o1sqmifi7nonh7xxxx
+  client_id: c85cgj5t9c9vscu6k9tg
+  name: pyron-mtls 
+  description: ''
+  type: pyron
+  create_and_bind_services_automatically: true
+  token_exchange:
+    enabled: false
+    trusted_idp_ids: null
+  token_exchange_client_id: null
+policies:
+  - tenant_id: {{ .tenant_id }}
+    server_id: {{ .workspace }}
+    id: sample-policy-mtls
+    language: cloudentity
+    type: api
+    policy_name: sample-mtls-policy
+    validators:
+      - name: attributes
+        conf:
+          fields:
+            - comparator: equals
+              field: 'authnCtx.cnf.x5t#S256'
+              value: $request.headers.x-ssl-cert-hash
+        recovery: null
+      - name: attributes
+        conf:
+          fields:
+            - comparator: present
+              field: 'authnCtx.cnf.x5t#S256'
+              value: ''
+        recovery: null
