@@ -41,7 +41,7 @@ type Config struct {
 	ResourceURL        string `env:"RESOURCE_URL"`
 	InjectCertMode     bool   `env:"INJECT_CERT_MODE,required"`
 	// can be one of "", "tenant", or "server"
-	RoutingMode string
+	RoutingMode string `env:"ROUTING_MODE"`
 	TenantID    string `env:"CONFIGURATION_TENANT_ID,required"`
 }
 
