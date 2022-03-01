@@ -2,11 +2,11 @@
 
 Cloudentity authorization platform completely supports the [RFC8705](https://datatracker.ietf.org/doc/html/rfc8705) for OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens.
 
-As you might already be aware Cloudentity platform is compliant to the latest emerging OAuth specifications and can support in modernizing the application architectures with latest open standards and
+As you might already be aware Cloudentity platform is compliant to the latest emerging OAuth specifications and can support in modernizing application architectures with latest open standards and
 specfications support. We will take you down the path of understanding use cases that can be addressed using mTLS specification, code samples in various language on how to integrate and utilize the latest
 specification in your new architecture patterns.
 
-In this specific article , we will be creating a Go application and calling a resource server protecting a resource with mTLS bound accessToken. We will be using the Cloudentity Authorization Platform for our authorization server. We will also be using the [Cloudentity ACP OpenAPI Go Client](https://github.com/cloudentity/acp-client-go).
+In this specific article , we will be creating a Go application and access a protected resource with an mTLS bound accessToken. We will be using the Cloudentity Authorization Platform for our authorization server. We will also be using the [Cloudentity ACP OpenAPI Go Client](https://github.com/cloudentity/acp-client-go).
 
 ### Prerequisites
 
@@ -19,9 +19,9 @@ Cloudentity offers a free SaaS Tenant and you can sign up for one, if you have n
 - [Go](https://go.dev/) - Recommended v1.17 +
 
 ### Basic Concepts
-OAuth 2.0 Mutual-TLS client authentication and certificate bound access tokens is explained in [RFC 8705](https://datatracker.ietf.org/doc/html/rfc8705). When following a traditional OAuth 2.0 authorization code flow, the access token is all that is required to access a protected resource. However, anyone with access to this token can then access the resource even if the token should not be in their possession. Mutual-TLS client authentication allows us to bind access tokens to a client’s mTLS certificate and this allows the resource server to verify that the presenter of this access token was, in fact, issued this token.  
+OAuth 2.0 Mutual-TLS client authentication and certificate bound access tokens is explained in [RFC 8705](https://datatracker.ietf.org/doc/html/rfc8705). When following a traditional OAuth 2.0 authorization code flow, the access token is all that is required to access a protected resource. However, anyone with access to this token can then access the resource even if the token should not be in their possession. Mutual-TLS client authentication allows us to bind access tokens to a client’s mTLS certificate and this allows the resource server to verify that the presenter of this access token was issued this token.  
 
-Once the resource server is provided an access token it will obtain, from its TLS implementation layer, the client certificate. It will then verify that it matches the certificate bound to the access token. The resource server will get the JWT provided in the Authorization header sent by the OAuth client application. The JWT has the `x5t#S256` confirmation member.  This value of this member is the base64url-encoded SHA-256 hash, or thumbprint of the DER encoding of the x.509 certificate. The resource server then compares this value to the certificate provided by taking the hash of the certificate obtained in the TLS layer and comparing it to what was obtained from the JWT.
+Once the resource server is provided an access token it will obtain, from its TLS implementation layer, the client certificate. It will then verify that it matches the certificate bound to the access token. The resource server will get the JWT provided in the Authorization header sent by the OAuth client application. The JWT has the `x5t#S256` confirmation member.  The value of this member is the base64url-encoded SHA-256 hash, or thumbprint of the DER encoding of the x.509 certificate. The resource server then compares this value to the certificate provided by taking the hash of the certificate obtained in the TLS layer and comparing it to what was obtained from the JWT.
 
 ### Preparing Cloudentity SaaS
 First we are going to set up a service in [Cloudentity Authorization Platform](https://authz.cloudentity.io/) so that we can import a workspace and a client application that will act as our authorization server. The import client is for convenience and brevity of this article and is not required to set up an authorization server.  To use the import client we need to add a few environment variables to the `.env` file in our repo that allows the application to access our newly created import application. To see how to setup the client application manually, checkout [Sample Go MTLS Oauth Client](https://github.com/cloudentity/sample-go-mtls-oauth-client).
