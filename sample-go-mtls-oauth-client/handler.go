@@ -11,7 +11,7 @@ import (
 
 func (s *Server) Login(w http.ResponseWriter, r *http.Request) {
 	var (
-		data       map[string]interface{}
+		data               map[string]interface{}
 		encodedCookieValue string
 		storage            AppStorage
 		err                error
@@ -23,7 +23,7 @@ func (s *Server) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if encodedCookieValue, err = s.SecureCookie.Encode("app", storage); err != nil {
+	if encodedCookieValue, err = s.SecureCookie.Encode("app", storage.CSRF); err != nil {
 		s.renderError(w, ErrorDetails{http.StatusInternalServerError, fmt.Sprintf("error while encoding cookie: %+v", err)})
 		return
 	}
@@ -55,7 +55,7 @@ func (s *Server) Callback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err = s.SecureCookie.Decode("app", cookie.Value, &s.AppStorage); err != nil {
+	if err = s.SecureCookie.Decode("app", cookie.Value, &s.AppStorage.CSRF); err != nil {
 		s.renderError(w, ErrorDetails{http.StatusBadRequest, fmt.Sprintf("failed to decode app storage: %+v", err)})
 		return
 	}
