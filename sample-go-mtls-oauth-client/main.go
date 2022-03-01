@@ -35,7 +35,6 @@ type Config struct {
 	PORT               int    `env:"PORT,required"`
 	RedirectHost       string `env:"REDIRECT_HOST,required"`
 	WorkspaceName      string `env:"ACP_WORKSPACE,required"`
-	WellKnownURL       string `env:"CONFIGURATION_WELL_KNOWN,required"`
 	TenantURL          string `env:"CONFIGURATION_TENANT_URL,required"`
 	Endpoints          WellKnownEndpoints
 	UsePyron           bool   `env:"USE_PYRON,required"`
@@ -187,7 +186,7 @@ func (s *Server) Start() error {
 
 	handler.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets"))))
 
-	fmt.Printf("Login endpoint available at: http://localhost:%v/login\nCallback endpoint available at: %v\n\n", s.Config.PORT, s.Client.Config.RedirectURL)
+	log.Printf("Login endpoint available at: http://localhost:%v/login\nCallback endpoint available at: %v\n\n", s.Config.PORT, s.Client.Config.RedirectURL)
 	if err := httpServer.ListenAndServe(); err != http.ErrServerClosed {
 		log.Fatalln(err)
 	} else {
@@ -314,7 +313,7 @@ func getPathParts(issuer string) (issuerURL *url.URL, paths []string, err error)
 }
 
 func getBasePath(config Config, paths []string) (string, error) {
-	basePath := ""
+	basePath := "/"
 
 	switch config.RoutingMode {
 	case "server":

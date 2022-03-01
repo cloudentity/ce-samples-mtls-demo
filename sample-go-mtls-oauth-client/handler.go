@@ -66,7 +66,6 @@ func (s *Server) Callback(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Redirect(w, r, "/home", http.StatusFound)
-
 }
 
 func (s *Server) Home(w http.ResponseWriter, r *http.Request) {
