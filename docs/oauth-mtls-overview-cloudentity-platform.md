@@ -1,18 +1,52 @@
-# OAuth mtlS with Cloudentity Authorization platform
+# OAuth mTLS client authentication & certificate bound access token with Cloudentity Authorization platform
 
-Cloudentity authorization platform completely supports the RFC8705(https://datatracker.ietf.org/doc/html/rfc8705) for OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens.
+Cloudentity authorization platform provides implementation of [RFC8705 -OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens](https://datatracker.ietf.org/doc/html/rfc8705) for OAuth client authentication using mutual TLS, based on either self-signed certificates or public key infrastructure (PKI). 
+
 As you might already be aware Cloudentity platform is compliant to latest emerging OAuth specifications and can support in modernizing the application architecutres with latest open standards and
-specfications support. We will take you down the path of understanding use cases that can be addressed using mTLS specification, code samples in various language on how to integrate and utilize the latest
-specification in your new architecture patterns
+specfications. These emerging specifications can be utilzied to create more modern and secure applications and introduce into your existing application architecture.
 
-## Specification keyword support
+## Main features
 
-Attached image shows all the keywords for the specification that is support by Cloudentity authorization platform
+Cloudentity authorization server supports all the specification aspects that includes highlights such as
+* tls signed client authentication
+* self signed tls client authentication
+* certificate bound access token
+* tls certificate match on all criteria specified by spec
+* issue binding/non-binding access tokens
+* introspection/revocation endpoints 
+* enforce mtls setting at global level/client level
 
-![Cloudentity mtls](rfc-8705-keywords.jpeg)
+![Cloudentity mtls](mtls-rfc-8705.jpeg)
 
-## Recommended uses
+## Usage
 
-The specification 
+[RFC8705 -OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens](https://datatracker.ietf.org/doc/html/rfc8705) can be used to modernize the way applications interact with each other and to increase security posture of the applications running in your infrastructure.
+* secure machine to machine communication (services authentication using Dynamic Client registration)
+* Secure APIs from rogue clients stealing and using access tokens
+* Eliminate client secret as client authentication method and rely on PKI/self signed certificate - one secret less to worry about
+* Enable & enforce secure practices while partners are accessing APIs by enforcing stronger authentication methods like mTLS client authentication
+
+## Further reading & use cases
+
+We have articles that will help you explore each of the topics within the specification independently to augment application development best practices. 
+
+* [Secure APIs with OAuth Certificate Bound Access Tokens]
+*  [OAuth mTLS client authentication using Cloudentity]
+
+Further more, we have developer articles to give some feel of how this could be utilzied within applications
+
+* [Secure a NodeJS service to service communication  with Cloudentity certificate bound access token]
+* [Nodejs application consuming a AWS API Gateway service protected with Cloudentity certificate bound access toekn]
+* [mTLS applciation in Go]
+
+### How to quickly see this in action?
+
+You can jump right in and explore all the capabilities offered by Cloudentity
+
+* [Register for a free Cloudentity SaaS tenant, if don't have one](https://authz.cloudentity.io/register)
+   * Activate the tenant and take the self guided tour to familiarize with the platform
+* Explore and try out one of the articles in above section   
+
+
 
 
