@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"strings"
 	"text/template"
 
 	"github.com/caarlos0/env"
@@ -33,12 +34,16 @@ type Config struct {
 	InsecureSkipVerify bool   `env:"INSECURE_SKIP_VERIFY"`
 	PORT               int    `env:"PORT,required"`
 	RedirectHost       string `env:"REDIRECT_HOST,required"`
-	WellKnown          string `env:"WELL_KNOWN_URL,required"`
+	WorkspaceName      string `env:"ACP_WORKSPACE,required"`
+	WellKnownURL       string `env:"CONFIGURATION_WELL_KNOWN,required"`
+	TenantURL          string `env:"CONFIGURATION_TENANT_URL,required"`
 	Endpoints          WellKnownEndpoints
 	UsePyron           bool   `env:"USE_PYRON,required"`
 	ResourceURL        string `env:"RESOURCE_URL"`
-	XSSLCertHash       string `env:"X_SSL_CERT_HASH"`
 	InjectCertMode     bool   `env:"INJECT_CERT_MODE,required"`
+	// can be one of "", "tenant", or "server"
+	RoutingMode string
+	TenantID    string `env:"CONFIGURATION_TENANT_ID,required"`
 }
 
 func (c Config) NewClientConfig() (acp.Config, error) {
@@ -104,7 +109,7 @@ func NewServer() (Server, error) {
 		return server, errors.Wrapf(err, "failed to load config")
 	}
 
-	if server.Config.Endpoints, err = fetchEndpointURLs(server.Config.WellKnown); err != nil {
+	if server.Config.Endpoints, err = fetchEndpointURLs(server.Config); err != nil {
 		return server, errors.Wrap(err, "failed to fetch well-known endpoints")
 	}
 
@@ -180,6 +185,8 @@ func (s *Server) Start() error {
 		TLSNextProto: make(map[string]func(*http.Server, *tls.Conn, http.Handler), 0),
 	}
 
+	handler.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets"))))
+
 	fmt.Printf("Login endpoint available at: http://localhost:%v/login\nCallback endpoint available at: %v\n\n", s.Config.PORT, s.Client.Config.RedirectURL)
 	if err := httpServer.ListenAndServe(); err != http.ErrServerClosed {
 		log.Fatalln(err)
@@ -211,15 +218,22 @@ type WellKnownEndpoints struct {
 	TokenEndpoint         *url.URL `json:"token_endpoint"`
 }
 
-func fetchEndpointURLs(wellKnownURL string) (WellKnownEndpoints, error) {
+func fetchEndpointURLs(config Config) (WellKnownEndpoints, error) {
 	var (
 		endpoints WellKnownEndpoints
 		resp      *http.Response
 		we        models.WellKnown
 		err       error
+		base      string
+		tenant    string
+		issuer    *url.URL
 	)
 
-	if resp, err = http.Get(wellKnownURL); err != nil {
+	if base, tenant, issuer, err = parsePath(config); err != nil {
+		return endpoints, errors.Wrap(err, "unable to parse path")
+	}
+
+	if resp, err = http.Get(getTargetURL(config, base, tenant, issuer, "").String()); err != nil {
 		return endpoints, errors.Wrap(err, "error retrieving .well-known")
 	}
 	defer resp.Body.Close()
@@ -245,4 +259,79 @@ func fetchEndpointURLs(wellKnownURL string) (WellKnownEndpoints, error) {
 	}
 
 	return endpoints, nil
+}
+
+func getTargetURL(config Config, basePath string, tenantID string, issuerURL *url.URL, systemTenant string) *url.URL {
+	switch config.RoutingMode {
+	case "server":
+		basePath = fmt.Sprintf("%s/%s/.well-known/openid-configuration", basePath, config.WorkspaceName)
+	case "tenant":
+		basePath = fmt.Sprintf("%s/%s/.well-known/openid-configuration", basePath, config.WorkspaceName)
+	default:
+		if tenantID == systemTenant {
+			basePath = fmt.Sprintf("%s/%s/.well-known/openid-configuration", basePath, config.WorkspaceName)
+		} else {
+			basePath = fmt.Sprintf("%s/%s/%s/.well-known/openid-configuration", basePath, tenantID, config.WorkspaceName)
+		}
+	}
+
+	return &url.URL{
+		Scheme: issuerURL.Scheme,
+		Host:   issuerURL.Host,
+		Path:   basePath,
+	}
+}
+
+func parsePath(config Config) (basePath string, tenantID string, issuerURL *url.URL, err error) {
+	var paths []string
+
+	if issuerURL, paths, err = getPathParts(fmt.Sprintf("%s/%s", config.TenantURL, config.WorkspaceName)); err != nil {
+		return "", "", nil, errors.Wrapf(err, "unable to parse path")
+	}
+
+	log.Printf("paths are %v", paths)
+	if basePath, err = getBasePath(config, paths); err != nil {
+		return "", "", nil, errors.Wrapf(err, "unable to get base path")
+	}
+
+	if config.RoutingMode == "server" || config.RoutingMode == "tenant" {
+		tenantID = config.TenantID
+	} else {
+		tenantID = paths[len(paths)-2]
+	}
+
+	return basePath, tenantID, issuerURL, err
+}
+
+func getPathParts(issuer string) (issuerURL *url.URL, paths []string, err error) {
+	if issuerURL, err = url.Parse(issuer); err != nil {
+		return nil, nil, err
+	}
+
+	paths = strings.FieldsFunc(issuerURL.Path, func(c rune) bool { return c == '/' })
+
+	return issuerURL, paths, err
+}
+
+func getBasePath(config Config, paths []string) (string, error) {
+	basePath := ""
+
+	switch config.RoutingMode {
+	case "server":
+		basePath = fmt.Sprintf("/%s/", strings.Join(paths[0:], "/"))
+	case "tenant":
+		if strings.Join(paths[0:len(paths)-1], "/") != "" {
+			basePath = fmt.Sprintf("/%s/", strings.Join(paths[0:len(paths)-1], "/"))
+		}
+	default:
+		if len(paths) < 2 {
+			return "", errors.New("invalid issuer url")
+		}
+
+		if len(paths) > 2 {
+			basePath = fmt.Sprintf("%s/", strings.Join(paths[0:len(paths)-2], "/"))
+		}
+	}
+
+	return basePath, nil
 }

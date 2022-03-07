@@ -11,13 +11,14 @@ import (
 
 func (s *Server) Login(w http.ResponseWriter, r *http.Request) {
 	var (
-		authorizeURL       string
+		data       map[string]interface{}
 		encodedCookieValue string
 		storage            AppStorage
 		err                error
 	)
 
-	if authorizeURL, storage.CSRF, err = s.Client.AuthorizeURL(); err != nil {
+	data = make(map[string]interface{})
+	if data["auth"], storage.CSRF, err = s.Client.AuthorizeURL(); err != nil {
 		s.renderError(w, ErrorDetails{http.StatusInternalServerError, fmt.Sprintf("failed to get authorization url: %+v", err)})
 		return
 	}
@@ -33,7 +34,7 @@ func (s *Server) Login(w http.ResponseWriter, r *http.Request) {
 		Path:  "/",
 	})
 
-	http.Redirect(w, r, authorizeURL, http.StatusTemporaryRedirect)
+	s.Tmpl.ExecuteTemplate(w, "home", data)
 }
 
 func (s *Server) Callback(w http.ResponseWriter, r *http.Request) {
@@ -91,7 +92,7 @@ func (s *Server) Home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	s.Tmpl.ExecuteTemplate(w, "bootstrap", map[string]interface{}{"Token": token.Raw, "UsePyron": s.Config.UsePyron, "FormattedClaims": string(claims)})
+	s.Tmpl.ExecuteTemplate(w, "home", map[string]interface{}{"Token": token.Raw, "UsePyron": s.Config.UsePyron, "FormattedClaims": string(claims)})
 }
 
 func (s *Server) Resource(w http.ResponseWriter, r *http.Request) {
@@ -106,7 +107,9 @@ func (s *Server) Resource(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if res, err = s.fetchResource(); err != nil {
+	certHash := r.FormValue("certhash") // not checking if empty to allow for missing certificate thumbprint
+
+	if res, err = s.fetchResource(certHash); err != nil {
 		s.renderError(w, ErrorDetails{http.StatusBadRequest, fmt.Sprintf("client failed to fetch the resource %v", err)})
 		return
 	}
@@ -122,21 +125,21 @@ func (s *Server) Resource(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resourceRes := map[string]interface{}{"Status": res.StatusCode, "Content": string(resBodyBytes)}
-	s.Tmpl.ExecuteTemplate(w, "resource", resourceRes)
+	resourceRes := map[string]interface{}{"Resource": true, "Status": res.StatusCode, "Content": string(resBodyBytes)}
+	s.Tmpl.ExecuteTemplate(w, "home", resourceRes)
 }
 
-func (s *Server) fetchResource() (res *http.Response, err error) {
+func (s *Server) fetchResource(certHash string) (res *http.Response, err error) {
 	var req *http.Request
 
-	if req, err = s.newHTTPRequest(); err != nil {
+	if req, err = s.newHTTPRequest(certHash); err != nil {
 		return nil, err
 	}
 
 	return s.HttpClient.Do(req)
 }
 
-func (s *Server) newHTTPRequest() (req *http.Request, err error) {
+func (s *Server) newHTTPRequest(certHash string) (req *http.Request, err error) {
 	if req, err = http.NewRequest("GET", s.Config.ResourceURL, nil); err != nil {
 		return nil, err
 	}
@@ -148,7 +151,7 @@ func (s *Server) newHTTPRequest() (req *http.Request, err error) {
 
 	// This is for demo purposes only. This can be configured in the environment variables.
 	if s.Config.InjectCertMode {
-		req.Header.Add("x-ssl-cert-hash", s.Config.XSSLCertHash)
+		req.Header.Add("x-ssl-cert-hash", certHash)
 	}
 
 	return req, err

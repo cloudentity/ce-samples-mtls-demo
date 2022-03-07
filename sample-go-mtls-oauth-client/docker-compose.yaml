@@ -11,6 +11,63 @@ services:
       - .env
     networks:
       - default
+    depends_on:
+      - pyron
+
+  pyron:
+    container_name: pyron
+    image: docker.cloudentity.io/pyron:1.6.0
+    env_file: .pyron_env
+    volumes:
+      - ./pyron/configs:/configs
+    ports:
+     - 8080:8080
+    restart: always
+
+  pyron-authorizer:
+    container_name: pyron-authorizer
+    image: docker.cloudentity.io/pyron-authorizer:2.0.0-4
+    env_file: .authorizer_env
+    environment:
+      - ACP_RELOAD_INTERVAL=5s # for demo purposes only, increase for production!
+    ports:
+     - 8442:8442
+    restart: on-failure
+
+  configuration:
+    container_name: configuration
+    env_file:
+      - .env
+    image: cloudentity/openbanking-quickstart-configuration:latest
+    restart: on-failure
+    volumes:
+      - ./certs/acp_cert.pem:/certs/acp_cert.pem
+      - ./certs/ca.pem:/certs/ca.pem
+      - ./data/variables.yaml:/variables.yaml
+      - ./data/imports:/app/imports
+    command:
+      - /app/main
+      - --tenant-url
+      - ${CONFIGURATION_TENANT_URL}
+      - --tenant
+      - ${CONFIGURATION_TENANT_ID}
+      - --client-id
+      - ${CONFIGURATION_CLIENT_ID}
+      - --client-secret
+      - ${CONFIGURATION_CLIENT_SECRET}
+      - --templates-dirs
+      - /app/imports
+      - --variables-file
+      - /variables.yaml
+      - --verbose
+
+  echo-service:
+    container_name: echo-service
+    image: jmalloc/echo-server
+    environment:
+      - PORT=4000
+    ports:
+      - 4000:4000
 networks:
   default:
     name: pyron-authorizer_default
