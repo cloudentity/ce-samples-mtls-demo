@@ -11,7 +11,9 @@ commonly referred in multiple terms like
  * key confirmation
  * proof of possession
  * holder of key
- 
+
+![Cloudentity mtls](cloudentity-api-risk-mitigation-mtls.jpeg)
+  
 Let's talk a look at how Cloudentity enables support for this to secure your APIs
 
 * Register an OAuth client application in Cloudentity OAuth authorization server
