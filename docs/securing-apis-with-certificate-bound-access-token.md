@@ -1,8 +1,8 @@
-# Secure APIs with OAuth Certificate Bound Access Tokens
+# Secure APIs with OAuth Certificate Bound Access Tokens and mTLS
 
-Cloudentity authorization platform completely supports the RFC8705(https://datatracker.ietf.org/doc/html/rfc8705) for OAuth Mutual-TLS Certificate-Bound Access Tokens.
+Cloudentity authorization platform provides implementation for [RFC-8705 -OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens](https://datatracker.ietf.org/doc/html/rfc8705) - OAuth client authentication using mutual TLS, based on either self-signed certificates or public key infrastructure (PKI). 
 
-With this specification support for binding the OAuth accessToken to the clients certificate, we can
+With this specification support for binding the OAuth access token to the clients certificate, we can
 * prevent the use of stolen access tokens
 * replay of access tokens by unauthorized parties
 
@@ -26,24 +26,27 @@ Let's talk a look at how Cloudentity enables support for this to secure your API
 
 Let's see this in action with some quick demonstrations
 
-1. [Register for a free Cloudentity SaaS tenant, iff you have not already done it](https://authz.cloudentity.io/register)
+1. [Register for a free Cloudentity SaaS tenant, if you have not already done it](https://authz.cloudentity.io/register)
    * Activate the tenant and take the self guided tour to familiarize with the platform
+
 2. Create an OAuth client application and configure mTLS criteria
    * Choose the application type as `service`, which will configure the grant type as `client_credentials`. We are choosing this as its easy to demonstrate and skips the authorize flow. 
    We have provided some sample application code snippets in other articles attached below that goes through more complex flows.
-   * Set the authentication type
-   * Configure jwks_uri or json web key set(for self signed tls authentication)
-   * Configure certificate metadata matching criteria from one of the below
+   * Select the `Token Endpoint Authentication Method` as `Self Signed TLS Client Authentication` or `TLS Client Authentication`
+   * Configure jwks_uri or json web key set(for self signed certificate). [Checkout this article for more details about OAuth mTLS using self signed certificate](cloudentity-oauth-mtls-self-signed-client-authentication.md)
+   * Configure certificate metadata matching criteria from one of the below (for tls authentication)[Checkout this article for more details about OAuth mTLS using TLS](cloudentity-oauth-mtls-client-authentication.md)
       * subject DN
       * DNS SAN
       * ipAddress SAN
       * email SAN
-3. Fetch an accessToken using client credentials flow
-   While mTLS is great for security, it can be quite overwhelming to use common debugging and testing techniques, but we have attached couple of ways to test this out
+
+3. Check the box for `Certificate bound access token` in case you need the certificate thumprint bound in the access token. If checked, this will add a new JWT Confirmation Method member `"x5t#S256"` that adheres to [RFC-8700](https://datatracker.ietf.org/doc/html/rfc7800) - Proof of Posession semantics specifictions for JSON web tokens. [`Certificate bound access token` feature can be used to increase API security, as detailed in the linked article](securing-apis-with-certificate-bound-access-token.md)   
+
+4. Now that the client has been configured let's try to get an access Token from the authorization server using client credentials flow
 
 #### Fetch access tokens 
 
-Let's use `curl` to test this out quickly
+While mTLS is great for security, it can be quite overwhelming to use common debugging and testing techniques, but we can use `curl` to test this out quickly.
 
 ```bash
 curl  --cacert ca.crt \
@@ -70,8 +73,6 @@ Sample output
 
 The most interesting piece is within the fetched accessToken. For example,
 
-```json
-```
 Decoded view
 ```json
 {..
@@ -82,16 +83,31 @@ Decoded view
 }
 ```
 
+### Use the access token to access a protected resource
+
+To complete this exercise, follow this article where we protect a resource exposed by AWS API Gateway using Cloudentity authorizers and access token issued by Cloudentity authorization server
+
 ### Further reading & examples
 
-[Read the Cloudentity product guide explaining more concepts and details](https://docs.authorization.cloudentity.com/features/oauth/client_auth/tls_client_auth/)
+* [mTLS OAuth concept](https://docs.authorization.cloudentity.com/features/oauth/client_auth/tls_client_auth/)
+* [ OAuth mtLS implementation by Cloudentity overview](oauth-mtls-overview-cloudentity-platform.md)
+* [Configure OAuth mTLS client authentication using TLS](cloudentity-oauth-mtls-client-authentication.md)
+* [Configure OAuth mTLS client authentication using self signed certificate](cloudentity-oauth-mtls-self-signed-client-authentication.md)
+* [Secure APIs with OAuth mTLS and certificate bound access token](securing-apis-with-certificate-bound-access-token.md)
 
-We have more sample applications built to demonstrate the mTLS capability for various use cases in
-different languages. Check out our developer articles for these here
+Further more, We have built some reference applications to demonstrate the OAuth mTLS capability for various use cases in various programming languages, to provide and idea of how this could be utilized within your applications. Check out our developer articles for these here
 
-* Secured API in NodeJS protected using Cloudentity certificate bound accessToken
-* AWS API Gateway resource protected using Cloudentity certificate bound accessToken
+* [Cloudentity authorization platform securing a Nodejs API using OAuth mTLS]
+* [Cloudentity authorization platform securing a resource exposed via AWS API Gateway using OAuth mTLS]
+* [mTLS client authentication and fetch certificate bound access token using OAuth PKCE flow in a Go application from Cloudentity authorization platform]
 
-Check it out for yourself using our FREE tenant. You'll find helpful product documentation here or contact us and we'd be happy to answer any questions and give you a demo.
+### How to quickly see this in action?
+
+You can jump right in and explore all the capabilities offered by Cloudentity
+
+* [Register for a free Cloudentity SaaS tenant, if don't have one](https://authz.cloudentity.io/register)
+   * Activate the tenant and take the self guided tour to familiarize yourself with the platform
+* Explore and try out one of the articles in the `Further reading & examples` section above
+* In case you want to explore more Cloudentity features, check out [Cloudentity product documentation here](https://docs.authorization.cloudentity.com/) or [contact us](https://cloudentity.com/demo/) and we'd be happy to answer any questions and give you a demo.
 
 
