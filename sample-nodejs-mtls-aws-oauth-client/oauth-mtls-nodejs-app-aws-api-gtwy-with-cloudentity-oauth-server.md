@@ -60,7 +60,10 @@ Log in to your [AWS acount](https://aws.amazon.com/) and go to the API that you 
 Your AWS API Gateway is now using Mutual-TLS and the Cloudentity Amazon API Gateway Authorizer to protect your API. 
 
 ### Running the Node.js Application
-In At the root of the project go to the `.env` file and enter the following:
+
+Let's run the application without a policy set for the authorizer to enforce. We will add the policy in the next section.
+
+At the root of the project go to the `.env` file and enter the following:
 - MTLS_OAUTH_CLIENT_ID
 - MTLS_OAUTH_CLIENT_SECRET
 - MTLS_OAUTH_TOKEN_URL
@@ -75,7 +78,9 @@ npm start
 
 Now go to `http://localhost:5002/home` and get an access token by clicking 'Get Certificate Bound Access Token'.  Notice the `cnf` claim with the x5t#S256 member. This is the certificate thumbprint. Now click 'Call Resource server with Certificate Bound Access Token' and verify that you receive a JSON response. In the case of the `/pets/` API it will be a JSON response of pets. 
 
-Currently, a policy is not set on the API in Cloudentity Authorization Platform. Go back to your tenant in [Cloudentity Authorization Platform](https://authz.cloudentity.io/) and go to Enforcement-APIs. Since we chose 'Create and bind services automatically', once the authorizer was start and the API deployed in AWS our APIs appear here automatically. 
+### Creating and enforcing a policy
+
+Currently, a policy is not set on the API in Cloudentity Authorization Platform. Go back to your tenant in [Cloudentity Authorization Platform](https://authz.cloudentity.io/) and go to Enforcement-APIs. Since we chose 'Create and bind services automatically' our APIs appear here automatically. 
 ![api enforcement](images/enforcement.png)
 
 We will quickly walk through setting up a a policy but for a more detailed explanation of using the policy editor see [Creating Policy](https://docs.authorization.cloudentity.com/guides/developer/protect/access_control/create_auth_policy/?q=policy). 
