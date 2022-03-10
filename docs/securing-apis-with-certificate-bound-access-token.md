@@ -87,6 +87,12 @@ Decoded view
 
 To complete this exercise, follow this article where we protect a resource exposed by AWS API Gateway using Cloudentity authorizers and access token issued by Cloudentity authorization server
 
+// TODO: Refine and expand
+
+When following a traditional OAuth 2.0 authorization code flow, the access token is all that is required to access a protected resource. However, anyone with access to this token can then access the resource even if the token should not be in their possession. Mutual-TLS client authentication allows us to bind access tokens to a client’s mTLS certificate and this allows the resource server to verify that the presenter of this access token was issued this token.
+
+Once the resource server is provided an access token it will obtain, from its TLS implementation layer, the client certificate. It will then verify that it matches the certificate bound to the access token. The resource server will get the JWT provided in the Authorization header sent by the OAuth client application. The JWT has the x5t#S256 confirmation claim. The value of this member is the base64url-encoded SHA-256 hash, or thumbprint of the DER encoding of the x.509 certificate. The resource server then compares this value to the certificate provided by taking the hash of the certificate obtained in the TLS layer and comparing it to what was obtained from the JWT.
+
 ### Further reading & examples
 
 * [mTLS OAuth concept](https://docs.authorization.cloudentity.com/features/oauth/client_auth/tls_client_auth/)

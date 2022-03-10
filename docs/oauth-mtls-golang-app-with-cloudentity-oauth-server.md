@@ -1,55 +1,48 @@
 # Go app using OAuth mTLS with Cloudentity Authorization platform
 
-Cloudentity authorization platform completely supports the [RFC8705](https://datatracker.ietf.org/doc/html/rfc8705) for OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens.
+Cloudentity authorization platform provides implementation for [RFC-8705 -OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens](https://datatracker.ietf.org/doc/html/rfc8705) - OAuth client authentication using mutual TLS, based on either self-signed certificates or public key infrastructure (PKI). 
 
-As you might already be aware Cloudentity platform is compliant to the latest emerging OAuth specifications and can support in modernizing application architectures with latest open standards and
-specfications support. We will take you down the path of understanding use cases that can be addressed using mTLS specification, code samples in various language on how to integrate and utilize the latest
-specification in your new architecture patterns.
+In this article , we will be creating a [Go(also known as Golang) application](https://go.dev/learn/) that acts like a mTLS client to fetch authorization token from Cloudentity authorization platform and then utilize the authorization token to access a protected resource over http using the TLS certificate bound access token issued by the Cloudentity authorization server.
 
-In this specific article , we will be creating a Go application and access a protected resource with an mTLS bound accessToken. We will be using the Cloudentity Authorization Platform for our authorization server. We will also be using the [Cloudentity ACP OpenAPI Go Client](https://github.com/cloudentity/acp-client-go).
+![Cloudentity OAuth mTLS go app](mtls-golang-app.jpeg)
+
+
+ We will be using the Cloudentity Authorization Platform for our authorization server. We will also be using the [Cloudentity ACP OpenAPI Go Client](https://github.com/cloudentity/acp-client-go).
 
 ### Prerequisites
 
-##### Cloudentity SaaS
-Cloudentity offers a free SaaS Tenant and you can sign up for one, if you have not already, for a free account. With this you are basically getting a free OAuth/OIDC compliant server with all the latest specifications comprising of OpenData initiatives across the world.
+* Cloudentity Authorization Platform tenant - 
+Cloudentity offers a free SaaS Tenant and [you can sign up for one, if you have not already got one](https://authz.cloudentity.io/register). With this you will get a free OAuth/OIDC compliant server with all the latest specifications.
 
-##### Go Application
-- [Docker](https://www.docker.com) - Recommended v20.10.+
-- [Docker Compose](https://docs.docker.com/compose/) - Minimum v1.28.5
-- [Go](https://go.dev/) - Recommended v1.17 +
+* Application builder tools - We will build and run the application locally using docker
+	* [Docker](https://www.docker.com) - Recommended v20.10.+
+	* [Docker Compose](https://docs.docker.com/compose/) - Minimum v1.28.5
+	* [Go](https://go.dev/) - Recommended v1.17 +
 
 ### Basic Concepts
-OAuth 2.0 Mutual-TLS client authentication and certificate bound access tokens is explained in [RFC 8705](https://datatracker.ietf.org/doc/html/rfc8705). When following a traditional OAuth 2.0 authorization code flow, the access token is all that is required to access a protected resource. However, anyone with access to this token can then access the resource even if the token should not be in their possession. Mutual-TLS client authentication allows us to bind access tokens to a client’s mTLS certificate and this allows the resource server to verify that the presenter of this access token was issued this token.  
+OAuth 2.0 Mutual-TLS client authentication and certificate bound access tokens is explained in [RFC 8705](https://datatracker.ietf.org/doc/html/rfc8705). We have simplified it for you in case you want to understand usage scenarios with some simple examples
+* [ OAuth mtLS implementation by Cloudentity overview](oauth-mtls-overview-cloudentity-platform.md)
+* [Configure OAuth mTLS client authentication using self signed certificate](cloudentity-oauth-mtls-self-signed-client-authentication.md)
+* [Configure OAuth mTLS client authentication using TLS](cloudentity-oauth-mtls-client-authentication.md)
+* [Secure APIs with OAuth mTLS and certificate bound access token](securing-apis-with-certificate-bound-access-token.md)
 
-Once the resource server is provided an access token it will obtain, from its TLS implementation layer, the client certificate. It will then verify that it matches the certificate bound to the access token. The resource server will get the JWT provided in the Authorization header sent by the OAuth client application. The JWT has the `x5t#S256` confirmation claim.  The value of this member is the base64url-encoded SHA-256 hash, or thumbprint of the DER encoding of the x.509 certificate. The resource server then compares this value to the certificate provided by taking the hash of the certificate obtained in the TLS layer and comparing it to what was obtained from the JWT.
+### Source repo
 
-### Preparing Cloudentity SaaS
-First we are going to set up a service in [Cloudentity Authorization Platform](https://authz.cloudentity.io/) so that we can import a workspace and a client application that will act as our authorization server. The import client is for convenience and brevity of this article and is not required to set up an authorization server.  To use the import client we need to add a few environment variables to the `.env` file in our repo that allows the application to access our newly created import application. To see how to setup the client application manually, checkout [Sample Go MTLS Oauth Client](https://github.com/cloudentity/sample-go-mtls-oauth-client).
+We expect Go programming language experience to understand the programming constructs, in case you want to just run the application, jump to How to build and run the application after cloing the repo.
 
-Now let's get the import service working:
- -	Login in to Cloudentity SaaS https://authz.cloudentity.io/
- -	From the list in `Administrative Workspace` choose the `System` workspace.
- -	On the navigation menu go to `Applications->Clients`.
- -	Choose `CREATE APPLICATION`
- -	Give the client application a name and from the `Choose an application type` section choose `Service`.
- -	After the client is created choose the `Scopes` tab.
- -	With the `Scopes` tab chosen, under `Management` turn on `manage_configuration`.
- -	From the OAuth tab copy the Client ID and Client Secret as you will add these for importing the OAuth client app. These are your CONFIGURATION_CLIENT_ID and CONFIGURATION_CLIENT_SECRET.
- -	In the top right of Cloudentity SaaS copy your `tenant` which is your CONFIGURATION_TENANT_ID.
- -	Finally,on the left hand menu choose `Auth Settings-> OAuth` and copy the Authorization URL. This is your authorization URL for your system. What we need is the Tenant URL for your new client app that will be created. To get the Tenant URL remove `system` from the end of the URL. This is your CONFIGURATION_TENANT_URL.
+The source code for this entire exercise is [available in Github for reference](https://github.com/cloudentity/sample-go-mtls-oauth-client)
 
-With the import client now created, we can move on to creating the Go client application.
-### Building the Go OAuth Client
-Before writing code we need to set some environment variables. The environment variables are used to configure our Go client to communicate with the import service that we set up in the previous step. Addtionally, it sets up [Cloudentity Pyron Authorizer](https://docs.authorization.cloudentity.com/guides/developer/protect/pyron/). You can use any authorizer, or none at all, but we use it here due to running locally and since we don't have TLS termination we can 'fake' the mTLS flow by injecting the certificate thumbprint into a header. This allows us to play with the policy settings in [Cloudentity Authorization Platform](https://authz.cloudentity.io/). We also set the environment variables with the Tenant ID and Tenant URL so that we can access the `.well-known` endpoint of our client application in [Cloudentity Authorization Platform](https://authz.cloudentity.io/). We need to access the `.well-known` endpoint to get the authorization and token endpoint URLs.
-
-Go to the home directory of the Go application repository. In the `.env` file and fill in the following using the items we copied above:
- -	CONFIGURATION_TENANT_URL
- -	CONFIGURATION_TENANT_ID 
- -	CONFIGURATION_CLIENT_ID 
- -	CONFIGURATION_CLIENT_SECRET 
-
-Our `main` function is very simple. It creates a server and it starts it.
+```bash
+git clone git@github.com:cloudentity/sample-go-mtls-oauth-client.git
 ```
+
+We will also be using the [Go Client built based on OpenAPI specifications for Cloudentity APIs](https://github.com/cloudentity/acp-client-go) in this article
+
+### Building the Go Application
+
+The [`main` function](https://github.com/cloudentity/sample-go-mtls-oauth-client/blob/master/main.go#L193) is very simple. It creates a server and starts it.
+
+```go
 func main() {
 	var (
 		server Server
@@ -66,8 +59,13 @@ func main() {
 }
 ```
 
-The `NewServer()` function is where we parse the configuration and get our environment variables. We also load our templates used for the UI and fetch the authentication and token endpoints.  We initialize our Cloudentity ACP Go Client and create a HTTP client.
-```
+The [`NewServer()` function](https://github.com/cloudentity/sample-go-mtls-oauth-client/blob/master/main.go#L193) does couple of interesting things
+* parses the configuration and get the environment variables
+* loads the templates used for the UI and 
+* fetch the authentication and token endpoints to interact with Cloudentity authorization platform amd
+* finally initializes the Cloudentity ACP Go Client and create a HTTP client for communication with Cloudentity authorization platform
+
+```go
 func NewServer() (Server, error) {
 	var (
 		config acp.Config
@@ -105,8 +103,9 @@ func NewServer() (Server, error) {
 }
 ```
 
- Since we are using Cloudentity ACP Go Client we pass the confguration along to it. The Cloudentity ACP Go Client reduces boilerplate and makes our lives easier by handling the OAuth 2.0 details.
- ```
+ [Cloudentity ACP Go Client](https://github.com/cloudentity/acp-client-go/blob/master/README.md) can be treated as an SDK and it reduces boilerplate and makes our lives easier by handling the OAuth 2.0 interactions with the Cloudentity authorization server [once the relevant endpoints are configured](https://github.com/cloudentity/sample-go-mtls-oauth-client/blob/master/main.go#L44).
+
+ ```go
  func (c Config) NewClientConfig() (acp.Config, error) {
 	var (
 		redirectURL *url.URL
@@ -131,8 +130,9 @@ func NewServer() (Server, error) {
 }
 ```
 
-We need to initialize our http client so that it uses TLS so we load our key pairs and read our rootCA so that we can use TLS.
-```
+For this particular article, we are interested to create a Mutual TLS communication channel that can interact with Cloudentity Authorization platform for specific calls as highlighted in the initial diagram. To facilitate mTLS we need to provide the RSA public/private key pair and the root CA to be used during handshake with Cloudentity API endpoints. So we configure the http client that handles the traffic accordingly.
+
+```go
 func newHTTPClient(client acp.Client, config Config) (*http.Client, error) {
 	var (
 		pool  *x509.CertPool
@@ -176,8 +176,9 @@ func newHTTPClient(client acp.Client, config Config) (*http.Client, error) {
 }
 ```
 
-With the configuration complete we start our server. 
-```
+Now that we have gone over the basic configuration setup, the server is started by using below block. As you can see, it also has handlers for various routes that will be served by the server.
+
+```go
 func (s *Server) Start() error {
 	handler := http.NewServeMux()
 	handler.HandleFunc("/login", s.Login)
@@ -205,8 +206,9 @@ func (s *Server) Start() error {
 }
 ```
 
-Looking at `handler.go` is where we find the handlers for our application. First we look at the login handler. We begin by getting our authorization endpoint URL. It is important that we protect against CSRF attacks, so we set an encrypted cookie.
-```
+Let's take a look at some of the main route handlers in `handler.go`. In the login handler, you will see the code flow to get authorization code using the OAuth PKCE flow First we look at the login handler. We begin by getting our authorization endpoint URL. In here, we also set an ecrypted cookie to protect against CSRF attacks.
+
+```go
 func (s *Server) Login(w http.ResponseWriter, r *http.Request) {
 	var (
 		data       map[string]interface{}
@@ -235,8 +237,16 @@ func (s *Server) Login(w http.ResponseWriter, r *http.Request) {
 	s.Tmpl.ExecuteTemplate(w, "home", data)
 }
 ```
-Once the user of the application authorizes the application then they are redirected to the callback URL. First we check that there is no error returned from the authorization serer. Then verify out secure cookie. Last we exchange the authorization code returned from the authorization server for a token. The Cloudentity ACP Go Client checks that the state is correct.
-```
+
+Based on the OAuth handshake, once user authorizes the authorization request initiated by this application, user will be redirected to the callback URL and it is handled by the `callback` handler. Within this we check couple of things
+* authorization server has not returned any error for the authorization request
+* verify the secure cookie??
+* and finally exchange the authorization code for access token from Cloudentity authorization server.
+* Cloudentity ACP Go client internally checks that the OAuth state parameter passed to authorization server is same as the one handed over to the server
+
+It is important to note that this final exchange happens over the mTLS protected token endpoint configured for this application client. 
+
+```go
 func (s *Server) Callback(w http.ResponseWriter, r *http.Request) {
 	var (
 		code   = r.URL.Query().Get("code")
@@ -268,8 +278,12 @@ func (s *Server) Callback(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/home", http.StatusFound)
 }
 ```
-Next we use the returned token and parse it for display on the UI. Note: We use `parser.ParseUnverified` for simplicity but the documentation is clear `WARNING: Don't use this method unless you know what you're doing`. 
-```
+
+If the mTLS token endpoint returns a successful response, we use the returned token and parse it for display on the UI. 
+> NOTE: We use `parser.ParseUnverified` for simplicity but the documentation is clear `WARNING: Don't use this method unless you know what you're doing`. 
+
+
+```go
 func (s *Server) Home(w http.ResponseWriter, r *http.Request) {
 	var (
 		token  *jwt.Token
@@ -296,8 +310,17 @@ func (s *Server) Home(w http.ResponseWriter, r *http.Request) {
 	s.Tmpl.ExecuteTemplate(w, "home", map[string]interface{}{"Token": token.Raw, "UsePyron": s.Config.UsePyron, "FormattedClaims": string(claims)})
 }
 ```
+
+Let's take a pause for a moment and run the application to see what we have achieved.
+
+
+### Calling protected resource
+
+
+
 Finally, we use the certificate bound token to call the resource server. We intentionally do a few things for demonstrations purposes here that should not be done in a production application. We have an environment variable that sets `s.Config.InjectCertMode` and this should not be done in a real application. This is used because we are using a Pyron authorizer locally and we do not have TLS termination so the resource server cannot actually get the certificate and verify it against the hash. So we get the certificate thumbprint from the token here `certHash := r.FormValue("certhash")` and then if we are injecting that (`s.Config.InjectCertMode` is true - see the helper function below) then we can set a policy that checks for that header and then compares it certificate hash in the token. A real resource server would get the certificate hash from the token and then get the certificate from the TLS layer, hash it, and compare it directly.
-```
+
+```go
 func (s *Server) Resource(w http.ResponseWriter, r *http.Request) {
 	var (
 		res          *http.Response
@@ -354,6 +377,38 @@ func (s *Server) newHTTPRequest(certHash string) (req *http.Request, err error) 
 ```
 
 We have now covered the code and it is time to run the application.
+
+### Configure application
+
+### Building the Go OAuth Client
+
+TODO// Move this to end
+
+Before writing code we need to set some environment variables. The environment variables are used to configure our Go client to communicate with the import service that we set up in the previous step. Addtionally, it sets up [Cloudentity Pyron Authorizer](https://docs.authorization.cloudentity.com/guides/developer/protect/pyron/). You can use any authorizer, or none at all, but we use it here due to running locally and since we don't have TLS termination we can 'fake' the mTLS flow by injecting the certificate thumbprint into a header. This allows us to play with the policy settings in [Cloudentity Authorization Platform](https://authz.cloudentity.io/). We also set the environment variables with the Tenant ID and Tenant URL so that we can access the `.well-known` endpoint of our client application in [Cloudentity Authorization Platform](https://authz.cloudentity.io/). We need to access the `.well-known` endpoint to get the authorization and token endpoint URLs.
+
+Go to the home directory of the Go application repository. In the `.env` file and fill in the following using the items we copied above:
+ -	CONFIGURATION_TENANT_URL
+ -	CONFIGURATION_TENANT_ID 
+ -	CONFIGURATION_CLIENT_ID 
+ -	CONFIGURATION_CLIENT_SECRET 
+
+
+### Preparing Cloudentity SaaS
+First we are going to set up a service in [Cloudentity Authorization Platform](https://authz.cloudentity.io/) so that we can import a workspace and a client application that will act as our authorization server. The import client is for convenience and brevity of this article and is not required to set up an authorization server.  To use the import client we need to add a few environment variables to the `.env` file in our repo that allows the application to access our newly created import application. To see how to setup the client application manually, checkout [Sample Go MTLS Oauth Client](https://github.com/cloudentity/sample-go-mtls-oauth-client).
+
+Now let's get the import service working:
+ -	Login in to Cloudentity SaaS https://authz.cloudentity.io/
+ -	From the list in `Administrative Workspace` choose the `System` workspace.
+ -	On the navigation menu go to `Applications->Clients`.
+ -	Choose `CREATE APPLICATION`
+ -	Give the client application a name and from the `Choose an application type` section choose `Service`.
+ -	After the client is created choose the `Scopes` tab.
+ -	With the `Scopes` tab chosen, under `Management` turn on `manage_configuration`.
+ -	From the OAuth tab copy the Client ID and Client Secret as you will add these for importing the OAuth client app. These are your CONFIGURATION_CLIENT_ID and CONFIGURATION_CLIENT_SECRET.
+ -	In the top right of Cloudentity SaaS copy your `tenant` which is your CONFIGURATION_TENANT_ID.
+ -	Finally,on the left hand menu choose `Auth Settings-> OAuth` and copy the Authorization URL. This is your authorization URL for your system. What we need is the Tenant URL for your new client app that will be created. To get the Tenant URL remove `system` from the end of the URL. This is your CONFIGURATION_TENANT_URL.
+
+With the import client now created, we can move on to creating the Go client application.
 
 ### Running the Application
 
