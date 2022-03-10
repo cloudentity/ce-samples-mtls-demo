@@ -32,6 +32,7 @@ After creating the application you will be redirected to your new application. C
 ![mtls method choose](images/mtls-method.png)
 
 On the left hand menu go to Auth Settings->OAuth and paste in your root CA certificate contents. In the repository, it is the `ca.pem` contents. Check `TLS Client Authentication`. Click 'Save Changes'.
+![adding ca contents](images/paste-ca.png)
 
 Now we need to create the Cloudentity Amazon API Gateway authorizer. On the left sidebar choose Enforcement->Authorizers and then click 'Create Gateway'.
 ![create gateway](images/create-gtwy.png)
