@@ -101,7 +101,7 @@ Choose 'Actions' and then 'Deploy API'. Choose a stage or create a new one. For 
  ![set handler name](images/name-handler.png)
  
  
- Go to the configuration tab. Optionally, set the memory size to a desired size under 'General Configuration' if desired. We choose 128MB. 
+ Go to the configuration tab. Optionally, set the memory size to a desired size under 'General Configuration'. We choose 128MB. 
  ![set memory](images/memory.png)
  
  Chooose 'Environment Variables' and select 'Edit'.
