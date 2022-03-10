@@ -132,7 +132,7 @@ Click 'Add Permissions' then choose 'Create inline policy'.
 Click 'Choose service' and add API Gateway. Under actions choose 'All API Gateway Actions'. Select 'Resources' and choose 'All resources'. We are adding all resources for simplicity in this tutorial. Adjust these according to your needs. 
 ![gateway policy](images/gtwy-perm.png)
 
-Click 'Add additional permissions' and select 'Lambda'. Under 'Manual actions' choose 'All Lmabda actions'. Under 'Resources' choose 'All resources'. 
+Click 'Add additional permissions' and select 'Lambda'. Under 'Manual actions' choose 'All Lambda actions'. Under 'Resources' choose 'All resources'. 
 ![lambda policy](images/lambda-perm.png)
 
 Click 'Review policy', give the policy a name and then click 'Create policy'.
