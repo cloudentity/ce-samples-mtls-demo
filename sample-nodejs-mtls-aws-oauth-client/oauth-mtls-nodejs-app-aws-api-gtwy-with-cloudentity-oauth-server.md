@@ -74,9 +74,12 @@ Choose 'Actions' and then 'Deploy API'. Choose a stage or create a new one. For 
  Inside 'Configuration' choose 'Edit' under 'Endpoint Configuration'. 
  ![edit configuration](images/edit-config.png)
  
- Select your ACM certificate and save. Click the 'API Mappings' tab choose 'Configure API Mappings' and select the API and stage that you created in AWS API Gateway then save.
+ Select your ACM certificate and save.
  ![set acm](images/acm.png)
- 
+
+ Click the 'API Mappings' tab choose 'Configure API Mappings' and select the API and stage that you created in AWS API Gateway then save.
+![configure mappings](images/config-mappings.png)
+
  Go back to your API and on the left menu choose 'Settings'. Under 'Default Endpoint' choose 'Disabled'. This ensures that only your custom domain is called instead of the default URL that was created automatically when you created the API.
   ![disable default](images/disable-default.png)
   
