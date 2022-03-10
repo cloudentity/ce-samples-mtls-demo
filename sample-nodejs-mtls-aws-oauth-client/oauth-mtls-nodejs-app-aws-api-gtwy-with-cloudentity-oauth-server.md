@@ -40,7 +40,7 @@ Now we need to create the Cloudentity Amazon API Gateway authorizer. On the left
 On the 'Authorizers' page choose 'Amazon API Gateway'. Give the gateway a name, check 'Create and bind services automatically' and choose 'Save'.
 ![name gateway](images/name-gtwy.png)
 
-After creating the authorize you will be redirected to the quickstart guide. Click 'Download Authorizer'. You will upload this to AWS Lambda in a future step.
+After creating the authorizer you will be redirected to the quickstart guide. Click 'Download Authorizer'. You will upload this to AWS Lambda in a future step.
 ![download gateway](images/download.png)
 
 Click on the 'Settings' tab. Scroll down and copy the Client ID, Client Secret, and Issuer URL. You will enter these values as environment variables in your AWS Lamdba function.
