@@ -42,7 +42,7 @@ Log in to your [AWS acount](https://aws.amazon.com/) and go to the API that you 
  Select your domain or [create a new one](https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html) if necessary. Once you have selected your custom domain, under 'Domain Details' choose 'Edit'. 
  ![edit domain details](images/custom-edit1.png)
  
- Select 'Mutual TLS authentication' and enter your trust store URI. The trust store URI will be a location where AWS can retrieve the contents of your trusted certificate. If you have a link to you trust store URI then use that. Otherwise, you can upload the your pem encoded trusted certificate that you are using to S3 and use that URI. Click 'Save'. Once you save you will see the Domain Details pane and 'Mutual TLS' will turn green showing that mTLS is now active. 
+ Select 'Mutual TLS authentication' and enter your trust store URI. The trust store URI will be a location where AWS can retrieve the contents of your trusted certificate. If you have a link to your trust store URI then use that. Otherwise, you can upload the your pem encoded trusted certificate that you are using to S3 and use that URI. Click 'Save'. Once you save you will see the Domain Details pane and 'Mutual TLS' will turn green showing that mTLS is now active. 
  ![setting trust store](images/trust-store.png)
  
  Inside 'Configuration' choose 'Edit' under 'Endpoint Configuration'. 
