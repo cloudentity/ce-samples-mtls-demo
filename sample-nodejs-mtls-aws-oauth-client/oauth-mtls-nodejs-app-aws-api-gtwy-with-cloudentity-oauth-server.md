@@ -78,7 +78,7 @@ Now go to `http://localhost:5002/home` and get an access token by clicking 'Get 
 Currently, a policy is not set on the API in Cloudentity Authorization Platform. Go back to your tenant in [Cloudentity Authorization Platform](https://authz.cloudentity.io/) and go to Enforcement-APIs. Since we chose 'Create and bind services automatically', once the authorizer was start and the API deployed in AWS our APIs appear here automatically. 
 ![api enforcement](images/enforcement.png)
 
-We will quickly walk through setting up a a policy but for a more detailed explanation of using the policy editor see [Creating Policy in Policy Editor](https://docs.authorization.cloudentity.com/guides/developer/protect/access_control/create_auth_policy/?q=policy). 
+We will quickly walk through setting up a a policy but for a more detailed explanation of using the policy editor see [Creating Policy](https://docs.authorization.cloudentity.com/guides/developer/protect/access_control/create_auth_policy/?q=policy). 
 
 Select the API you wish to protect with a policy. For the example API we choose `GET /pets`. Notice the API shows 'Unrestricted'. Click 'Unrestricted' and choose 'Add new policy'. Give the policy a name and choose 'Cloudentity' for the policy language. Click 'Create'. 
 ![name policy](images/name-policy.png)
