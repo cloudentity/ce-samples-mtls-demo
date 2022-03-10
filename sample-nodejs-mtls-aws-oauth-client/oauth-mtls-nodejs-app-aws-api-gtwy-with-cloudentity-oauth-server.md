@@ -28,7 +28,7 @@ Create a new client application. Select Applications->Clients and choose 'Create
 Give the application a name. Choose your application type. We chose 'Server Web' for our application. Next click 'Create'. 
 ![naming application](images/app-type.png)
 
-After creating the application you will be redirected to your new application. Choose the 'OAuth' tab. Scroll down to 'Token Endpoint Authentication Method' and choose `TLS Client Authentication`. Further down under 'Certificate Metadata' choose `TLS_CLIENT_AUTH_SAN_DNS`. In 'DNS Name SAN entry' enter `acp` if your are using the provided certfiicate. Otherwise, enter the appropirate value for your certificate. Check 'Certificate bound access tokens' and then choose 'Save'. On the right copy your CLIENT ID, CLIENT SECRET, and the TOKEN URL. You will enter these in the `.env` at the root of the Node.js application project folder.
+After creating the application you will be redirected to your new application. Choose the 'OAuth' tab. Scroll down to 'Token Endpoint Authentication Method' and choose `TLS Client Authentication`. Further down under 'Certificate Metadata' choose `TLS_CLIENT_AUTH_SAN_DNS`. In 'DNS Name SAN entry' enter `acp` if your are using the provided certfiicate. Otherwise, enter the appropriate value for your certificate. Check 'Certificate bound access tokens' and then choose 'Save'. On the right copy your CLIENT ID, CLIENT SECRET, and the TOKEN URL. You will enter these in the `.env` at the root of the Node.js application project folder.
 ![mtls method choose](images/mtls-method.png)
 
 On the left hand menu go to Auth Settings->OAuth and paste in your root CA certificate contents. In the repository, it is the `ca.pem` contents. Check `TLS Client Authentication`. Click 'Save Changes'.
