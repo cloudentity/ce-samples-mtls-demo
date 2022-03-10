@@ -222,4 +222,5 @@ You can also look in CloudWatch logs to see the status of a request. In your lam
  - [RFC 8705](https://datatracker.ietf.org/doc/html/rfc8705)
  - [Mutual-TLS with AWS API Gateway](https://aws.amazon.com/blogs/compute/introducing-mutual-tls-authentication-for-amazon-api-gateway/)
  - [Custom Domains with AWS API Gateway](https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html)
+ - [Cloudentity Amazon API Gateway Authorizer](https://docs.authorization.cloudentity.com/guides/developer/protect/aws_api_gw/aws/?q=aws%20api)
 
