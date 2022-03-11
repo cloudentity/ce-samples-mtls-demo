@@ -10,15 +10,42 @@ This article is geared towards showing a backend application calling another ser
 
 ## Pre-requisites
 
-* Nodejs
-* Npm
+* Cloudentity Authorization Platform tenant - 
+  Cloudentity offers a free SaaS Tenant and [you can sign up for one, if you have not already got one](https://authz.cloudentity.io/register). With this you will get a free OAuth/OIDC compliant server with all the latest specifications.
 
-##
+* Application builder tools - We will build and run the application locally
+	* [Node.js](https://nodejs.org)  - Recommended v16.x+
+	* [npm](https://www.npmjs.com)
 
-Import required packages
+### Basic Concepts
+OAuth 2.0 Mutual-TLS client authentication and certificate bound access tokens is explained in [RFC 8705](https://datatracker.ietf.org/doc/html/rfc8705). We have simplified it for you in case you want to understand usage scenarios with some simple examples
+* [OAuth mtLS implementation by Cloudentity overview](oauth-mtls-overview-cloudentity-platform.md)
+* [Configure OAuth mTLS client authentication using self signed certificate](cloudentity-oauth-mtls-self-signed-client-authentication.md)
+* [Configure OAuth mTLS client authentication using TLS](cloudentity-oauth-mtls-client-authentication.md)
+* [Secure APIs with OAuth mTLS and certificate bound access token](securing-apis-with-certificate-bound-access-token.md)
 
 
-``` bash
+### Source repo
+
+We expect Javscript programming language experience to understand the programming constructs, in case you want to just run the application, jump to How to build and run the application after cloing the repo.
+
+The source code for this entire exercise is [available in Github for reference](https://github.com/cloudentity/ce-samples-mtls-demo/tree/master/sample-nodejs-mtls-oauth-client)
+
+```bash
+git clone https://github.com/cloudentity/ce-samples-mtls-demo.git
+```
+
+The repo contains several example projects. Change directory into the sample nodejs oauth client directory
+```bash
+cd ce-samples-mtls-demo/sample-nodejs-mtls-oauth-client
+```
+
+### Building the Node.js client application
+
+First, in `index.js` we import the required required packages.
+
+
+``` javascript
 var axios = require('axios');
 var qs = require('qs');
 var express = require('express');
@@ -33,9 +60,9 @@ var path = require('path')
 require('dotenv').config();
 ```
 
-Set up express app to serve some views and html pages
+We then [set up](https://github.com/cloudentity/sample-go-mtls-oauth-client/blob/master/main.go#L193) the express app to serve some views and html pages.
 
-```bash
+```javascript
 app.set('views', `${__dirname}/views`);
 app.set('view engine', 'mustache');
 app.engine('mustache', mustacheExpress());
@@ -43,20 +70,41 @@ app.use (bodyParser.urlencoded( {extended : true} ) );
 app.use(express.static(path.join(__dirname, "/public")));
 ```
 
-Set up routes to serve traffic
+We get our client credentials and OAuth token URL for our non-mTLS application from our environment varaibles.
+```javascript
+const client_id = process.env.OAUTH_CLIENT_ID; 
+const client_secret = process.env.OAUTH_CLIENT_SECRET; 
+const token_url = process.env.OAUTH_TOKEN_URL; 
+const auth_token = Buffer.from(`${client_id}:${client_secret}`, 'utf-8').toString('base64');
+```
 
-Route for home page
-```bash
+Using Mutual-TLS requires that we use our certificate and public key so we read these from the file system and use them when making requests requiring mTLS and we initialize the `https.Agent`. We also read in our environment variables that will be used with our mTLS OAuth server. 
+```javascript 
+const httpsAgent = new https.Agent({
+  cert: fs.readFileSync('full_chain.pem'),
+  key: fs.readFileSync('acp_key.pem'),
+});
 
+const mtls_client_id = process.env.MTLS_OAUTH_CLIENT_ID; 
+const mtls_token_url = process.env.MTLS_OAUTH_TOKEN_URL; 
+```
+
+Next, we set up routes to serve traffic.
+
+We render the home page which will be the kick off point for retrieving an access token. 
+```javascript
 app.get('/home', function(req, res) {
-  res.render('home', {pageTitle: "Enter Your Name"} )
+  res.render('home', {} )
 })
 
 ```
 
-Route for fetching a regular access Token
+Once the application is running and the end user visits `http://localhost:5002/home` the user is presented with the following UI. The home page displays links for fetching an access token through traditional OAuth 2.0 client credentials flow. Additonally, we can choose to get a certificate bound access token using mTLS as shown in the screenshot below. 
+![token access ui]((images/mtls-ui.png)).
 
-```bash
+When the user selects `Get Access Token` from the UI the route `/auth` is called which fetches a regular access token that is not certificate bound. Here we are using `client_credentials` grant type. We then decode the value and display the decoded token in the UI.
+
+```javascript
 
 app.get('/auth', function(req, res) {
   getAuth().then(value => {
@@ -72,17 +120,6 @@ app.get('/auth', function(req, res) {
  
 });
 
-const client_id = process.env.OAUTH_CLIENT_ID; // Your client id
-const client_secret = process.env.OAUTH_CLIENT_SECRET; // Your secret
-const token_url = process.env.OAUTH_TOKEN_URL; // Your secret
-const auth_token = Buffer.from(`${client_id}:${client_secret}`, 'utf-8').toString('base64');
-
-const httpsAgent = new https.Agent({
-  cert: fs.readFileSync('full_chain.pem'),
-  key: fs.readFileSync('acp_key.pem'),
-});
-
-
 const getAuth = async () => {
 try {
  const data = qs.stringify({'grant_type':'client_credentials'});
@@ -97,18 +134,11 @@ try {
  console.log(error);
 }
 }
-
 ```
 
-Route for fetching a certificate bound access Token
+Now we will fetch a certificate bound access token. When the user click `Get Certificate Bound Access Token` a certificate bound access token will be retreieved. The `getMtlsAuth` function is called. The [RFC 8705 specification](https://datatracker.ietf.org/doc/html/rfc8705) for mTLS says `For all requests to the authorization server utilizing mutual-TLS client authentication, the client MUST include the "client_id"` so we pass in the client ID. We also use our `httpsAgent` which will include our certificate and public key.
 
-```bash
-
-const mtls_client_id = process.env.MTLS_OAUTH_CLIENT_ID; // Your client id
-const mtls_client_secret = process.env.MTLS_OAUTH_CLIENT_SECRET; // Your secret
-const mtls_token_url = process.env.MTLS_OAUTH_TOKEN_URL; // Your secret
-const mtls_auth_token = Buffer.from(`${mtls_client_id}:${mtls_client_secret}`, 'utf-8').toString('base64');
-
+```javascript
 const getMtlsAuth = async () => {
   try{
     const data = qs.stringify({'grant_type':'client_credentials', 'client_id': mtls_client_id});
@@ -131,6 +161,7 @@ const getMtlsAuth = async () => {
 }
 
 ```
+
 
 Route to call a sample resource server url
 

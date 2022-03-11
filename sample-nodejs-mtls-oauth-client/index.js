@@ -19,8 +19,25 @@ app.engine('mustache', mustacheExpress());
 app.use (bodyParser.urlencoded( {extended : true} ) );
 app.use(express.static(path.join(__dirname, "/public")));
 
+
+// Credentials for non Mutual-TLS application
+const client_id = process.env.OAUTH_CLIENT_ID; // Your client id
+const client_secret = process.env.OAUTH_CLIENT_SECRET; // Your secret
+const token_url = process.env.OAUTH_TOKEN_URL; // Your OAuth token URL
+const auth_token = Buffer.from(`${client_id}:${client_secret}`, 'utf-8').toString('base64');
+
+// Using mTLS requires that we use our certificate and public key.
+const httpsAgent = new https.Agent({
+  cert: fs.readFileSync('full_chain.pem'),
+  key: fs.readFileSync('acp_key.pem'),
+});
+
+// Credentials for Mutual-TLS application
+const mtls_client_id = process.env.MTLS_OAUTH_CLIENT_ID; // Your client id
+const mtls_token_url = process.env.MTLS_OAUTH_TOKEN_URL; // Your OAuth token url for mTLS
+
 app.get('/home', function(req, res) {
-  res.render('home', {pageTitle: "Enter Your Name"} )
+  res.render('home', {} )
 })
 
 app.get('/auth', function(req, res) {
@@ -36,23 +53,6 @@ app.get('/auth', function(req, res) {
  })
  
 });
-
-
-const client_id = process.env.OAUTH_CLIENT_ID; // Your client id
-const client_secret = process.env.OAUTH_CLIENT_SECRET; // Your secret
-const token_url = process.env.OAUTH_TOKEN_URL; // Your secret
-const auth_token = Buffer.from(`${client_id}:${client_secret}`, 'utf-8').toString('base64');
-
-const httpsAgent = new https.Agent({
-  cert: fs.readFileSync('full_chain.pem'),
-  key: fs.readFileSync('acp_key.pem'),
-});
-
-
-const mtls_client_id = process.env.MTLS_OAUTH_CLIENT_ID; // Your client id
-const mtls_client_secret = process.env.MTLS_OAUTH_CLIENT_SECRET; // Your secret
-const mtls_token_url = process.env.MTLS_OAUTH_TOKEN_URL; // Your secret
-const mtls_auth_token = Buffer.from(`${mtls_client_id}:${mtls_client_secret}`, 'utf-8').toString('base64');
 
 const getMtlsAuth = async () => {
   try{
@@ -76,7 +76,7 @@ const getMtlsAuth = async () => {
 }
 
 
-const resource_url = process.env.MTLS_RESOURCE_URL; // Your secret
+const resource_url = process.env.MTLS_RESOURCE_URL; // Resource server URL
 
 const callResourceServerMtlsAPi = async (accessToken) => {
   try {
@@ -197,5 +197,6 @@ app.get('/health', function(req, res) {
     res.send('Service is alive and healthy')
 });
 
-app.listen(5002);
-console.log("Server listening at http://localhost:5002/");
+const port = process.env.PORT;
+app.listen(port);
+console.log(`Server listening at http://localhost:${port}/home`);
