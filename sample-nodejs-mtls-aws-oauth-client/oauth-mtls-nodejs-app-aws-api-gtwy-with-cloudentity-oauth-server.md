@@ -72,7 +72,7 @@ At the root of the project go to the `.env` file and enter the following:
 Your `MTLS_RESOURCE_URL` is the url of the resource we created in AWS API Gateway. It will be your custom domain plus the API path. For example, if you created the example API and your custom domain is `api.example.com` then your MTLS_RESOURCE_URL would be `https://api.example.com/pets`.
 
 Now run the application from terminal at the root of the project with 
-```
+```bash
 npm start
 ```
 
@@ -89,7 +89,7 @@ Select the API you wish to protect with a policy. For the example API we choose 
 ![name policy](images/name-policy.png)
 
 Save the following policy to a file.
-```
+```yaml
 validators:
   - name: attributes
     conf:
@@ -114,9 +114,8 @@ Once you save the policy press the back arrow and save the policy on the API you
 Now in your browser go back to `http://localhost:5002/home` and verify that you can still access the protected resource after obtaining an access token.
 
 You can also look in CloudWatch logs to see the status of a request. In your lambda function go to 'Monitor' and then click 'View logs in CloudWatch'. You will see the logs for this lamdba function. Make a request and notice that the logs will show that the policy was checked during the request and that the request was authorized or denied. For example, the following shows the resource requested was `/pets`. The policy name is shown, here it is `mtls-aws-api-gateway-mtls-policy` as that is the name we gave the policy. We see the status is `AUTHORIZED`.
-```
+```json
 {
-…
     "msg": "request validated",
     "path": "/pets",
     "rule": {
