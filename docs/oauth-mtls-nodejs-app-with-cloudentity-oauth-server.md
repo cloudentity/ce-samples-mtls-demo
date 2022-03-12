@@ -33,7 +33,7 @@ Fortunately, we have a way to prevent a rogue caller from using a stolen access 
 
 ### Source repo
 
-We expect Javscript programming language experience to understand the programming constructs, in case you want to just run the application, jump to `#Running the Node.js client application` and run the application after cloning the repo.
+We expect Javscript programming language experience to understand the programming constructs, in case you want to just run the application, jump to [Running the Node.js client application](#running-the-node.js-client-application) and run the application after cloning the repo.
 
 The source code for this entire exercise is [available in Github for reference](https://github.com/cloudentity/ce-samples-mtls-demo/tree/master/sample-nodejs-mtls-oauth-client)
 
