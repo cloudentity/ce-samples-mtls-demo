@@ -95,7 +95,7 @@ const mtls_token_url = process.env.MTLS_OAUTH_TOKEN_URL;
 ```
 
 
-We set our port and log the URL for the starting point of our application. We also set a `/health` endpoint just for verifying that everything is up and running.
+We [set our port](https://github.com/cloudentity/ce-samples-mtls-demo/blob/00aad5ee9ab3074c0904fc6725dda24ce7838837/sample-nodejs-mtls-oauth-client/index.js#L39) and log the URL for the starting point of our application. We also set a `/health` endpoint just for verifying that everything is up and running.
 ```javascript
 const port = process.env.PORT;
 app.listen(port);
@@ -109,7 +109,7 @@ app.get('/health', function (req, res) {
 
 Next, we set up our primary application routes to serve traffic for the OAuth flow.
 
-We [define](https://github.com/cloudentity/ce-samples-mtls-demo/blob/017a33ae63334789bbc9a87f6894a68cca431167/sample-nodejs-mtls-oauth-client/index.js#L39) a `/home` route to render the home page which will be the kick off point for retrieving an access token. 
+We [define](https://github.com/cloudentity/ce-samples-mtls-demo/blob/00aad5ee9ab3074c0904fc6725dda24ce7838837/sample-nodejs-mtls-oauth-client/index.js#L48) a `/home` route to render the home page which will be the kick off point for retrieving an access token. 
 ```javascript
 app.get('/home', function(req, res) {
   res.render('home', {} )
@@ -117,8 +117,10 @@ app.get('/home', function(req, res) {
 
 ```
 
-Once the application is running and the end user visits `http://localhost:5002/home` the user is presented with the following UI. The home page displays links for fetching an access token through traditional OAuth 2.0 client credentials flow. Additonally, we can choose to get a certificate bound access token using mTLS as shown in the screenshot below. 
-![token access ui]((images/mtls-ui.png)).
+Once the application is running and the end user visits `http://localhost:5002/home` the user is presented with the following UI.
+![token access ui](images/mtls-ui.png)
+
+The home page displays links for fetching an access token through traditional OAuth 2.0 client credentials flow. Additonally, we can choose to get a certificate bound access token using mTLS as shown in the screenshot below. 
 
 When the user selects `Get Access Token` from the UI the route `/auth` is called which fetches a regular access token that is not certificate bound. Here we are using `client_credentials` grant type. We then decode the value and display the decoded token in the UI.
 
