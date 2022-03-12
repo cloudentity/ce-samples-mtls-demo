@@ -75,7 +75,7 @@ app.use (bodyParser.urlencoded( {extended : true} ) );
 app.use(express.static(path.join(__dirname, "/public")));
 ```
 
-We [get our]()https://github.com/cloudentity/ce-samples-mtls-demo/blob/017a33ae63334789bbc9a87f6894a68cca431167/sample-nodejs-mtls-oauth-client/index.js#L24 client credentials and OAuth token URL for our non-mTLS application from our environment variables.
+We [get our](https://github.com/cloudentity/ce-samples-mtls-demo/blob/017a33ae63334789bbc9a87f6894a68cca431167/sample-nodejs-mtls-oauth-client/index.js#L24) client credentials and OAuth token URL for our non-mTLS application from our environment variables.
 ```javascript
 const client_id = process.env.OAUTH_CLIENT_ID; 
 const client_secret = process.env.OAUTH_CLIENT_SECRET; 
