@@ -1,4 +1,4 @@
-# Nodejs app using OAuth mtlS with Cloudentity Authorization platform
+# Node.js app using OAuth mTLS with Cloudentity Authorization platform
 
 Cloudentity authorization platform completely supports [RFC 8705](https://datatracker.ietf.org/doc/html/rfc8705) for OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens.
 As you might already be aware Cloudentity platform is compliant to latest emerging OAuth specifications and can support in modernizing the application architecutres with latest open standards and
@@ -75,7 +75,7 @@ app.use (bodyParser.urlencoded( {extended : true} ) );
 app.use(express.static(path.join(__dirname, "/public")));
 ```
 
-We get our client credentials and OAuth token URL for our non-mTLS application from our environment varaibles.
+We [get our]()https://github.com/cloudentity/ce-samples-mtls-demo/blob/017a33ae63334789bbc9a87f6894a68cca431167/sample-nodejs-mtls-oauth-client/index.js#L24 client credentials and OAuth token URL for our non-mTLS application from our environment variables.
 ```javascript
 const client_id = process.env.OAUTH_CLIENT_ID; 
 const client_secret = process.env.OAUTH_CLIENT_SECRET; 
@@ -83,7 +83,7 @@ const token_url = process.env.OAUTH_TOKEN_URL;
 const auth_token = Buffer.from(`${client_id}:${client_secret}`, 'utf-8').toString('base64');
 ```
 
-Using Mutual-TLS requires that we use our certificate and public key so we read these from the file system and use them when making requests requiring mTLS and we initialize the `https.Agent`. We also read in our environment variables that will be used with our mTLS OAuth server. 
+Using Mutual-TLS requires that we use our certificate and public key so we [read these](https://github.com/cloudentity/ce-samples-mtls-demo/blob/017a33ae63334789bbc9a87f6894a68cca431167/sample-nodejs-mtls-oauth-client/index.js#L30) from the file system and use them when making requests requiring mTLS and we initialize the `https.Agent`. We also read in our environment variables that will be used with our mTLS OAuth server. 
 ```javascript 
 const httpsAgent = new https.Agent({
   cert: fs.readFileSync('full_chain.pem'),
@@ -94,9 +94,12 @@ const mtls_client_id = process.env.MTLS_OAUTH_CLIENT_ID;
 const mtls_token_url = process.env.MTLS_OAUTH_TOKEN_URL; 
 ```
 
+
+We set our port and log the URL for the starting point of our application. We also set a `/health` endpoint just for verifying that everything is up and running.
+
 Next, we set up routes to serve traffic.
 
-We render the home page which will be the kick off point for retrieving an access token. 
+We [define](https://github.com/cloudentity/ce-samples-mtls-demo/blob/017a33ae63334789bbc9a87f6894a68cca431167/sample-nodejs-mtls-oauth-client/index.js#L39) a `/home` route to render the home page which will be the kick off point for retrieving an access token. 
 ```javascript
 app.get('/home', function(req, res) {
   res.render('home', {} )

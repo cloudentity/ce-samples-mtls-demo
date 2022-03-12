@@ -36,14 +36,14 @@ const httpsAgent = new https.Agent({
 const mtls_client_id = process.env.MTLS_OAUTH_CLIENT_ID; // Your client id
 const mtls_token_url = process.env.MTLS_OAUTH_TOKEN_URL; // Your OAuth token url for mTLS
 
-app.get('/health', function (req, res) {
-  res.send('Service is alive and healthy')
-});
-
 const port = process.env.PORT;
 app.listen(port);
 
 console.log(`Server listening at http://localhost:${port}/home`);
+
+app.get('/health', function (req, res) {
+  res.send('Service is alive and healthy')
+});
 
 app.get('/home', function (req, res) {
   res.render('home', {})
