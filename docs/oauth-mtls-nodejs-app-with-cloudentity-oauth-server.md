@@ -33,7 +33,7 @@ Fortunately, we have a way to prevent a rogue caller from using a stolen access 
 
 ### Source repo
 
-We expect Javscript programming language experience to understand the programming constructs, in case you want to just run the application, jump to How to build and run the application after cloing the repo.
+We expect Javscript programming language experience to understand the programming constructs, in case you want to just run the application, jump to `#Running the Node.js client application` and run the application after cloning the repo.
 
 The source code for this entire exercise is [available in Github for reference](https://github.com/cloudentity/ce-samples-mtls-demo/tree/master/sample-nodejs-mtls-oauth-client)
 
@@ -49,7 +49,6 @@ cd ce-samples-mtls-demo/sample-nodejs-mtls-oauth-client
 ### Building the Node.js client application
 
 First, in `index.js` we import the required required packages.
-
 
 ``` javascript
 var axios = require('axios');
@@ -249,128 +248,23 @@ const callResourceServerMtlsAPiAsRogueCaller = async (accessToken) => {
 }
 ```
 
-
-
-
-
-
-
-
-
-
-const resource_url = process.env.MTLS_RESOURCE_URL; // Your secret
-
-const callResourceServerMtlsAPi = async (accessToken) => {
-  try {
-   const httpOptions = {
-    url: resource_url,  
-    method: "GET",
-    httpsAgent : httpsAgent,
-    headers: {
-      'Content-Type': 'application/json' ,
-      'Authorization': 'Bearer ' + accessToken
-    }
-  }
-  
-  const result = await axios(httpOptions)
-    return result.data;  
-  }catch(error){
-    console.log(error);
-  }
-
-}
-
-
-
-app.get('/mtlsauth', function(req, res) {
-  getMtlsAuth().then(value => {
-   if(value !== undefined) {
-     var decoded = jwt_decode(value);
-     res.render('home', {certificate_bound_access_token: JSON.stringify(decoded, null, 4)} )
-   } else {
-     res.send("No token fetched!")
-   }
- }, err => {
-   res.send("Unable to fetch token!")
- })
-});
-
-
-
-app.get('/mtls-resource', function(req, res) {
-  getMtlsAuth().then(value => {
-    if(value !== undefined) {
-        var decoded = jwt_decode(value);
-        callResourceServerMtlsAPi(value).then(value => {
-        if(value !== undefined) {
-          res.render('home', {mtls_resource: JSON.stringify(value, null, 4)} )
-        } else {
-          res.send("No response fetched!")
-        }
-      }, err => {
-        res.send("Unable to fetch token!")
-      })
-  }
-  });
-});
-
-app.get('/mtls-resource-roguecaller', function(req, res) {
-  getMtlsAuth().then(value => {
-    if(value !== undefined) {
-        var decoded = jwt_decode(value);
-        callResourceServerMtlsAPiAsRogueCaller(value).then(value => {
-        if(value !== undefined) {
-          res.render('home', {mtls_resource_rogue_caller: value} )
-        } else {
-          res.send("No response fetched!")
-        }
-      }, err => {
-        res.send("Unable to fetch token!")
-      })
-  }
-  });
-});
-
-const rogueHttpsAgent = new https.Agent({
-  cert: fs.readFileSync('api-server-cert.pem'),
-  key: fs.readFileSync('api-server-key.pem'),
-});
-
-
-const callResourceServerMtlsAPiAsRogueCaller = async (accessToken) => {
-  try {
-    const httpOptions = {
-    url: resource_url,  
-    method: "GET",
-    httpsAgent : rogueHttpsAgent,
-    headers: {
-      'Content-Type': 'application/json' ,
-      'Authorization': 'Bearer ' + accessToken
-    }
-  }
- 
-  const result = await axios(httpOptions)
-  return result;
-   
-  } catch(error)
-  {
-     console.log(error);
-   return error;
-
-  }
-
-}
-
-
-app.get('/health', function(req, res) {
-    res.send('Service is alive and healthy')
-});
-
-app.listen(5002);
-console.log("Server listening at http://localhost:5002/");
-
+### Running the Node.js client application
+Go to the root of the project `sample-nodejs-mtls-oauth-client`. From the root of the repo enter the following in terminal.
+```bash
+cd sample-nodejs-mtls-oauth-client
 ```
 
-##
+In the `.env` file enter the following
+ - OAUTH_CLIENT_ID="<your oauth client id that is not using mtls>"
+ - OAUTH_CLIENT_SECRET="<your oauth client secret that is not using mtls>"
+ - OAUTH_TOKEN_URL="<your oauth client token url that is not using mtls>"
+ - MTLS_OAUTH_CLIENT_ID="<your oauth client id that is using mtls>"
+ - MTLS_OAUTH_TOKEN_URL="<your oauth client token url that is using mtls>"
+ - MTLS_RESOURCE_URL="<your protected resource API URL>"
+
+Once you have filled in the environment variables run the application by entering the following in the terminal:
+```bash
+npm start
+```
 
 
