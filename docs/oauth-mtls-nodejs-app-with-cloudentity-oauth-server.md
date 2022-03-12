@@ -1,6 +1,6 @@
 # Nodejs app using OAuth mtlS with Cloudentity Authorization platform
 
-Cloudentity authorization platform completely supports RFC8705(https://datatracker.ietf.org/doc/html/rfc8705) for OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens.
+Cloudentity authorization platform completely supports [RFC 8705](https://datatracker.ietf.org/doc/html/rfc8705) for OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens.
 As you might already be aware Cloudentity platform is compliant to latest emerging OAuth specifications and can support in modernizing the application architecutres with latest open standards and
 specfications support. We will take you down the path of understanding use cases that can be addressed using mTLS specification, code samples in various language on how to integrate and utilize the latest
 specification in your new architecture patterns.
@@ -26,6 +26,10 @@ OAuth 2.0 Mutual-TLS client authentication and certificate bound access tokens i
 
 Let's look at an overview of how mTLS works to help secure your application from rogue callers that have obtained an access token.
 ![mtls overview](https://github.com/cloudentity/ce-samples-mtls-demo/blob/nodejs-mtls/docs/cloudentity-api-risk-mitigation-mtls.jpeg).
+
+When not using mTLS the client is issued an access token. Unfortunately, a rogue application has also obtained this access token. When not using mTLS, anyone in possession of the access token is able to access a protected resource using that access token. 
+
+Fortunately, we have a way to prevent a rogue caller from using a stolen access token. We can use Mutual-TLS as described in [RFC 8705](https://datatracker.ietf.org/doc/html/rfc8705). The client is issue an access token. A rogue caller gets access to the access token. However, since we are using mTLS we have a certificate bound access token. Since the rogue caller does not have access to our certificate, the rogue caller attempts to use the access token and the protected resource denies access to the resource since the certificate does not match the certificate thumbprint bound to the access token.
 
 ### Source repo
 
