@@ -96,8 +96,18 @@ const mtls_token_url = process.env.MTLS_OAUTH_TOKEN_URL;
 
 
 We set our port and log the URL for the starting point of our application. We also set a `/health` endpoint just for verifying that everything is up and running.
+```javascript
+const port = process.env.PORT;
+app.listen(port);
 
-Next, we set up routes to serve traffic.
+console.log(`Server listening at http://localhost:${port}/home`);
+
+app.get('/health', function (req, res) {
+  res.send('Service is alive and healthy')
+});
+```
+
+Next, we set up our primary application routes to serve traffic for the OAuth flow.
 
 We [define](https://github.com/cloudentity/ce-samples-mtls-demo/blob/017a33ae63334789bbc9a87f6894a68cca431167/sample-nodejs-mtls-oauth-client/index.js#L39) a `/home` route to render the home page which will be the kick off point for retrieving an access token. 
 ```javascript
