@@ -255,12 +255,12 @@ cd sample-nodejs-mtls-oauth-client
 ```
 
 In the `.env` file enter the following
- - OAUTH_CLIENT_ID="<your oauth client id that is not using mtls>"
- - OAUTH_CLIENT_SECRET="<your oauth client secret that is not using mtls>"
- - OAUTH_TOKEN_URL="<your oauth client token url that is not using mtls>"
- - MTLS_OAUTH_CLIENT_ID="<your oauth client id that is using mtls>"
- - MTLS_OAUTH_TOKEN_URL="<your oauth client token url that is using mtls>"
- - MTLS_RESOURCE_URL="<your protected resource API URL>"
+ - OAUTH_CLIENT_ID="`<your oauth client id that is not using mtls>`"
+ - OAUTH_CLIENT_SECRET="`<your oauth client secret that is not using mtls>`"
+ - OAUTH_TOKEN_URL="`<your oauth client token url that is not using mtls>`"
+ - MTLS_OAUTH_CLIENT_ID="`<your oauth client id that is using mtls>`"
+ - MTLS_OAUTH_TOKEN_URL="`<your oauth client token url that is using mtls>`"
+ - MTLS_RESOURCE_URL="`<your protected resource API URL>`"
 
 Once you have filled in the environment variables run the application by entering the following in the terminal:
 ```bash
