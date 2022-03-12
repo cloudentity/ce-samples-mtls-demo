@@ -136,26 +136,39 @@ try {
 }
 ```
 
-Now we will fetch a certificate bound access token. When the user click `Get Certificate Bound Access Token` a certificate bound access token will be retreieved. The `getMtlsAuth` function is called. The [RFC 8705 specification](https://datatracker.ietf.org/doc/html/rfc8705) for mTLS says `For all requests to the authorization server utilizing mutual-TLS client authentication, the client MUST include the "client_id"` so we pass in the client ID. We also use our `httpsAgent` which will include our certificate and public key.
+Now we will fetch a certificate bound access token. When the user clicks `Get Certificate Bound Access Token` from the UI the route `/mtlsauth` is called which fetches a certificate bound access token. The `getMtlsAuth` function is called. [RFC 8705](https://datatracker.ietf.org/doc/html/rfc8705) states `For all requests to the authorization server utilizing mutual-TLS client authentication, the client MUST include the "client_id"` so we pass in the client ID. We also use our `httpsAgent` which will include our certificate and public key.
 
 ```javascript
+app.get('/mtlsauth', function (req, res) {
+  getMtlsAuth().then(value => {
+    if (value !== undefined) {
+      var decoded = jwt_decode(value);
+      res.render('home', { certificate_bound_access_token: JSON.stringify(decoded, null, 4) })
+    } else {
+      res.send("No token fetched!")
+    }
+  }, err => {
+    res.send("Unable to fetch token!")
+  })
+});
+
 const getMtlsAuth = async () => {
-  try{
-    const data = qs.stringify({'grant_type':'client_credentials', 'client_id': mtls_client_id});
+  try {
+    const data = qs.stringify({ 'grant_type': 'client_credentials', 'client_id': mtls_client_id });
 
     const httpOptions = {
-      url: mtls_token_url,  
+      url: mtls_token_url,
       method: "POST",
-      httpsAgent : httpsAgent,
+      httpsAgent: httpsAgent,
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded' 
-    },
-    data: data
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      data: data
     }
 
     const response = await axios(httpOptions)
     return response.data.access_token;
-  } catch(error){
+  } catch (error) {
     console.log(error);
   }
 }
@@ -163,12 +176,72 @@ const getMtlsAuth = async () => {
 ```
 
 
-Route to call a sample resource server url
+After getting a certificate bound access token, the user can then access protected resource by clicking the `Call Resource server with Certificate Bound Access Token` button on the UI. The `/mtls-resource` handler is called which then calls the protectes resource API including the certificate bound access token in the `Authorization` header. Once the response is returned the response from the protected resource is then rendered. If access to the protected resource is allowed we display the JSON response. Otherwise, we display an error that the protected resource access was not authorized. 
 
-```bash
+```javascript
+const resource_url = process.env.MTLS_RESOURCE_URL; // Resource server URL
 
+app.get('/mtls-resource', function (req, res) {
+  getMtlsAuth().then(value => {
+    if (value !== undefined) {
+      var decoded = jwt_decode(value);
+      callResourceServerMtlsAPI(value).then(value => {
+        if (value !== undefined) {
+          res.render('home', { mtls_resource: JSON.stringify(value, null, 4) })
+        } else {
+          res.send("No response fetched!")
+        }
+      }, err => {
+        res.send("Unable to fetch the resource!")
+      })
+    }
+  });
+});
+
+const callResourceServerMtlsAPI = async (accessToken) => {
+  try {
+    const httpOptions = {
+      url: resource_url,
+      method: "GET",
+      httpsAgent: httpsAgent,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + accessToken
+      }
+    }
+
+    const result = await axios(httpOptions)
+    return result.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
 ```
 
+The user can also try and fetch the protected resource using a different certificate. Because we are using Mutual-TLS, if we use a different certificate then the client application will be unable to access the resource and an error will be displayed.
+```javascript
+const callResourceServerMtlsAPiAsRogueCaller = async (accessToken) => {
+  try {
+    const httpOptions = {
+      url: resource_url,
+      method: "GET",
+      httpsAgent: rogueHttpsAgent,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + accessToken
+      }
+    }
+
+    const result = await axios(httpOptions)
+    return result;
+
+  } catch (error) {
+    console.log(error);
+    return error;
+
+  }
+}
+```
 
 
 

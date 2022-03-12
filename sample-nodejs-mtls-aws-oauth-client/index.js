@@ -76,7 +76,7 @@ const getMtlsAuth = async () => {
 }
 
 
-const resource_url = process.env.MTLS_RESOURCE_URL; // Your secret
+const resource_url = process.env.MTLS_RESOURCE_URL; // Your resource URL
 
 const callResourceServerMtlsAPi = async (accessToken) => {
   try {
