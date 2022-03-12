@@ -264,7 +264,7 @@ const callResourceServerMtlsAPiAsRogueCaller = async (accessToken) => {
 ```
 
 ### Running the client application
-Make sure that you ahve configured your OAuth applications in Cloudentity Authorization Platform. Directions on configuring your client applications can be found [here](https://github.com/cloudentity/ce-samples-mtls-demo/blob/nodejs-mtls/docs/cloudentity-oauth-mtls-client-authentication.md). 
+Make sure that you have configured your OAuth applications in Cloudentity Authorization Platform. Directions on configuring your client applications can be found [here](https://github.com/cloudentity/ce-samples-mtls-demo/blob/nodejs-mtls/docs/cloudentity-oauth-mtls-client-authentication.md). 
 
 Go to the root of the project `sample-nodejs-mtls-oauth-client`. From the root of the repo enter the following in terminal.
 ```bash
