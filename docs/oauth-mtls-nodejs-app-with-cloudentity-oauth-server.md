@@ -1,12 +1,12 @@
-# Node.js app using OAuth mTLS with Cloudentity Authorization platform
+# Node.js app using OAuth mTLS with Cloudentity Authorization Platform
 
 Cloudentity authorization platform completely supports [RFC 8705](https://datatracker.ietf.org/doc/html/rfc8705) for OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens.
-As you might already be aware Cloudentity platform is compliant to latest emerging OAuth specifications and can support in modernizing the application architecutres with latest open standards and
-specfications support. We will take you down the path of understanding use cases that can be addressed using mTLS specification, code samples in various language on how to integrate and utilize the latest
-specification in your new architecture patterns.
+As you might already be aware, Cloudentity platform is compliant with the latest emerging OAuth specifications and can support in modernizing the application architectures with latest open standards and
+specfications support. We will take you down the path of understanding use cases that can be addressed using the mTLS specification and code samples in various languages on how to integrate and utilize the latest specification in your new architecture patterns.
 
-In this specific section , we will be creating a Nodejs application and calling a resource server protecting a resource with mTLS bound accessToken
-This article is geared towards showing a backend application calling another service
+In this specific section, we will be creating a Node.js application and calling a resource server protecting a resource with mTLS bound accessToken.
+
+This article is geared towards showing a backend application calling another service.
 
 ## Pre-requisites
 
@@ -18,22 +18,23 @@ This article is geared towards showing a backend application calling another ser
 	* [npm](https://www.npmjs.com)
 
 ### Basic Concepts
+
 OAuth 2.0 Mutual-TLS client authentication and certificate bound access tokens is explained in [RFC 8705](https://datatracker.ietf.org/doc/html/rfc8705). We have simplified it for you in case you want to understand usage scenarios with some simple examples
-* [OAuth mtLS implementation by Cloudentity overview](oauth-mtls-overview-cloudentity-platform.md)
+* [OAuth mTLS implementation by Cloudentity overview](oauth-mtls-overview-cloudentity-platform.md)
 * [Configure OAuth mTLS client authentication using self signed certificate](cloudentity-oauth-mtls-self-signed-client-authentication.md)
 * [Configure OAuth mTLS client authentication using TLS](cloudentity-oauth-mtls-client-authentication.md)
-* [Secure APIs with OAuth mTLS and certificate bound access token](securing-apis-with-certificate-bound-access-token.md)
+* [Secure APIs with OAuth mTLS and certificate bound access tokens](securing-apis-with-certificate-bound-access-token.md)
 
 Let's look at an overview of how mTLS works to help secure your application from rogue callers that have obtained an access token.
 ![mtls overview](https://github.com/cloudentity/ce-samples-mtls-demo/blob/nodejs-mtls/docs/cloudentity-api-risk-mitigation-mtls.jpeg).
 
 When not using mTLS the client is issued an access token. Unfortunately, a rogue application has also obtained this access token. When not using mTLS, anyone in possession of the access token is able to access a protected resource using that access token. 
 
-Fortunately, we have a way to prevent a rogue caller from using a stolen access token. We can use Mutual-TLS as described in [RFC 8705](https://datatracker.ietf.org/doc/html/rfc8705). The client is issue an access token. A rogue caller gets access to the access token. However, since we are using mTLS we have a certificate bound access token. Since the rogue caller does not have access to our certificate, the rogue caller attempts to use the access token and the protected resource denies access to the resource since the certificate does not match the certificate thumbprint bound to the access token.
+Fortunately, we have a way to prevent a rogue caller from using a stolen access token. We can use Mutual-TLS as described in [RFC 8705](https://datatracker.ietf.org/doc/html/rfc8705). The client is issue an access token. A rogue caller obtains access to the access token. However, since we are using mTLS we have a certificate bound access token. Since the rogue caller does not have access to our certificate, the rogue caller attempts to use the access token and the protected resource denies access to the resource since the certificate does not match the certificate thumbprint bound to the access token.
 
 ### Source repo
 
-We expect Javscript programming language experience to understand the programming constructs, in case you want to just run the application, jump to [Running the client application](#running-the-client-application) and run the application after cloning the repo.
+In case you want to just run the application, jump to [Running the client application](#running-the-client-application) and run the application after cloning the repo.
 
 The source code for this entire exercise is [available in Github for reference](https://github.com/cloudentity/ce-samples-mtls-demo/tree/master/sample-nodejs-mtls-oauth-client)
 
@@ -83,7 +84,7 @@ const token_url = process.env.OAUTH_TOKEN_URL;
 const auth_token = Buffer.from(`${client_id}:${client_secret}`, 'utf-8').toString('base64');
 ```
 
-Using Mutual-TLS requires that we use our certificate and public key so we [read these](https://github.com/cloudentity/ce-samples-mtls-demo/blob/017a33ae63334789bbc9a87f6894a68cca431167/sample-nodejs-mtls-oauth-client/index.js#L30) from the file system and use them when making requests requiring mTLS and we initialize the `https.Agent`. We also read in our environment variables that will be used with our mTLS OAuth server. 
+Using Mutual-TLS requires that we use our certificate and public key so we [read these](https://github.com/cloudentity/ce-samples-mtls-demo/blob/017a33ae63334789bbc9a87f6894a68cca431167/sample-nodejs-mtls-oauth-client/index.js#L30) from the file system and use them when making requests requiring mTLS and use those to initialize the `https.Agent`. We read in our environment variables that will be used with our mTLS OAuth server. 
 ```javascript 
 const httpsAgent = new https.Agent({
   cert: fs.readFileSync('full_chain.pem'),
@@ -122,7 +123,7 @@ Once the application is running and the end user visits `http://localhost:5002/h
 
 The home page displays links for fetching an access token through traditional OAuth 2.0 client credentials flow. Additonally, we can choose to get a certificate bound access token using mTLS. 
 
-When the user selects `Get Access Token` from the UI the route `/auth` is called which fetches a regular access token that is not certificate bound. [Here](https://github.com/cloudentity/ce-samples-mtls-demo/blob/00aad5ee9ab3074c0904fc6725dda24ce7838837/sample-nodejs-mtls-oauth-client/index.js#L52) we are using `client_credentials` grant type. We then decode the value and display the decoded token in the UI.
+When the user selects `Get Access Token` from the UI, the route `/auth` is called which fetches a regular access token that is not certificate bound. [Here](https://github.com/cloudentity/ce-samples-mtls-demo/blob/00aad5ee9ab3074c0904fc6725dda24ce7838837/sample-nodejs-mtls-oauth-client/index.js#L52) we are using `client_credentials` grant type. We then decode the token and display the decoded token in the UI.
 
 ```javascript
 
@@ -141,22 +142,22 @@ app.get('/auth', function(req, res) {
 });
 
 const getAuth = async () => {
-try {
- const data = qs.stringify({'grant_type':'client_credentials'});
- const response = await axios.post(token_url, data, {
-   headers: { 
-     'Authorization': `Basic ${auth_token}`,
-     'Content-Type': 'application/x-www-form-urlencoded' 
-   }
- })
- return response.data.access_token; 
-}catch(error){
- console.log(error);
-}
+  try {
+    const data = qs.stringify({'grant_type':'client_credentials'});
+    const response = await axios.post(token_url, data, {
+      headers: { 
+        'Authorization': `Basic ${auth_token}`,
+        'Content-Type': 'application/x-www-form-urlencoded' 
+      }
+    })
+    return response.data.access_token; 
+  } catch(error){
+    console.log(error);
+  }
 }
 ```
 
-[Now](https://github.com/cloudentity/ce-samples-mtls-demo/blob/00aad5ee9ab3074c0904fc6725dda24ce7838837/sample-nodejs-mtls-oauth-client/index.js#L81) we will fetch a certificate bound access token. When the user clicks `Get Certificate Bound Access Token` from the UI the route `/mtlsauth` is called which fetches a certificate bound access token. The `getMtlsAuth` function is called. [RFC 8705](https://datatracker.ietf.org/doc/html/rfc8705) states `For all requests to the authorization server utilizing mutual-TLS client authentication, the client MUST include the "client_id"` so we pass in the client ID. We also use our `httpsAgent` which will include our certificate and public key.
+[Now](https://github.com/cloudentity/ce-samples-mtls-demo/blob/00aad5ee9ab3074c0904fc6725dda24ce7838837/sample-nodejs-mtls-oauth-client/index.js#L81) we will fetch a certificate bound access token. When the user clicks `Get Certificate Bound Access Token` from the UI, the route `/mtlsauth` is called which fetches a certificate bound access token. The `getMtlsAuth` function is called where we set our grant type to client credentials and call the token endpoint. [RFC 8705](https://datatracker.ietf.org/doc/html/rfc8705) states `For all requests to the authorization server utilizing mutual-TLS client authentication, the client MUST include the "client_id"` so we pass in the client ID. We also use our `httpsAgent` which will include our certificate and public key.
 
 ```javascript
 app.get('/mtlsauth', function (req, res) {
@@ -196,7 +197,7 @@ const getMtlsAuth = async () => {
 ```
 
 
-After getting a certificate bound access token, the user can then access protected resource by clicking the `Call Resource server with Certificate Bound Access Token` button on the UI. The `/mtls-resource` [handler](https://github.com/cloudentity/ce-samples-mtls-demo/blob/00aad5ee9ab3074c0904fc6725dda24ce7838837/sample-nodejs-mtls-oauth-client/index.js#L116) is called which then calls the protectes resource API including the certificate bound access token in the `Authorization` header. Once the response is returned the response from the protected resource is then rendered. If access to the protected resource is allowed we display the JSON response. Otherwise, we display an error that the protected resource access was not authorized. 
+After getting a certificate bound access token, the user can then access a protected resource by clicking the `Call Resource server with Certificate Bound Access Token` button on the UI. The `/mtls-resource` [handler](https://github.com/cloudentity/ce-samples-mtls-demo/blob/00aad5ee9ab3074c0904fc6725dda24ce7838837/sample-nodejs-mtls-oauth-client/index.js#L116) is called which then calls the protected resource API including the certificate bound access token in the `Authorization` header. Once the response is returned, it is rendered in the UI. If access to the protected resource is allowed we display the JSON response. Otherwise, we display an error that the protected resource access was not authorized. 
 
 ```javascript
 const resource_url = process.env.MTLS_RESOURCE_URL; // Resource server URL
@@ -264,6 +265,7 @@ const callResourceServerMtlsAPiAsRogueCaller = async (accessToken) => {
 ```
 
 ### Running the client application
+
 Make sure that you have configured your OAuth applications in Cloudentity Authorization Platform. Directions on configuring your client applications can be found [here](https://github.com/cloudentity/ce-samples-mtls-demo/blob/nodejs-mtls/docs/cloudentity-oauth-mtls-client-authentication.md). 
 
 Go to the root of the project `sample-nodejs-mtls-oauth-client`. From the root of the repo enter the following in terminal.
@@ -284,4 +286,16 @@ Once you have filled in the environment variables run the application by enterin
 npm start
 ```
 
+### Conclusion
+
+We demonstrated that Cloudentity authorization platform fully supports [RFC 8705](https://datatracker.ietf.org/doc/html/rfc8705) for OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens by creating a Node.js client application that accesses a protected resource using certificate bound access tokens. We covered some basic concepts and then went through the code to see how with just a few lines of code we can take advantage of the extra protection that Mutal-TLS offers us. 
+
+Take some time to go through the links and learn more about OAuth 2.0 and Cloudentity Authorization Platform. 
+
+### Relevant Links
+
+ - [Cloudentity Authorization Platform](https://authz.cloudentity.io/)
+ - [RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749)
+ - [RFC 8705](https://datatracker.ietf.org/doc/html/rfc8705)
+ - [Cloudentity product documentation here](https://docs.authorization.cloudentity.com/)
 
