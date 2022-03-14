@@ -95,11 +95,11 @@ Once the resource server is provided an access token it will obtain, from its TL
 
 ### Further reading & examples
 
-* [mTLS OAuth concept](https://docs.authorization.cloudentity.com/features/oauth/client_auth/tls_client_auth/)
 * [ OAuth mtLS implementation by Cloudentity overview](oauth-mtls-overview-cloudentity-platform.md)
+* [Secure APIs with OAuth mTLS and certificate bound access token](securing-apis-with-certificate-bound-access-token.md)
 * [Configure OAuth mTLS client authentication using TLS](cloudentity-oauth-mtls-client-authentication.md)
 * [Configure OAuth mTLS client authentication using self signed certificate](cloudentity-oauth-mtls-self-signed-client-authentication.md)
-* [Secure APIs with OAuth mTLS and certificate bound access token](securing-apis-with-certificate-bound-access-token.md)
+* [mTLS OAuth Cloudentity product guide](https://docs.authorization.cloudentity.com/features/oauth/client_auth/tls_client_auth/)
 
 Further more, We have built some reference applications to demonstrate the OAuth mTLS capability for various use cases in various programming languages, to provide and idea of how this could be utilized within your applications. Check out our developer articles for these here
 

@@ -46,7 +46,11 @@ Let's see this in action with some quick demonstrations
 
 1. [Register for a free Cloudentity SaaS tenant, if you have not already done it](https://authz.cloudentity.io/register)
    * Activate the tenant and take the self guided tour to familiarize with the platform
-2. [Create a self signed certificate](https://renjith85.medium.com/generate-self-signed-certificates-with-san-using-openssl-99e73ee5e164) that will be used to establish communication between OAuth client application, Cloudentity authorization server and resource server. Once you have an RSA key pair, use the public key to generate the JWKS that includes the `alg` and `x5c` 
+2. [Create a self signed certificate](https://renjith85.medium.com/generate-self-signed-certificates-with-san-using-openssl-99e73ee5e164) that will be used to establish communication between OAuth client application, Cloudentity authorization server and resource server. Once you have an RSA key pair, use the public key to generate the JWKS that includes the `alg` and `x5c`.
+
+> NOTE: In case you want to use one of the existing cert/key pairs, use the follwing artificats
+* [client.cert](https://github.com/cloudentity/ce-samples-mtls-demo/blob/master/sample-nodejs-mtls-oauth-client/client.cert)
+* [client.key](https://github.com/cloudentity/ce-samples-mtls-demo/blob/master/sample-nodejs-mtls-oauth-client/client.key)
 
 For below sample RSA Public key in pem format
 
@@ -104,19 +108,16 @@ Generated jwks should be of given format
 }
 ```
 
-
-
 3. Create an OAuth client application and configure for mTLS specification
    * Choose the application type as `service`, which will configure the grant type as `client_credentials`. We are choosing this as its easy to demonstrate and skips the authorize flow. 
    We have provided some sample application code snippets in other articles attached below that goes through more complex flows.
    * Select the `Token Endpoint Authentication Method` as `Self Signed TLS Client Authentication`
    * Configure jwks_uri or json web key set that has the self signed certificate
 
-4. Check the box for `Certificate bound access token` in case you need the certificate thumprint bound in the access token. If checked, this will add a new JWT Confirmation Method member `"x5t#S256"` that adheres to [RFC-8700](https://datatracker.ietf.org/doc/html/rfc7800) - Proof of Posession semantics specifictions for JSON web tokens. [`Certificate bound access token` feature can be used to increase API security, as detailed in the linked article](securing-apis-with-certificate-bound-access-token.md)   
+4. Check the box for `Certificate bound access token` in case you need the certificate thumprint bound in the access token. If checked, this will add a new JWT Confirmation Method member `"x5t#S256"` that adheres to [RFC-8700](https://datatracker.ietf.org/doc/html/rfc7800) - Proof of Posession semantics specifictions for JSON web tokens. [`API security can be enhanced with usage of certificate bound access token and is well explained in the referenced article`](securing-apis-with-certificate-bound-access-token.md)   
 
 5. Now that the client has been configured let's try to get an access Token from the authorization server using client credentials flow
   
-
 ### Fetch access tokens 
 
 While mTLS is great for security, it can be quite overwhelming to use common debugging and testing techniques, but we can use `curl` to test this out quickly.
@@ -148,8 +149,7 @@ Sample output
 }
 ```
 
-You can inspect the above access token using any jwt decoding tool, or use regular command line to decode the jwt. If you have `jq` installed use below command to decode the jwt and see the `.cnf` claim that 
-has the certificate thumbprint
+You can inspect the above access token using any jwt decoding tool, or use regular command line to decode the jwt. If you have `jq` installed use below command to decode the jwt and see the `.cnf` claim that has the certificate thumbprint
 
 Command with parsed accessToken
 
@@ -203,10 +203,10 @@ So wrapping up, we have seen couple of things in actions
 
 ### Further reading & examples
 
-* [mTLS OAuth concept](https://docs.authorization.cloudentity.com/features/oauth/client_auth/tls_client_auth/)
 * [ OAuth mtLS implementation by Cloudentity overview](oauth-mtls-overview-cloudentity-platform.md)
-* [Configure OAuth mTLS client authentication using TLS](cloudentity-oauth-mtls-client-authentication.md)
 * [Secure APIs with OAuth mTLS and certificate bound access token](securing-apis-with-certificate-bound-access-token.md)
+* [Configure OAuth mTLS client authentication using TLS](cloudentity-oauth-mtls-client-authentication.md)
+* [mTLS OAuth Cloudentity product guide](https://docs.authorization.cloudentity.com/features/oauth/client_auth/tls_client_auth/)
 
 We have more sample applications built to demonstrate the OAuth mTLS capability for various use cases in various programming languages. Check out our developer articles for these here
 
