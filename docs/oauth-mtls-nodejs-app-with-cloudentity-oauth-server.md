@@ -317,14 +317,13 @@ validators:
     recovery: null
 ```
 
-This policy checks that the access token includes the `cnf` claim with the certificate thumbprint that was bound to the token. It then takes the hash of the certificate obtained in the TLS layer and compares it the the certificate hash from the token. If they match then access to the resource is allowed, otherwise access is rejected.
+This policy checks that the access token includes the `cnf` claim with the certificate thumbprint that was bound to the token. It then takes the hash of the certificate obtained in the TLS layer and compares it to the certificate hash from the token. If they match then access to the resource is allowed, otherwise access is denied.
 
-Now from the client application UI, try accessing a resource again. Try it using a different certificate by using the rogue caller link. 
-
+Now from the client application UI try accessing the protected resource again. Try using a different certificate by using the rogue caller link `Call resource server with different TLS client certificate`. 
 
 ## Conclusion
 
-We demonstrated that Cloudentity authorization platform fully supports [RFC 8705](https://datatracker.ietf.org/doc/html/rfc8705) for OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens by creating a Node.js client application that accesses a protected resource using certificate bound access tokens. Basic concepts were coverend and then we went through the code to see how with just a few lines of code we can take advantage of the extra protection that Mutal-TLS offers us. 
+We demonstrated that Cloudentity Authorization Platform fully supports [RFC 8705](https://datatracker.ietf.org/doc/html/rfc8705) for OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens by creating a Node.js client application that accesses a protected resource using certificate bound access tokens. Basic concepts were coverend and then we went through the code to see how with just a few lines of code we can take advantage of the extra protection that Mutal-TLS offers us. We then setup a policy for our APIs which were enforced using Cloudentity Pyron authorizer.
 
 Take some time to go through the links and learn more about OAuth 2.0 and Cloudentity Authorization Platform. 
 
@@ -334,4 +333,6 @@ Take some time to go through the links and learn more about OAuth 2.0 and Cloude
  - [RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749)
  - [RFC 8705](https://datatracker.ietf.org/doc/html/rfc8705)
  - [Cloudentity product documentation here](https://docs.authorization.cloudentity.com/)
+ - [Protecting APIs using Pyron Authorizer](https://docs.authorization.cloudentity.com/guides/developer/protect/pyron/pyron/?q=pyron)
+ - [Creating policies with the Policy Editor](https://docs.authorization.cloudentity.com/guides/developer/protect/access_control/create_auth_policy/?q=policy)
 
