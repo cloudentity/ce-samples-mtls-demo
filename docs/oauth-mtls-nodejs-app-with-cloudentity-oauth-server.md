@@ -2,9 +2,9 @@
 
 Cloudentity authorization platform completely supports [RFC 8705](https://datatracker.ietf.org/doc/html/rfc8705) for OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens.
 
-As you might already be aware, Cloudentity platform is compliant with the latest emerging OAuth specifications and can support in modernizing the application architectures with latest open standards and specfications support. We will take you down the path of understanding use cases that can be addressed using the mTLS specification and code samples in various languages on how to integrate and utilize the latest specification in your new architecture patterns.
+As you might already be aware, Cloudentity platform is compliant with the latest emerging OAuth specifications and can support in modernizing the application architectures with latest open standards and specifications support. We will take you down the path of understanding use cases that can be addressed using the mTLS specification and code samples in various languages on how to integrate and utilize the latest specification in your new architecture patterns.
 
-In this specific section, we will be creating a Node.js application which will access a protected resource with certificate bound access tokens. Additionally, we will use [Cloudentity Pyron authorizer](https://docs.authorization.cloudentity.com/guides/developer/protect/pyron/) to enforce that the access token includes the certificate thumbprint and it matches the certifiate used by the client application.
+In this specific section, we will be creating a Node.js application which will access a protected resource with certificate bound access tokens. Additionally, we will use [Cloudentity Pyron authorizer](https://docs.authorization.cloudentity.com/guides/developer/protect/pyron/) to enforce the access token includes the certificate thumbprint and it matches the certificate used by the client application.
 
 This article is geared towards showing a backend application calling another service.
 
@@ -15,8 +15,9 @@ This article is geared towards showing a backend application calling another ser
 * Application builder tools - We will build and run the application locally
 	* [Node.js](https://nodejs.org)  - Recommended v16.x+
 	* [npm](https://www.npmjs.com)
+  * [make](https://www.gnu.org/software/make/)
 
-### Basic Concepts
+## Basic Concepts
 
 OAuth 2.0 Mutual-TLS client authentication and certificate bound access tokens is explained in [RFC 8705](https://datatracker.ietf.org/doc/html/rfc8705). We have simplified it for you in case you want to understand usage scenarios with some simple examples
 * [OAuth mTLS implementation by Cloudentity overview](oauth-mtls-overview-cloudentity-platform.md)
@@ -29,9 +30,9 @@ Let's look at an overview of how mTLS works to help secure your application from
 
 When not using mTLS the client is issued an access token. Unfortunately, a rogue application has also obtained this access token. When not using mTLS, anyone in possession of the access token is able to access a protected resource using that access token. 
 
-Fortunately, there is a way to prevent a rogue caller from using a stolen access token. Mutual-TLS as described in [RFC 8705](https://datatracker.ietf.org/doc/html/rfc8705). The client is issued an access token. A rogue caller obtains the access token. However, since mTLS is used the client certificate is bound to the access token. Since the rogue caller does not have access to the certificate, the rogue caller attempts to use the access token and the resource server denies access to the protected resource since the certificate does not match the certificate thumbprint bound to the access token.
+Fortunately, there is a way to prevent a rogue caller from using a stolen access token - Mutual-TLS as described in [RFC 8705](https://datatracker.ietf.org/doc/html/rfc8705). The client is issued an access token. A rogue caller obtains the access token. However, since mTLS is used the client certificate is bound to the access token. Since the rogue caller does not have access to the certificate, the rogue caller attempts to use the access token and the resource server denies access to the protected resource since the certificate does not match the certificate thumbprint bound to the access token.
 
-### Source repo
+## Source repo
 
 To just run the application, jump to [Running the client application](#running-the-client-application) and run the application after cloning the repo and entering your environment variables.
 
@@ -46,7 +47,7 @@ The repo contains several example projects. Change directory into the sample nod
 cd ce-samples-mtls-demo/sample-nodejs-mtls-oauth-client
 ```
 
-### Building the Node.js client application
+## Building the Node.js client application
 
 First, in `index.js` import the required required packages.
 
@@ -65,7 +66,7 @@ var path = require('path')
 require('dotenv').config();
 ```
 
-Then [set up](https://github.com/cloudentity/sample-go-mtls-oauth-client/blob/master/main.go#L193) the express app to serve some views and html pages.
+[Then](https://github.com/cloudentity/sample-go-mtls-oauth-client/blob/master/main.go#L193) set up the express app to serve some views and html pages.
 
 ```javascript
 app.set('views', `${__dirname}/views`);
@@ -75,7 +76,7 @@ app.use (bodyParser.urlencoded( {extended : true} ) );
 app.use(express.static(path.join(__dirname, "/public")));
 ```
 
-Next, [obtain](https://github.com/cloudentity/ce-samples-mtls-demo/blob/017a33ae63334789bbc9a87f6894a68cca431167/sample-nodejs-mtls-oauth-client/index.js#L24) client credentials and OAuth token URL for our non-mTLS application from our environment variables.
+[Next](https://github.com/cloudentity/ce-samples-mtls-demo/blob/017a33ae63334789bbc9a87f6894a68cca431167/sample-nodejs-mtls-oauth-client/index.js#L24), obtain client credentials and OAuth token URL for our non-mTLS application from our environment variables.
 ```javascript
 const client_id = process.env.OAUTH_CLIENT_ID; 
 const client_secret = process.env.OAUTH_CLIENT_SECRET; 
@@ -156,7 +157,7 @@ const getAuth = async () => {
 }
 ```
 
-[Now](https://github.com/cloudentity/ce-samples-mtls-demo/blob/00aad5ee9ab3074c0904fc6725dda24ce7838837/sample-nodejs-mtls-oauth-client/index.js#L81) a certificate bound access token will be fetched. When the user clicks `Get Certificate Bound Access Token` from the UI, the route `/mtlsauth` is called which fetches a certificate bound access token. The `getMtlsAuth` function is invoked where the grant type is set to client credentials and then the token endpoint is called. [RFC 8705](https://datatracker.ietf.org/doc/html/rfc8705) states `For all requests to the authorization server utilizing mutual-TLS client authentication, the client MUST include the "client_id"` so the client ID is included. The `httpsAgent` is used which will include our certificate and public key.
+[Now](https://github.com/cloudentity/ce-samples-mtls-demo/blob/00aad5ee9ab3074c0904fc6725dda24ce7838837/sample-nodejs-mtls-oauth-client/index.js#L81) a certificate bound access token will be fetched. When the user clicks `Get Certificate Bound Access Token` from the UI, the route `/mtlsauth` is called which fetches a certificate bound access token. The `getMtlsAuth` function is invoked where the grant type is set to client credentials and then the token endpoint is called. [RFC 8705](https://datatracker.ietf.org/doc/html/rfc8705) states `For all requests to the authorization server utilizing mutual-TLS client authentication, the client MUST include the "client_id"` so the client ID is included. The `httpsAgent` is used which will include the certificate and public key.
 
 ```javascript
 app.get('/mtlsauth', function (req, res) {
@@ -196,7 +197,7 @@ const getMtlsAuth = async () => {
 ```
 
 
-After getting a certificate bound access token, the user can then access a protected resource by clicking the `Call Resource server with Certificate Bound Access Token` button on the UI. The `/mtls-resource` [handler](https://github.com/cloudentity/ce-samples-mtls-demo/blob/00aad5ee9ab3074c0904fc6725dda24ce7838837/sample-nodejs-mtls-oauth-client/index.js#L116) is called which then calls the protected resource API including the certificate bound access token in the `Authorization` header. Once the response is returned, it is rendered in the UI. If access to the protected resource is allowed then display the JSON response. Otherwise, display an error that the protected resource access was not authorized. 
+After getting a certificate bound access token, the user can then access a protected resource by clicking the `Call Resource server with Certificate Bound Access Token` button on the UI. The `/mtls-resource` [handler](https://github.com/cloudentity/ce-samples-mtls-demo/blob/00aad5ee9ab3074c0904fc6725dda24ce7838837/sample-nodejs-mtls-oauth-client/index.js#L116) is called which then calls the protected resource API. It includes the certificate bound access token in the `Authorization` header. Once the response is returned, it is rendered in the UI. If access to the protected resource is allowed then display the JSON response. Otherwise, display an error that the protected resource access was not authorized. 
 
 ```javascript
 const resource_url = process.env.MTLS_RESOURCE_URL; // Resource server URL
@@ -263,33 +264,35 @@ const callResourceServerMtlsAPiAsRogueCaller = async (accessToken) => {
 }
 ```
 
-### Running the client application
+## Running the client application
 
-## Prepare Cloudentity Authorization Platform
+### Prepare Cloudentity Authorization Platform
 Configure OAuth applications in Cloudentity Authorization Platform. Directions on configuring the client applications can be found [here](https://github.com/cloudentity/ce-samples-mtls-demo/blob/nodejs-mtls/docs/cloudentity-oauth-mtls-client-authentication.md). 
 
-## Prepare Pyron Authorizer
-When accessing a protected resource, an authorizer will be used. The authrorizer will terminate TLS, get the certificate, take the thumbprint, and finally compare it to the certificate thumbprint bound to the token.
+### Prepare Pyron Authorizer
+When accessing a protected resource, an authorizer will be used. The authorizer will terminate TLS, get the certificate, take the thumbprint, and finally compare it to the certificate thumbprint bound to the token.
 
-First, set up Pyron authorizer in your Cloudentity Authorization Platform workspace following this [guide](https://docs.authorization.cloudentity.com/guides/developer/protect/pyron/pyron/?q=pyron). There is no need to download the authorizer as a docker image will be pulled when running the application. However, the credentials for the authorizer are necessary.
+First, set up Pyron authorizer in your Cloudentity Authorization Platform workspace following this [guide](https://docs.authorization.cloudentity.com/guides/developer/protect/pyron/pyron/?q=pyron). There is no need to download the authorizer because a docker image will be pulled when running the application. However, the credentials for the authorizer are necessary.
 
-Copy the Client ID, Client Secret and ISSUER URL from the 'Settings' tab of the authorizer as shown. These will be used when setting environment variables in the next section.
-![authorizer settings]((images/authorizer-settings.png))
+Copy the Client ID, Client Secret and Issuer URL from the 'Settings' tab of the authorizer as shown. 
+![authorizer settings](images/authorizer-settings.png)
 
-## Prepare and run the client application
+The copied values will be used when setting environment variables in the next section.
+
+### Prepare and run the client application
 Go to the root of the project `sample-nodejs-mtls-oauth-client`. From the root of the repo enter the following in terminal.
 ```bash
 cd sample-nodejs-mtls-oauth-client
 ```
 
-In the `.env` [file](https://github.com/cloudentity/ce-samples-mtls-demo/blob/8917632d47ff87720c8c52d2ac5e03cbeb33df25/sample-nodejs-mtls-oauth-client/.env#L1) enter the OAuth server variables that were copied before in the following:
+In the `.env` [file](https://github.com/cloudentity/ce-samples-mtls-demo/blob/8917632d47ff87720c8c52d2ac5e03cbeb33df25/sample-nodejs-mtls-oauth-client/.env#L1) enter the OAuth server variables that were copied before.
  - OAUTH_CLIENT_ID="`<your oauth client id that is not using mtls>`"
  - OAUTH_CLIENT_SECRET="`<your oauth client secret that is not using mtls>`"
  - OAUTH_TOKEN_URL="`<your oauth client token url that is not using mtls>`"
  - MTLS_OAUTH_CLIENT_ID="`<your oauth client id that is using mtls>`"
  - MTLS_OAUTH_TOKEN_URL="`<your oauth client token url that is using mtls>`"
 
-Now enter the environment variables for the Pyron authorizer in the `.env` [file](https://github.com/cloudentity/ce-samples-mtls-demo/blob/0ba02891d908662771294f21007c44af87b86e98/sample-nodejs-mtls-oauth-client/.env#L10):
+Now enter the environment variables for the Pyron authorizer in the `.env` [file](https://github.com/cloudentity/ce-samples-mtls-demo/blob/0ba02891d908662771294f21007c44af87b86e98/sample-nodejs-mtls-oauth-client/.env#L10).
  - ACP_ISSUER_URL="`<your issuer URL as shown in Pyron settings>`"
  - ACP_CLIENT_ID="`<your client id found in Pyron settings>`"
  - ACP_CLIENT_SECRET="`<your client secret found in Pyron settings>`"
@@ -319,13 +322,13 @@ This policy checks that the access token includes the `cnf` claim with the certi
 Now from the client application UI, try accessing a resource again. Try it using a different certificate by using the rogue caller link. 
 
 
-### Conclusion
+## Conclusion
 
 We demonstrated that Cloudentity authorization platform fully supports [RFC 8705](https://datatracker.ietf.org/doc/html/rfc8705) for OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens by creating a Node.js client application that accesses a protected resource using certificate bound access tokens. Basic concepts were coverend and then we went through the code to see how with just a few lines of code we can take advantage of the extra protection that Mutal-TLS offers us. 
 
 Take some time to go through the links and learn more about OAuth 2.0 and Cloudentity Authorization Platform. 
 
-### Relevant Links
+## Relevant Links
 
  - [Cloudentity Authorization Platform](https://authz.cloudentity.io/)
  - [RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749)
