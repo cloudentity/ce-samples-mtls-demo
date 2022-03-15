@@ -3,7 +3,7 @@ build:
 
 run: 
 	docker-compose up -d --no-build
-	./scripts/wait.sh
+	npm start
 
 run-all:
 	docker-compose up --build -d 

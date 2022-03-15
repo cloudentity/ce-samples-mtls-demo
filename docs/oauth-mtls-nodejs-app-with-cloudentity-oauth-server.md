@@ -1,17 +1,16 @@
 # Node.js app using OAuth mTLS with Cloudentity Authorization Platform
 
 Cloudentity authorization platform completely supports [RFC 8705](https://datatracker.ietf.org/doc/html/rfc8705) for OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens.
-As you might already be aware, Cloudentity platform is compliant with the latest emerging OAuth specifications and can support in modernizing the application architectures with latest open standards and
-specfications support. We will take you down the path of understanding use cases that can be addressed using the mTLS specification and code samples in various languages on how to integrate and utilize the latest specification in your new architecture patterns.
 
-In this specific section, we will be creating a Node.js application and calling a resource server protecting a resource with mTLS bound accessToken.
+As you might already be aware, Cloudentity platform is compliant with the latest emerging OAuth specifications and can support in modernizing the application architectures with latest open standards and specfications support. We will take you down the path of understanding use cases that can be addressed using the mTLS specification and code samples in various languages on how to integrate and utilize the latest specification in your new architecture patterns.
+
+In this specific section, we will be creating a Node.js application which will access a protected resource with certificate bound access tokens. Additionally, we will use [Cloudentity Pyron authorizer](https://docs.authorization.cloudentity.com/guides/developer/protect/pyron/) to enforce that the access token includes the certificate thumbprint and it matches the certifiate used by the client application.
 
 This article is geared towards showing a backend application calling another service.
 
 ## Pre-requisites
 
-* Cloudentity Authorization Platform tenant - 
-  Cloudentity offers a free SaaS Tenant and [you can sign up for one, if you have not already got one](https://authz.cloudentity.io/register). With this you will get a free OAuth/OIDC compliant server with all the latest specifications.
+* Cloudentity Authorization Platform tenant - Cloudentity offers a free SaaS Tenant and [you can sign up for one, if you have not already got one](https://authz.cloudentity.io/register). With this you will get a free OAuth/OIDC compliant server with all the latest specifications.
 
 * Application builder tools - We will build and run the application locally
 	* [Node.js](https://nodejs.org)  - Recommended v16.x+
@@ -30,11 +29,11 @@ Let's look at an overview of how mTLS works to help secure your application from
 
 When not using mTLS the client is issued an access token. Unfortunately, a rogue application has also obtained this access token. When not using mTLS, anyone in possession of the access token is able to access a protected resource using that access token. 
 
-Fortunately, there is a way to prevent a rogue caller from using a stolen access token. Mutual-TLS as described in [RFC 8705](https://datatracker.ietf.org/doc/html/rfc8705). The client is issued an access token. A rogue caller obtains access to the access token. However, since mTLS is used the client certificate is bound to the access token. Since the rogue caller does not have access to the certificate, the rogue caller attempts to use the access token and the protected resource denies access to the resource since the certificate does not match the certificate thumbprint bound to the access token.
+Fortunately, there is a way to prevent a rogue caller from using a stolen access token. Mutual-TLS as described in [RFC 8705](https://datatracker.ietf.org/doc/html/rfc8705). The client is issued an access token. A rogue caller obtains the access token. However, since mTLS is used the client certificate is bound to the access token. Since the rogue caller does not have access to the certificate, the rogue caller attempts to use the access token and the resource server denies access to the protected resource since the certificate does not match the certificate thumbprint bound to the access token.
 
 ### Source repo
 
-To just run the application, jump to [Running the client application](#running-the-client-application) and run the application after cloning the repo.
+To just run the application, jump to [Running the client application](#running-the-client-application) and run the application after cloning the repo and entering your environment variables.
 
 The source code for this entire exercise is [available in Github for reference](https://github.com/cloudentity/ce-samples-mtls-demo/tree/master/sample-nodejs-mtls-oauth-client)
 
@@ -289,7 +288,6 @@ In the `.env` [file](https://github.com/cloudentity/ce-samples-mtls-demo/blob/89
  - OAUTH_TOKEN_URL="`<your oauth client token url that is not using mtls>`"
  - MTLS_OAUTH_CLIENT_ID="`<your oauth client id that is using mtls>`"
  - MTLS_OAUTH_TOKEN_URL="`<your oauth client token url that is using mtls>`"
- - MTLS_RESOURCE_URL="`<your protected resource API URL>`"
 
 Now enter the environment variables for the Pyron authorizer in the `.env` file:
  - ACP_ISSUER_URL="`<your issuer URL as shown in Pyron settings>`"
@@ -302,6 +300,24 @@ Once the environment variables are set then run the application by entering the 
 ```bash
 make run-all
 ```
+
+Once the application is running you should see `http://localhost:5002/home` printed in the terminal. Go to that URL, get an access token, and then use the access token to obtain a protected resource. Once Pyron authorizer is running the APIs are automatically bound in Cloudentity Authorization Platform. However, there is no policy currently set on the APIs to prevent access without a certificate bound access token. Go to [Cloudentity Authorization Platofrom](https://authz.cloudentity.io/) and [create a policy](https://docs.authorization.cloudentity.com/guides/developer/protect/access_control/create_auth_policy/?q=policy). Add the following policy
+
+```bash
+validators:
+  - name: attributes
+    conf:
+      fields:
+        - comparator: equals
+          field: 'request.mtls.x5t#S256'
+          value: '$authnCtx.cnf.x5t#S256'
+    recovery: null
+```
+
+This policy checks that the access token includes the `cnf` claim with the certificate thumbprint that was bound to the token. It then takes the hash of the certificate obtained in the TLS layer and compares it the the certificate hash from the token. If they match then access to the resource is allowed, otherwise access is rejected.
+
+Now from the client application UI, try accessing a resource again. Try it using a different certificate by using the rogue caller link. 
+
 
 ### Conclusion
 
