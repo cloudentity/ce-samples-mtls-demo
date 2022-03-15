@@ -289,7 +289,7 @@ In the `.env` [file](https://github.com/cloudentity/ce-samples-mtls-demo/blob/89
  - MTLS_OAUTH_CLIENT_ID="`<your oauth client id that is using mtls>`"
  - MTLS_OAUTH_TOKEN_URL="`<your oauth client token url that is using mtls>`"
 
-Now enter the environment variables for the Pyron authorizer in the `.env` file:
+Now enter the environment variables for the Pyron authorizer in the `.env` [file](https://github.com/cloudentity/ce-samples-mtls-demo/blob/0ba02891d908662771294f21007c44af87b86e98/sample-nodejs-mtls-oauth-client/.env#L10):
  - ACP_ISSUER_URL="`<your issuer URL as shown in Pyron settings>`"
  - ACP_CLIENT_ID="`<your client id found in Pyron settings>`"
  - ACP_CLIENT_SECRET="`<your client secret found in Pyron settings>`"
@@ -301,9 +301,9 @@ Once the environment variables are set then run the application by entering the 
 make run-all
 ```
 
-Once the application is running you should see `http://localhost:5002/home` printed in the terminal. Go to that URL, get an access token, and then use the access token to obtain a protected resource. Once Pyron authorizer is running the APIs are automatically bound in Cloudentity Authorization Platform. However, there is no policy currently set on the APIs to prevent access without a certificate bound access token. Go to [Cloudentity Authorization Platofrom](https://authz.cloudentity.io/) and [create a policy](https://docs.authorization.cloudentity.com/guides/developer/protect/access_control/create_auth_policy/?q=policy). Add the following policy
+Once the application is running you should see `http://localhost:5002/home` printed in the terminal. Go to that URL, get an access token, and then use the access token to obtain a protected resource. Once Pyron authorizer is running the APIs are automatically bound in Cloudentity Authorization Platform. However, there is no policy currently set on the APIs to prevent access without a certificate bound access token. Go to [Cloudentity Authorization Platofrom](https://authz.cloudentity.io/) and [create a policy](https://docs.authorization.cloudentity.com/guides/developer/protect/access_control/create_auth_policy/?q=policy). Add the following policy. Note: You can save this policy to a file and from the policy editor you can then upload the policy by clicking on the 3 dots in the upper right and choosing 'Upload'.
 
-```bash
+```
 validators:
   - name: attributes
     conf:
