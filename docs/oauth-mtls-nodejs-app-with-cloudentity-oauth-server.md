@@ -304,7 +304,7 @@ Once the environment variables are set then run the application by entering the 
 make run-all
 ```
 
-Once the application is running you should see `http://localhost:5002/home` printed in the terminal. Go to that URL, get an access token, and then use the access token to obtain a protected resource. Once Pyron authorizer is running the APIs are automatically bound in Cloudentity Authorization Platform. However, there is no policy currently set on the APIs to prevent access without a certificate bound access token. Go to [Cloudentity Authorization Platofrom](https://authz.cloudentity.io/) and [create a policy](https://docs.authorization.cloudentity.com/guides/developer/protect/access_control/create_auth_policy/?q=policy). Add the following policy. Note: You can save this policy to a file and from the policy editor you can then upload the policy by clicking on the 3 dots in the upper right and choosing 'Upload'.
+Once the application is running you should see `http://localhost:5002/home` printed in the terminal. Go to that URL, get an access token, and then use the access token to obtain a protected resource. Once Pyron authorizer is running the APIs are automatically bound in Cloudentity Authorization Platform. However, there is no policy currently set on the APIs to prevent access without a certificate bound access token. Go to [Cloudentity Authorization Platform](https://authz.cloudentity.io/) and [create a policy](https://docs.authorization.cloudentity.com/guides/developer/protect/access_control/create_auth_policy/?q=policy). Add the following policy. Note: You can save this policy to a file and from the policy editor you can then upload the policy by clicking on the 3 dots in the upper right and choosing 'Upload'.
 
 ```
 validators:
