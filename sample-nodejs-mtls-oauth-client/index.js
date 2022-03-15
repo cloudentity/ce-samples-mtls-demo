@@ -197,8 +197,6 @@ const callResourceServerMtlsAPiAsRogueCaller = async (accessToken) => {
     return result;
 
   } catch (error) {
-    console.log(error);
     return error;
-
   }
 }
