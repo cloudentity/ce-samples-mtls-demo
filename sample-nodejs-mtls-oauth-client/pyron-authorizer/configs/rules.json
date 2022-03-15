@@ -1,0 +1,57 @@
+{
+  "rules": [
+    {
+      "default": {
+        "pathPrefix": "/inject",
+        "targetHost": "example.com",
+        "targetPort": 80,
+        "dropPrefix": false,
+        "injectClientCert": true
+      },
+      "request": {
+        "preFlow": {
+          "plugins": [
+            { "name": "acp-authz" }
+          ]
+        }
+      },
+      "endpoints": [
+        {
+          "method": "GET",
+          "pathPattern": "/test",
+          "requestPlugins": [
+            {
+              "name": "echo"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "default": {
+        "targetHost": "example.com",
+        "targetPort": 80,
+        "dropPrefix": false,
+        "injectClientCert": true
+      },
+      "request": {
+        "preFlow": {
+          "plugins": [
+            { "name": "acp-authz" }
+          ]
+        }
+      },
+      "endpoints": [
+        {
+          "method": "GET",
+          "pathPattern": "/inject3/test",
+          "requestPlugins": [
+            {
+              "name": "echo"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

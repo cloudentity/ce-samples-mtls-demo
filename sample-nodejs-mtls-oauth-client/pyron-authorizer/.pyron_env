@@ -1,0 +1,27 @@
+MODULES=["plugin/echo","plugin/acp-authz"]
+
+## plugin/acp-authz
+PLUGIN_ACP_AUTHZ__HOST=pyron-authorizer
+PLUGIN_ACP_AUTHZ__PORT=8442
+PLUGIN_ACP_AUTHZ__SSL=false
+PLUGIN_ACP_AUTHZ__MAX_POOL_SIZE=50
+
+## misc
+#ALIVE_PATH=/alive
+LOG_LEVEL=DEBUG
+
+## server
+HTTP_SERVER_PORT=8773
+
+## client
+#HTTP_CLIENT_MAX_POOL_SIZE=50
+#HTTP_CLIENT_KEEP_ALIVE=true
+#HTTP_CLIENT_TRUST_ALL=true
+
+ ### SSL/TLS
+
+HTTP_SERVER_SSL=true
+HTTP_SERVER_CLIENT_AUTH_REQUIRED=true
+HTTP_SERVER_PEM_KEY_CERT_OPTIONS__KEY_PATH=configs/api-server-key.pem
+HTTP_SERVER_PEM_KEY_CERT_OPTIONS__CERT_PATH=configs/api-server-cert.pem
+HTTP_SERVER_PEM_TRUST_OPTIONS__CERT_PATHS=["/configs/full_chain.pem"]

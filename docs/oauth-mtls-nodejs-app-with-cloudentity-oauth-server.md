@@ -270,8 +270,12 @@ const callResourceServerMtlsAPiAsRogueCaller = async (accessToken) => {
 Configure OAuth applications in Cloudentity Authorization Platform. Directions on configuring the client applications can be found [here](https://github.com/cloudentity/ce-samples-mtls-demo/blob/nodejs-mtls/docs/cloudentity-oauth-mtls-client-authentication.md). 
 
 ## Prepare Pyron Authorizer
+When accessing a protected resource, an authorizer will be used. The authrorizer will terminate TLS, get the certificate, take the thumbprint, and finally compare it to the certificate thumbprint bound to the token.
 
+First, set up Pyron authorizer in your Cloudentity Authorization Platform workspace following this [guide](https://docs.authorization.cloudentity.com/guides/developer/protect/pyron/pyron/?q=pyron). There is no need to download the authorizer as a docker image will be pulled when running the application. However, the credentials for the authorizer are necessary.
 
+Copy the Client ID, Client Secret and ISSUER URL from the 'Settings' tab of the authorizer as shown. These will be used when setting environment variables in the next section.
+![authorizer settings]((images/authorizer-settings.png))
 
 ## Prepare and run the client application
 Go to the root of the project `sample-nodejs-mtls-oauth-client`. From the root of the repo enter the following in terminal.
@@ -279,7 +283,7 @@ Go to the root of the project `sample-nodejs-mtls-oauth-client`. From the root o
 cd sample-nodejs-mtls-oauth-client
 ```
 
-In the `.env` [file](https://github.com/cloudentity/ce-samples-mtls-demo/blob/8917632d47ff87720c8c52d2ac5e03cbeb33df25/sample-nodejs-mtls-oauth-client/.env#L1) enter the following
+In the `.env` [file](https://github.com/cloudentity/ce-samples-mtls-demo/blob/8917632d47ff87720c8c52d2ac5e03cbeb33df25/sample-nodejs-mtls-oauth-client/.env#L1) enter the OAuth server variables that were copied before in the following:
  - OAUTH_CLIENT_ID="`<your oauth client id that is not using mtls>`"
  - OAUTH_CLIENT_SECRET="`<your oauth client secret that is not using mtls>`"
  - OAUTH_TOKEN_URL="`<your oauth client token url that is not using mtls>`"
@@ -287,9 +291,16 @@ In the `.env` [file](https://github.com/cloudentity/ce-samples-mtls-demo/blob/89
  - MTLS_OAUTH_TOKEN_URL="`<your oauth client token url that is using mtls>`"
  - MTLS_RESOURCE_URL="`<your protected resource API URL>`"
 
+Now enter the environment variables for the Pyron authorizer in the `.env` file:
+ - ACP_ISSUER_URL="`<your issuer URL as shown in Pyron settings>`"
+ - ACP_CLIENT_ID="`<your client id found in Pyron settings>`"
+ - ACP_CLIENT_SECRET="`<your client secret found in Pyron settings>`"
+ - ACP_TENANT_ID="`<your tenant id>`"
+
+
 Once the environment variables are set then run the application by entering the following in the terminal:
 ```bash
-npm start
+make run-all
 ```
 
 ### Conclusion

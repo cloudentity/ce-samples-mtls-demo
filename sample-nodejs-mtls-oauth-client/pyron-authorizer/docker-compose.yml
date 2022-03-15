@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  pyron:
+    container_name: pyron
+    image: docker.cloudentity.io/pyron:mtls-cert-inject-enabled
+    env_file: .pyron_env
+    volumes:
+      - ./configs:/configs
+    ports:
+     - 8773:8773
+    restart: always
+
+  pyron-authorizer:
+    container_name: pyron-authorizer
+    image: docker.cloudentity.io/pyron-authorizer:2.0.0
+    env_file: ../.env
+    environment:
+      - ACP_RELOAD_INTERVAL=5s # for demo purposes only, increase for production!
+    ports:
+     - 8442:8442
+    restart: on-failure
+
+  echo-service:
+    container_name: echo-service
+    image: jmalloc/echo-server
+    environment:
+      - PORT=4000
+    ports:
+      - 4000:4000

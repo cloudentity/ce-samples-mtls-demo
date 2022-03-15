@@ -121,12 +121,19 @@ app.get('/mtls-resource', function (req, res) {
       var decoded = jwt_decode(value);
       callResourceServerMtlsAPI(value).then(value => {
         if (value !== undefined) {
+          if (value.response != null && value.response.status == 403) {
+            res.render('home', { mtls_resource: JSON.stringify({
+              "error": "not authorized",
+              "status": value.response.status
+            }, null, 4) })
+            return
+          }
           res.render('home', { mtls_resource: JSON.stringify(value, null, 4) })
         } else {
-          res.send("No response fetched!")
+          res.send("No response fetched!");
         }
       }, err => {
-        res.send("Unable to fetch resource!")
+        res.send("Unable to fetch resource!", err);
       })
     }
   });
@@ -147,7 +154,7 @@ const callResourceServerMtlsAPI = async (accessToken) => {
     const result = await axios(httpOptions)
     return result.data;
   } catch (error) {
-    console.log(error);
+    return error
   }
 }
 
