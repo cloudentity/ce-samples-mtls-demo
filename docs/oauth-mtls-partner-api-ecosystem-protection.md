@@ -28,7 +28,7 @@ utilized to further secure the API access and communication
 
 ## Secure API communication in Partner Integration Ecosystem 
 
-In a partner integration ecosystem, there is an inherent trust but at the same time there is also a need for the capability to fine grain control API access to each of the partners within the ecosystem. It is even possible that each of the partners needs to be allowed only to acess selected APIs based on the partners agreements, trust and data handling capabilities. Even within a partner, there could be case to have different set of applications with varying requirement for selected API access. This is becoming
+In a partner integration ecosystem, there is an inherent trust but at the same time there is also a need for the capability to fine grain control API access to each of the partners within the ecosystem. It is even possible that each of the partners needs to be allowed only to acess selected APIs based on the partners agreements, trust and data handling capabilities. Even within a partner, there could be a case to have different set of applications with varying requirement for selected API access. This is becoming
 more relevant and critical as there are standards being formulated across the globe
 for data sharing in various industries. So its very essential that the token
 issued to each of the partner client applications is narrowly scoped with proper authorization checks and can be governed and enforced when presented to access APIs. And also at the same time there is the need to make sure the tokens are used only by the 
