@@ -5,7 +5,7 @@ for the APIs, which exposes data for partner integrations outside of the organiz
 capability of Cloudentity platform to increase API access, visibility and security. Cloudentity acts as the OAuth authorization server and token issuer based on OAuth specifications to govern and protect API resource
 request and access.
 
-One of the common approaches prelevant is to use the bearer tokens (access token) to authorize a client and as long as there is a bearer token, it is usually enough to gain accessto the API. This approach certainly has the glaring problem that whoever has the token can gain access to the API. Also there is the other problem with the secret used to identity the client that is trying to authorize to fetch the token. The secret is normally handled using an API Key or client credentials flow and we rely on the partner application to securely store this secret which is also another attack surface outside the control of the main organization.
+One of the common approaches prelevant is to use the bearer tokens (access token) to authorize a client and as long as there is a bearer token, it is usually enough to gain access to the API. This approach certainly has the glaring problem that whoever has the token can gain access to the API. Also there is the other problem with the secret used to identify the client that is trying to authorize to fetch the token. The secret is normally handled using an API Key or client credentials flow and we rely on the partner application to securely store this secret which is also another attack surface outside the control of the main organization.
 
 ![Cloudentity mtls](mtls-partner-api-token-trust.jpeg)
 
@@ -21,17 +21,17 @@ Such a combination certainly strengthens the API security for communication betw
 
 [Cloudentity authorization platform](https://cloudentity.com/) provides complete implementation for [RFC-8705 -OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens](https://datatracker.ietf.org/doc/html/rfc8705) - OAuth client authentication using mutual TLS, based on either self-signed certificates or public key infrastructure (PKI). With
 this implementation, the server is capable of supporting 2 main concepts that can be
-utilized to further secure the API interaction
+utilized to further secure the API access and communication
 * mTLS token endpoint with tls/self signed client authentication methods for access tokens and
 * certificate bound access tokens
 
 
 ## Secure API communication in Partner Integration Ecosystem 
 
-In a partner integration ecosystem, there is an inherent trust but at the same time there is also a need for the capability to fine grain control API access to each of the partners within the ecosystem. It is even possible that each of the partners might be allowed only certain API access based on the partners agreements, trust and data handling capabilities. Even within a partner, there could be case to have different set of applications with varying requirement for API access. This is becoming
+In a partner integration ecosystem, there is an inherent trust but at the same time there is also a need for the capability to fine grain control API access to each of the partners within the ecosystem. It is even possible that each of the partners needs to be allowed only to acess selected APIs based on the partners agreements, trust and data handling capabilities. Even within a partner, there could be case to have different set of applications with varying requirement for selected API access. This is becoming
 more relevant and critical as there are standards being formulated across the globe
 for data sharing in various industries. So its very essential that the token
-issued to each of the partner client applications is narrowly scoped with proper authorization checks. And also at the same time there is the need to make sure the tokens are used only by the 
+issued to each of the partner client applications is narrowly scoped with proper authorization checks and can be governed and enforced when presented to access APIs. And also at the same time there is the need to make sure the tokens are used only by the 
 authorized partner application to whom the token was issued and is not being shared across multiple partners or partner applications etc..
 
 Combining the power of mTLS along with a token that is bound to the certificate provides a secure and robust architecture for handling server to server communication(sometimes this interaction pattern is referred to as machine to machine communication or m2m communication as well by some providers) within the
@@ -48,7 +48,7 @@ Furthermore this approach also eliminates the need to distribute `API keys` or `
 * scope and claim level policy
 
 These tokens are issued to requesting applications with limited access and is also
-bound with the certificate thumbprint of the certificate used during the request for token minting.  Its highly common that a partner could utilize the same token (given  their apps has access to the private key & public certificate pair) for further calls but the benefit is that the certificate itself would not be shared across various partners that are registered to use the API.
+bound with the certificate thumbprint of the certificate used during the request for token minting. 
 
 Cloudentity authorization server supports all the [OAuth mTLS specification](https://datatracker.ietf.org/doc/html/rfc8705) highlights such as
 * tls signed client authentication
