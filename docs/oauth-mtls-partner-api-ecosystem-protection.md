@@ -7,19 +7,19 @@ request and access.
 
 One of the common approaches prevalent is to use the bearer tokens (access token) to authorize a client and as long as there is a bearer token, it is usually enough to gain access to the API. This approach certainly has the glaring problem that whoever has the token can gain access to the API. Also there is the other problem with the secret used to identify the client that is trying to authorize to fetch the token. The secret is normally handled using an API Key or client credentials flow and we rely on the partner application to securely store this secret which is also another attack surface outside the control of the main organization.
 
-![Cloudentity mtls](mtls-partner-api-token-trust.jpeg)
+![API access using tokens](mtls-partner-api-token-trust.jpeg)
 
 Another approach that is prevalent is just using the certificates in mTLS mode 
 to identify and trust the calling application (client) and then grant access to the resource server API with no other authorization checks (or may be a static API key check). This approach certainly lacks the authorization intent scoped tokens that can be
 governed effectively to ensure that the caller is allowed to actually mint the tokens and having a certificate should not be the only criteria. 
 
-![Cloudentity mtls](mtls-partner-api-mtls-trust.jpeg)
+![API access using mtls](mtls-partner-api-mtls-trust.jpeg)
 
 **What if we combine both the above approaches to negate each others drawbacks?**
 
 Such a combination certainly strengthens the API security for communication between the calling application and the server and is certainly made possible with the OAuth 2.0 specifications for Mutual Transport Layer Security.
 
-[Cloudentity authorization platform](https://cloudentity.com/) provides complete implementation for [RFC-8705 -OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens](https://datatracker.ietf.org/doc/html/rfc8705) - OAuth client authentication using mutual TLS, based on either self-signed certificates or public key infrastructure (PKI). With
+[Cloudentity authorization platform](https://cloudentity.com/) provides complete implementation for [RFC8705 -OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens](https://datatracker.ietf.org/doc/html/rfc8705) - OAuth client authentication using mutual TLS, based on either self-signed certificates or public key infrastructure (PKI). With
 this implementation, the server is capable of supporting 2 main concepts that can be
 utilized to further secure the API access and communication
 * mTLS token endpoint with tls/self signed client authentication methods for access tokens and
@@ -40,7 +40,7 @@ be validated during the token usage phase for resource access and this is facili
 
 Furthermore this approach also eliminates the need to distribute `API keys` or `client secrets` to authenticate the OAuth client to fetch the token. So there is one less `secret` to worry about that can be comprimised by your partner organization. The client requesting the token is authenticated using the same mTLS communication channel by matching pre configured criteria in the certificate presented in the TLS handshake. So the responsibility is more on the partner organization itself to keep their keys secure enough and there is no secret from the API provider organization that needs to be stored/secured by the partner applications.
 
-![Cloudentity mtls](mtls-partner-api-mtls-token-trust.jpeg)
+![API security and authorization using oauth mtls and access token](mtls-partner-api-mtls-token-trust.jpeg)
 
 [Cloudentity authorization server](https://docs.authorization.cloudentity.com/acp_overview/acp_overview/) acts as the centralized token service and will issue tokens only after passing the governance checks, represented as dynamic authorization policies, that can be configured at various levels including 
 * workspace level policy
@@ -59,7 +59,7 @@ Cloudentity authorization server supports all the [OAuth mTLS specification](htt
 * introspection/revocation endpoints 
 * enforce mtls setting at global level/client level
 
-![Cloudentity mtls](mtls-rfc-8705.jpeg)
+![Cloudentity oauth mtls RFC8705](mtls-rfc-8705.jpeg)
 
 ## Summary
 
