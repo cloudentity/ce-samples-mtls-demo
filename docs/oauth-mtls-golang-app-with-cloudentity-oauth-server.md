@@ -21,7 +21,7 @@ Cloudentity offers a free SaaS Tenant and [you can sign up for one, if you have 
 
 ### Basic Concepts
 OAuth 2.0 Mutual-TLS client authentication and certificate bound access tokens is explained in [RFC 8705](https://datatracker.ietf.org/doc/html/rfc8705). We have simplified it for you in case you want to understand usage scenarios with some simple examples
-* [ OAuth mtLS implementation by Cloudentity overview](oauth-mtls-overview-cloudentity-platform.md)
+* [OAuth mtLS implementation by Cloudentity overview](oauth-mtls-overview-cloudentity-platform.md)
 * [Configure OAuth mTLS client authentication using self signed certificate](cloudentity-oauth-mtls-self-signed-client-authentication.md)
 * [Configure OAuth mTLS client authentication using TLS](cloudentity-oauth-mtls-client-authentication.md)
 * [Secure APIs with OAuth mTLS and certificate bound access token](securing-apis-with-certificate-bound-access-token.md)

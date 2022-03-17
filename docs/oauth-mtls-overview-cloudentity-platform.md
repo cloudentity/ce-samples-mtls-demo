@@ -3,7 +3,7 @@
 Cloudentity authorization platform provides implementation for [RFC-8705 -OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens](https://datatracker.ietf.org/doc/html/rfc8705) - OAuth client authentication using mutual TLS, based on either self-signed certificates or public key infrastructure (PKI). 
 
 As you might already be aware Cloudentity platform is compliant to the latest emerging OAuth specifications and can support in modernizing the application architecutres with the latest open standards and
-specfications. These emerging specifications can be utilized to create more modern and secure application architectures and increase API and data security and reduce data breaches and exposure.
+specifications. These emerging specifications can be utilized to create more modern and secure application architectures and increase API and data security and reduce data breaches and exposure.
 
 ## Main features
 
